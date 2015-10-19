@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="EuropeUnderground_light.ttf">
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +22,68 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2fn-Ml-YO8" customClass="SView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="income" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRZ-4Z-e8r">
+                                        <rect key="frame" x="236" y="128" width="128" height="45"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="45"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="xRZ-4Z-e8r" firstAttribute="centerY" secondItem="2fn-Ml-YO8" secondAttribute="centerY" id="aCC-6Q-O2n"/>
+                                    <constraint firstItem="xRZ-4Z-e8r" firstAttribute="centerX" secondItem="2fn-Ml-YO8" secondAttribute="centerX" id="hZk-P5-o1I"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ej-32-dU5" customClass="SView">
+                                <rect key="frame" x="0.0" y="300" width="600" height="300"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="expense" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZIF-dn-CMe">
+                                        <rect key="frame" x="225" y="128" width="150" height="45"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="45"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="ZIF-dn-CMe" firstAttribute="centerY" secondItem="4ej-32-dU5" secondAttribute="centerY" id="0wR-9F-Mag"/>
+                                    <constraint firstItem="ZIF-dn-CMe" firstAttribute="centerX" secondItem="4ej-32-dU5" secondAttribute="centerX" id="wRy-2k-HI7"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="4ej-32-dU5" secondAttribute="bottom" id="3bk-qY-SD3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2fn-Ml-YO8" secondAttribute="trailing" constant="-20" id="FmE-he-4vk"/>
+                            <constraint firstItem="4ej-32-dU5" firstAttribute="top" secondItem="2fn-Ml-YO8" secondAttribute="bottom" id="GXo-HL-82S"/>
+                            <constraint firstItem="4ej-32-dU5" firstAttribute="height" secondItem="2fn-Ml-YO8" secondAttribute="height" id="Kzi-64-LI5"/>
+                            <constraint firstItem="4ej-32-dU5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="dY5-P7-TdJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4ej-32-dU5" secondAttribute="trailing" constant="-20" id="msH-Dq-Uv9"/>
+                            <constraint firstItem="2fn-Ml-YO8" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="shk-4R-Mq6"/>
+                            <constraint firstItem="2fn-Ml-YO8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="vwZ-wQ-AxA"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="4wd-JV-NHL"/>
+                    <connections>
+                        <outlet property="expenseLabel" destination="ZIF-dn-CMe" id="XMo-8X-8oJ"/>
+                        <outlet property="incomeLabel" destination="xRZ-4Z-e8r" id="jqG-8h-eHr"/>
+                        <outlet property="lowerView" destination="4ej-32-dU5" id="BwJ-Xp-f1V"/>
+                        <outlet property="upperView" destination="2fn-Ml-YO8" id="cqJ-HZ-Obb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1085" y="269"/>
         </scene>
     </scenes>
 </document>
