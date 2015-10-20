@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -23,45 +24,59 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ej-32-dU5" customClass="SView">
+                                <rect key="frame" x="0.0" y="300" width="600" height="300"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j78-ol-Uk3">
+                                        <rect key="frame" x="225" y="122" width="150" height="57"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="45"/>
+                                        <state key="normal" title="expense">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="expenceTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XXm-T1-VR5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="j78-ol-Uk3" firstAttribute="centerY" secondItem="4ej-32-dU5" secondAttribute="centerY" id="WOt-kT-omY"/>
+                                    <constraint firstItem="j78-ol-Uk3" firstAttribute="centerX" secondItem="4ej-32-dU5" secondAttribute="centerX" id="lyl-zA-iAq"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2fn-Ml-YO8" customClass="SView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="300"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="income" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRZ-4Z-e8r">
-                                        <rect key="frame" x="236" y="128" width="128" height="45"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5FW-yP-S9Z">
+                                        <rect key="frame" x="236" y="122" width="128" height="57"/>
                                         <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="45"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <state key="normal" title="income">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="incomeTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PkW-XI-enO"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstItem="xRZ-4Z-e8r" firstAttribute="centerY" secondItem="2fn-Ml-YO8" secondAttribute="centerY" id="aCC-6Q-O2n"/>
-                                    <constraint firstItem="xRZ-4Z-e8r" firstAttribute="centerX" secondItem="2fn-Ml-YO8" secondAttribute="centerX" id="hZk-P5-o1I"/>
+                                    <constraint firstItem="5FW-yP-S9Z" firstAttribute="centerX" secondItem="2fn-Ml-YO8" secondAttribute="centerX" id="6lI-Ew-6ks"/>
+                                    <constraint firstItem="5FW-yP-S9Z" firstAttribute="centerY" secondItem="2fn-Ml-YO8" secondAttribute="centerY" id="GfN-sy-cfG"/>
                                 </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ej-32-dU5" customClass="SView">
-                                <rect key="frame" x="0.0" y="300" width="600" height="300"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="expense" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZIF-dn-CMe">
-                                        <rect key="frame" x="225" y="128" width="150" height="45"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="45"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="ZIF-dn-CMe" firstAttribute="centerY" secondItem="4ej-32-dU5" secondAttribute="centerY" id="0wR-9F-Mag"/>
-                                    <constraint firstItem="ZIF-dn-CMe" firstAttribute="centerX" secondItem="4ej-32-dU5" secondAttribute="centerX" id="wRy-2k-HI7"/>
-                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="KmE-gu-ufS" appends="YES" id="TqN-Hc-tuy"/>
+                                    <outletCollection property="gestureRecognizers" destination="KPW-Hk-yQV" appends="YES" id="Zn6-mH-ima"/>
+                                </connections>
                             </view>
                         </subviews>
                         <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.94069406079999995" green="0.94069406079999995" blue="0.94069406079999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="4ej-32-dU5" secondAttribute="bottom" id="3bk-qY-SD3"/>
                             <constraint firstAttribute="trailingMargin" secondItem="2fn-Ml-YO8" secondAttribute="trailing" constant="-20" id="FmE-he-4vk"/>
@@ -75,15 +90,67 @@
                     </view>
                     <navigationItem key="navigationItem" id="4wd-JV-NHL"/>
                     <connections>
-                        <outlet property="expenseLabel" destination="ZIF-dn-CMe" id="XMo-8X-8oJ"/>
-                        <outlet property="incomeLabel" destination="xRZ-4Z-e8r" id="jqG-8h-eHr"/>
                         <outlet property="lowerView" destination="4ej-32-dU5" id="BwJ-Xp-f1V"/>
                         <outlet property="upperView" destination="2fn-Ml-YO8" id="cqJ-HZ-Obb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="down" id="KmE-gu-ufS">
+                    <connections>
+                        <action selector="didSwipeDownOnUpperView:" destination="BYZ-38-t0r" id="FFE-po-xvY"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="up" id="KPW-Hk-yQV">
+                    <connections>
+                        <action selector="didSwipeUpOnUpperView:" destination="BYZ-38-t0r" id="ajn-6D-a4u"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1085" y="269"/>
+            <point key="canvasLocation" x="1360" y="205"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="xSR-WK-9f1">
+            <objects>
+                <viewController storyboardIdentifier="SDetailViewController" id="cSg-bm-eh6" customClass="SDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="c40-Yg-com"/>
+                        <viewControllerLayoutGuide type="bottom" id="4J1-IS-N87"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SUY-vd-v3S">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8jf-XG-5Dr">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Oqo-DM-Cdr" appends="YES" id="SNN-28-VSR"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="8jf-XG-5Dr" secondAttribute="trailing" constant="-20" id="514-7t-s9n"/>
+                            <constraint firstItem="8jf-XG-5Dr" firstAttribute="leading" secondItem="SUY-vd-v3S" secondAttribute="leadingMargin" constant="-20" id="9Du-r8-WCn"/>
+                            <constraint firstItem="4J1-IS-N87" firstAttribute="top" secondItem="8jf-XG-5Dr" secondAttribute="bottom" id="H5w-QT-wbC"/>
+                            <constraint firstItem="8jf-XG-5Dr" firstAttribute="top" secondItem="SUY-vd-v3S" secondAttribute="topMargin" id="lhO-QV-kT5"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="innerView" destination="8jf-XG-5Dr" id="17G-vE-NML"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u3m-sb-OFS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="Oqo-DM-Cdr">
+                    <connections>
+                        <action selector="didPanInnerView:" destination="cSg-bm-eh6" id="h06-ko-Zut"/>
+                    </connections>
+                </panGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1982" y="205"/>
         </scene>
     </scenes>
 </document>

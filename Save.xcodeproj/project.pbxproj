@@ -17,6 +17,7 @@
 		581C2FBC1BD4C2A90021ABA3 /* SaveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FBB1BD4C2A90021ABA3 /* SaveTests.m */; };
 		581C2FC71BD4C2A90021ABA3 /* SaveUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FC61BD4C2A90021ABA3 /* SaveUITests.m */; };
 		581C2FEF1BD4F8E70021ABA3 /* EuropeUnderground_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581C2FED1BD4F8E70021ABA3 /* EuropeUnderground_light.ttf */; settings = {ASSET_TAGS = (); }; };
+		584F2E5B1BD66A0800F91052 /* SDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 584F2E5A1BD66A0800F91052 /* SDetailViewController.m */; settings = {ASSET_TAGS = (); }; };
 		585F9F471BD506EF006CC223 /* Adequate-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 585F9F461BD506EF006CC223 /* Adequate-ExtraLight.ttf */; settings = {ASSET_TAGS = (); }; };
 		585F9F4A1BD513AE006CC223 /* SView.m in Sources */ = {isa = PBXBuildFile; fileRef = 585F9F491BD513AE006CC223 /* SView.m */; settings = {ASSET_TAGS = (); }; };
 		8C28FAE895FE3B71170C029C /* Pods_Save.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817266FE4409656ECCBD2ADF /* Pods_Save.framework */; };
@@ -59,6 +60,8 @@
 		581C2FC61BD4C2A90021ABA3 /* SaveUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaveUITests.m; sourceTree = "<group>"; };
 		581C2FC81BD4C2A90021ABA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		581C2FED1BD4F8E70021ABA3 /* EuropeUnderground_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EuropeUnderground_light.ttf; sourceTree = "<group>"; };
+		584F2E591BD66A0800F91052 /* SDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDetailViewController.h; sourceTree = "<group>"; };
+		584F2E5A1BD66A0800F91052 /* SDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDetailViewController.m; sourceTree = "<group>"; };
 		585F9F461BD506EF006CC223 /* Adequate-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Adequate-ExtraLight.ttf"; sourceTree = "<group>"; };
 		585F9F481BD513AE006CC223 /* SView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SView.h; sourceTree = "<group>"; };
 		585F9F491BD513AE006CC223 /* SView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SView.m; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 			children = (
 				581C2FA41BD4C2A90021ABA3 /* ViewController.h */,
 				581C2FA51BD4C2A90021ABA3 /* ViewController.m */,
+				584F2E591BD66A0800F91052 /* SDetailViewController.h */,
+				584F2E5A1BD66A0800F91052 /* SDetailViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -388,6 +393,7 @@
 				581C2FAC1BD4C2A90021ABA3 /* Save.xcdatamodeld in Sources */,
 				585F9F4A1BD513AE006CC223 /* SView.m in Sources */,
 				581C2FA61BD4C2A90021ABA3 /* ViewController.m in Sources */,
+				584F2E5B1BD66A0800F91052 /* SDetailViewController.m in Sources */,
 				581C2FA31BD4C2A90021ABA3 /* AppDelegate.m in Sources */,
 				581C2FA01BD4C2A90021ABA3 /* main.m in Sources */,
 			);
@@ -481,7 +487,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "f2e8fb16-ad54-4412-859f-81342fcb6a44";
@@ -521,7 +527,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "f2e8fb16-ad54-4412-859f-81342fcb6a44";
 				SDKROOT = iphoneos;

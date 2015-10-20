@@ -7,8 +7,7 @@
 //
 
 #import "SView.h"
-#define kraiseAnimation @"raise"
-#define klowerAnimation @"lower"
+
 
 @implementation SView
 
@@ -16,48 +15,84 @@
 - (void)drawRect:(CGRect)rect {
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.bounds];
     self.layer.masksToBounds = NO;
-    self.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.layer.shadowOffset = CGSizeMake(0.0f, 3.0f);
+    self.layer.shadowColor = [UIColor grayColor].CGColor;
+    self.layer.shadowOffset = CGSizeMake(0.0f, 0.5f);
     self.layer.shadowPath = shadowPath.CGPath;
     
-    self.raiseAnimation = [POPBasicAnimation animation];
-    self.raiseAnimation.name = kraiseAnimation;
-    self.raiseAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
-    self.raiseAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(self.center.x-5, self.center.y-5)];
-    self.raiseAnimation.delegate=self;
-    
-    self.lowerAnimation = [POPBasicAnimation animation];
-    self.lowerAnimation.name = klowerAnimation;
-    self.lowerAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
-    self.lowerAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(self.center.x, self.center.y)];
-    self.lowerAnimation.delegate=self;
+    self.touchesDidEnd = YES;
+    self.shouldTouch = YES;
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self pop_addAnimation:self.raiseAnimation forKey:kraiseAnimation];
+    if (self.shouldTouch) {
+        if (self.touchesDidEnd) {
+            CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
+            anim.fromValue = [NSNumber numberWithFloat:0.0];
+            anim.toValue = [NSNumber numberWithFloat:0.5];
+            anim.duration = 0.3;
+            [self.layer addAnimation:anim forKey:@"shadowOpacity"];
+            self.layer.shadowOpacity = 0.5;
+            
+            CGRect screenRect = [[UIScreen mainScreen] bounds];
+            int screenWidth = screenRect.size.width;
+            int screenHeight = screenRect.size.height;
+            if (screenHeight % 2) {
+                screenHeight++;
+            }
+            int middle = screenHeight/2;
+            int middleOfMiddle = middle/2;
+
+            
+            if (self.viewTag == 0) {
+                [UIView animateWithDuration:0.3 animations:^(void) {
+                    self.center = CGPointMake((screenWidth/2)-3, middleOfMiddle-3);
+                }];
+            }
+            else{
+                [UIView animateWithDuration:0.3 animations:^(void) {
+                    self.center = CGPointMake((screenWidth/2)-3, middle+middleOfMiddle-3);
+                }];
+            }
+        }
+        self.touchesDidEnd = NO;
+    }
 }
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self pop_addAnimation:self.lowerAnimation forKey:klowerAnimation];
-}
-
-- (void)pop_animationDidStart:(POPAnimation *)anim{
-    if ([anim.name isEqualToString:kraiseAnimation]) {
-        self.layer.shadowOpacity = 0.5f;
-    }
-    else{
+    if (self.shouldTouch) {
+        CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
+        anim.fromValue = [NSNumber numberWithFloat:0.5];
+        anim.toValue = [NSNumber numberWithFloat:0.0];
+        anim.duration = 0.3;
+        [self.layer addAnimation:anim forKey:@"shadowOpacity"];
+        self.layer.shadowOpacity = 0.0;
+        self.touchesDidEnd = YES;
+        
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        int screenWidth = screenRect.size.width;
+        int screenHeight = screenRect.size.height;
+        if (screenHeight % 2) {
+            screenHeight++;
+        }
+        int middle = screenHeight/2;
+        int middleOfMiddle = middle/2;
+        
+        
+        if (self.viewTag == 0) {
+            [UIView animateWithDuration:0.3 animations:^(void) {
+                self.center = CGPointMake(screenWidth/2, middleOfMiddle);
+            }];
+        }
+        else{
+            [UIView animateWithDuration:0.3 animations:^(void) {
+                self.center = CGPointMake(screenWidth/2, middle+middleOfMiddle-1);
+            }];
+        }
         
     }
 }
 
-- (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished{
-    if ([anim.name isEqualToString:kraiseAnimation]) {
-        
-    }
-    else{
-        self.layer.shadowOpacity = 0.0f;
-    }
-    
-}
+
+
 
 @end

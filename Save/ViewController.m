@@ -7,12 +7,21 @@
 //
 
 #import "ViewController.h"
+#import <pop/POP.h>
+#import "SDetailViewController.h"
+
+#define kraiseAnimation @"raise"
+#define klowerAnimation @"lower"
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *incomeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *expenseLabel;
-@property (weak, nonatomic) IBOutlet UIView *upperView;
-@property (weak, nonatomic) IBOutlet UIView *lowerView;
+@property (weak, nonatomic) IBOutlet SView *upperView;
+@property (weak, nonatomic) IBOutlet SView *lowerView;
+
+@property(nonatomic,strong)POPBasicAnimation *raiseAnimation;
+@property(nonatomic,strong)POPBasicAnimation *lowerAnimation;
+
 
 @end
 
@@ -20,7 +29,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    self.upperView.viewTag = 0;
+    self.lowerView.viewTag = 1;
+    self.raiseAnimation = [POPBasicAnimation animation];
+    self.raiseAnimation.name = kraiseAnimation;
+    self.raiseAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    int screenWidth = screenRect.size.width;
+    int screenHeight = screenRect.size.height;
+    if (screenHeight % 2) {
+        screenHeight++;
+    }
+    int middle = screenHeight/2;
+    int middleOfMiddle = middle/2;
+    
+    self.raiseAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(screenWidth/2,middleOfMiddle)];
+    self.raiseAnimation.delegate=self;
+    
+    self.lowerAnimation = [POPBasicAnimation animation];
+    self.lowerAnimation.name = klowerAnimation;
+    self.lowerAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
+    self.lowerAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(screenWidth/2,middle + middleOfMiddle+50)];
+    self.lowerAnimation.delegate=self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -28,6 +58,42 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)didSwipeDownOnUpperView:(UISwipeGestureRecognizer *)sender {
+    [self.upperView pop_addAnimation:self.lowerAnimation forKey:klowerAnimation];
+    [self.upperView touchesBegan:nil withEvent:nil];
+    self.upperView.shouldTouch = NO;
+}
 
+- (IBAction)didSwipeUpOnUpperView:(UISwipeGestureRecognizer *)sender {
+    [self.upperView pop_addAnimation:self.raiseAnimation forKey:kraiseAnimation];
+    self.upperView.shouldTouch = YES;
+    [self.upperView touchesEnded:nil withEvent:nil];
+}
+
+- (IBAction)incomeTapped:(UIButton *)sender {
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
+    [self presentViewController:vc animated:NO completion:^(void){
+        
+    }];
+//    [UIView animateWithDuration:0.2 animations:^(void){
+//        self.upperView.alpha = 0;
+//        self.lowerView.alpha = 0;
+//    }completion:^(BOOL finished){
+//        self.upperView.hidden=YES;
+//        self.lowerView.hidden=YES;
+//    }];
+}
+
+- (IBAction)expenceTapped:(UIButton *)sender {
+//    [UIView animateWithDuration:0.2 animations:^(void){
+//        self.upperView.alpha = 0;
+//        self.lowerView.alpha = 0;
+//    }completion:^(BOOL finished){
+//        self.upperView.hidden=YES;
+//        self.lowerView.hidden=YES;
+//    }];
+}
 
 @end

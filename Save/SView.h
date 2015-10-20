@@ -7,10 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <pop/POP.h>
 
-@interface SView : UIView<POPAnimationDelegate>
+@interface SView : UIView
 
-@property(nonatomic,strong)POPBasicAnimation *raiseAnimation;
-@property(nonatomic,strong)POPBasicAnimation *lowerAnimation;
+@property(nonatomic,assign)BOOL touchesDidEnd;
+@property(nonatomic,assign)BOOL shouldTouch;
+@property(nonatomic,assign) int viewTag;
+
+
+-(void)touchesBegan:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event;
+-(void)touchesEnded:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event;
+
+
+
 @end
