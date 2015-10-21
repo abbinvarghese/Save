@@ -3,10 +3,26 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="EuropeUnderground_light.ttf">
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
             <string>EuropeUnderground-Light</string>
             <string>EuropeUnderground-Light</string>
         </mutableArray>
@@ -76,7 +92,7 @@
                             </view>
                         </subviews>
                         <animations/>
-                        <color key="backgroundColor" red="0.94069406079999995" green="0.94069406079999995" blue="0.94069406079999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="4ej-32-dU5" secondAttribute="bottom" id="3bk-qY-SD3"/>
                             <constraint firstAttribute="trailingMargin" secondItem="2fn-Ml-YO8" secondAttribute="trailing" constant="-20" id="FmE-he-4vk"/>
@@ -90,6 +106,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="4wd-JV-NHL"/>
                     <connections>
+                        <outlet property="expenseButton" destination="j78-ol-Uk3" id="MSd-1M-Rgt"/>
+                        <outlet property="incomeButton" destination="5FW-yP-S9Z" id="tNR-8s-OEW"/>
                         <outlet property="lowerView" destination="4ej-32-dU5" id="BwJ-Xp-f1V"/>
                         <outlet property="upperView" destination="2fn-Ml-YO8" id="cqJ-HZ-Obb"/>
                     </connections>
@@ -117,16 +135,266 @@
                         <viewControllerLayoutGuide type="bottom" id="4J1-IS-N87"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="SUY-vd-v3S">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8jf-XG-5Dr">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="save" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PTQ-sN-g6B">
+                                <rect key="frame" x="357" y="321" width="46" height="25"/>
                                 <animations/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="25"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cancel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hy-vU-wmB">
+                                <rect key="frame" x="-35" y="321" width="62" height="25"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="25"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8jf-XG-5Dr">
+                                <rect key="frame" x="-4" y="0.0" width="383" height="667"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W8B-7M-xCe">
+                                        <rect key="frame" x="8" y="56" width="322" height="60"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="60"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="₹" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xBM-cQ-Ddl">
+                                        <rect key="frame" x="343" y="80" width="17" height="27"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="27"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCn-jr-Ivm">
+                                        <rect key="frame" x="129" y="582" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="bCn-jr-Ivm" secondAttribute="height" multiplier="25:17" id="IbU-Xe-ULe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="0">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="zeroTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="ei6-0p-oYv"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aWn-GF-IfM">
+                                        <rect key="frame" x="4" y="582" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="aWn-GF-IfM" secondAttribute="height" multiplier="25:17" id="ZPg-bB-ZFe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title=".">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="pointTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="8Ww-WO-zgO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XIZ-MJ-Qsb">
+                                        <rect key="frame" x="254" y="582" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="XIZ-MJ-Qsb" secondAttribute="height" multiplier="25:17" id="g1W-eI-aCa"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="C">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="backspaceTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="9IW-bM-Sm1"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wxn-Ou-vN4">
+                                        <rect key="frame" x="129" y="497" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Wxn-Ou-vN4" secondAttribute="height" multiplier="25:17" id="tgp-pr-sH1"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="8">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="eightTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="f0t-xE-K2c"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BwT-7x-3RM">
+                                        <rect key="frame" x="4" y="497" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="BwT-7x-3RM" secondAttribute="height" multiplier="25:17" id="IqX-UC-mtp"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="7">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="sevenTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="Uzk-dl-X89"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JPA-4Y-rnY">
+                                        <rect key="frame" x="254" y="497" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="JPA-4Y-rnY" secondAttribute="height" multiplier="25:17" id="Hin-U6-bHX"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="9">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="nineTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="Dfh-Do-gKn"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G3T-Je-KL6">
+                                        <rect key="frame" x="129" y="412" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="G3T-Je-KL6" secondAttribute="height" multiplier="25:17" id="Onw-Ha-p2Q"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="5">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="fiveTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="f8K-mW-ZVD"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58f-bR-nMv">
+                                        <rect key="frame" x="4" y="412" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="58f-bR-nMv" secondAttribute="height" multiplier="25:17" id="PjL-7X-gog"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="4">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="fourTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="spn-aV-xgI"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eI1-sB-890">
+                                        <rect key="frame" x="254" y="412" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="eI1-sB-890" secondAttribute="height" multiplier="25:17" id="ds8-5v-slF"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="6">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="sixTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="KWd-Yr-u6v"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yov-L4-210">
+                                        <rect key="frame" x="129" y="327" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="yov-L4-210" secondAttribute="height" multiplier="25:17" id="Kwl-4B-xxz"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="2">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="twoTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="F60-QK-tPQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rHq-WM-rzJ">
+                                        <rect key="frame" x="4" y="327" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="rHq-WM-rzJ" secondAttribute="height" multiplier="25:17" id="24A-AY-SX1"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="1">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="oneTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="On2-Dt-vYu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zvc-TN-BwT">
+                                        <rect key="frame" x="254" y="327" width="125" height="85"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Zvc-TN-BwT" secondAttribute="height" multiplier="25:17" id="3O0-1m-tzc"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
+                                        <state key="normal" title="3">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="threeTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="x7S-LZ-iXj"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="Zvc-TN-BwT" firstAttribute="leading" secondItem="yov-L4-210" secondAttribute="trailing" id="073-6J-N83"/>
+                                    <constraint firstItem="58f-bR-nMv" firstAttribute="leading" secondItem="8jf-XG-5Dr" secondAttribute="leading" constant="4" id="0XS-yt-ATf"/>
+                                    <constraint firstItem="BwT-7x-3RM" firstAttribute="leading" secondItem="8jf-XG-5Dr" secondAttribute="leading" constant="4" id="0at-lu-yxX"/>
+                                    <constraint firstItem="yov-L4-210" firstAttribute="leading" secondItem="rHq-WM-rzJ" secondAttribute="trailing" id="3D3-hq-MFW"/>
+                                    <constraint firstAttribute="trailing" secondItem="JPA-4Y-rnY" secondAttribute="trailing" constant="4" id="3D7-bz-lic"/>
+                                    <constraint firstItem="JPA-4Y-rnY" firstAttribute="height" secondItem="BwT-7x-3RM" secondAttribute="height" id="3Lz-sm-wuw"/>
+                                    <constraint firstAttribute="trailing" secondItem="eI1-sB-890" secondAttribute="trailing" constant="4" id="41F-w0-6Mo"/>
+                                    <constraint firstItem="eI1-sB-890" firstAttribute="height" secondItem="58f-bR-nMv" secondAttribute="height" id="54E-uV-rmI"/>
+                                    <constraint firstItem="W8B-7M-xCe" firstAttribute="leading" secondItem="8jf-XG-5Dr" secondAttribute="leading" constant="8" id="5BM-Ih-uAx"/>
+                                    <constraint firstItem="G3T-Je-KL6" firstAttribute="leading" secondItem="58f-bR-nMv" secondAttribute="trailing" id="5Ge-Oh-MCM"/>
+                                    <constraint firstAttribute="trailing" secondItem="Zvc-TN-BwT" secondAttribute="trailing" constant="4" id="7L0-PP-BUA"/>
+                                    <constraint firstItem="G3T-Je-KL6" firstAttribute="top" secondItem="yov-L4-210" secondAttribute="bottom" id="7rb-NR-LbI"/>
+                                    <constraint firstItem="Wxn-Ou-vN4" firstAttribute="leading" secondItem="BwT-7x-3RM" secondAttribute="trailing" id="8fv-60-onc"/>
+                                    <constraint firstItem="rHq-WM-rzJ" firstAttribute="leading" secondItem="8jf-XG-5Dr" secondAttribute="leading" constant="4" id="AMX-JO-4Ef"/>
+                                    <constraint firstItem="XIZ-MJ-Qsb" firstAttribute="width" secondItem="aWn-GF-IfM" secondAttribute="width" id="ATc-rs-Vol"/>
+                                    <constraint firstItem="Zvc-TN-BwT" firstAttribute="width" secondItem="rHq-WM-rzJ" secondAttribute="width" id="Bn0-lV-vjx"/>
+                                    <constraint firstItem="bCn-jr-Ivm" firstAttribute="leading" secondItem="aWn-GF-IfM" secondAttribute="trailing" id="Bpx-fL-iXb"/>
+                                    <constraint firstItem="Wxn-Ou-vN4" firstAttribute="width" secondItem="BwT-7x-3RM" secondAttribute="width" id="CiI-IF-rLX"/>
+                                    <constraint firstItem="Wxn-Ou-vN4" firstAttribute="top" secondItem="G3T-Je-KL6" secondAttribute="bottom" id="DVL-vo-3A0"/>
+                                    <constraint firstItem="xBM-cQ-Ddl" firstAttribute="leading" secondItem="W8B-7M-xCe" secondAttribute="trailing" constant="13" id="DlC-Y0-l8W"/>
+                                    <constraint firstAttribute="bottom" secondItem="bCn-jr-Ivm" secondAttribute="bottom" id="F1H-4Z-hPs"/>
+                                    <constraint firstItem="eI1-sB-890" firstAttribute="leading" secondItem="G3T-Je-KL6" secondAttribute="trailing" id="IuM-4m-Ldw"/>
+                                    <constraint firstItem="XIZ-MJ-Qsb" firstAttribute="height" secondItem="aWn-GF-IfM" secondAttribute="height" id="KSk-Mg-uK2"/>
+                                    <constraint firstItem="JPA-4Y-rnY" firstAttribute="top" secondItem="eI1-sB-890" secondAttribute="bottom" id="L6Y-8l-s1X"/>
+                                    <constraint firstAttribute="trailing" secondItem="XIZ-MJ-Qsb" secondAttribute="trailing" constant="4" id="LAk-Im-tKu"/>
+                                    <constraint firstItem="JPA-4Y-rnY" firstAttribute="leading" secondItem="Wxn-Ou-vN4" secondAttribute="trailing" id="ODc-Ze-POb"/>
+                                    <constraint firstAttribute="trailing" secondItem="xBM-cQ-Ddl" secondAttribute="trailing" constant="23" id="Ohf-ih-3Za"/>
+                                    <constraint firstAttribute="bottom" secondItem="XIZ-MJ-Qsb" secondAttribute="bottom" id="PLL-nN-6MF"/>
+                                    <constraint firstItem="bCn-jr-Ivm" firstAttribute="height" secondItem="aWn-GF-IfM" secondAttribute="height" id="Sxo-2l-7kA"/>
+                                    <constraint firstItem="G3T-Je-KL6" firstAttribute="height" secondItem="58f-bR-nMv" secondAttribute="height" id="TQj-X3-A36"/>
+                                    <constraint firstItem="aWn-GF-IfM" firstAttribute="top" secondItem="BwT-7x-3RM" secondAttribute="bottom" id="XZp-yT-ZjJ"/>
+                                    <constraint firstItem="W8B-7M-xCe" firstAttribute="top" secondItem="8jf-XG-5Dr" secondAttribute="top" constant="56" id="Yad-SF-uhE"/>
+                                    <constraint firstItem="58f-bR-nMv" firstAttribute="top" secondItem="rHq-WM-rzJ" secondAttribute="bottom" id="aXL-SM-hG7"/>
+                                    <constraint firstItem="yov-L4-210" firstAttribute="height" secondItem="rHq-WM-rzJ" secondAttribute="height" id="fWt-gd-Hjq"/>
+                                    <constraint firstItem="xBM-cQ-Ddl" firstAttribute="top" secondItem="8jf-XG-5Dr" secondAttribute="top" constant="80" id="fro-LW-drq"/>
+                                    <constraint firstItem="G3T-Je-KL6" firstAttribute="width" secondItem="58f-bR-nMv" secondAttribute="width" id="g1d-Ph-I6x"/>
+                                    <constraint firstItem="XIZ-MJ-Qsb" firstAttribute="leading" secondItem="bCn-jr-Ivm" secondAttribute="trailing" id="gPX-o6-VO5"/>
+                                    <constraint firstItem="BwT-7x-3RM" firstAttribute="top" secondItem="58f-bR-nMv" secondAttribute="bottom" id="hEg-iB-NhO"/>
+                                    <constraint firstItem="yov-L4-210" firstAttribute="width" secondItem="rHq-WM-rzJ" secondAttribute="width" id="k7s-rO-00O"/>
+                                    <constraint firstItem="Zvc-TN-BwT" firstAttribute="height" secondItem="rHq-WM-rzJ" secondAttribute="height" id="lTg-Ok-kK6"/>
+                                    <constraint firstItem="bCn-jr-Ivm" firstAttribute="top" secondItem="Wxn-Ou-vN4" secondAttribute="bottom" id="neT-Vv-J88"/>
+                                    <constraint firstAttribute="bottom" secondItem="aWn-GF-IfM" secondAttribute="bottom" id="nhF-Od-Sqe"/>
+                                    <constraint firstItem="eI1-sB-890" firstAttribute="top" secondItem="Zvc-TN-BwT" secondAttribute="bottom" id="oXs-I6-wYR"/>
+                                    <constraint firstItem="aWn-GF-IfM" firstAttribute="leading" secondItem="8jf-XG-5Dr" secondAttribute="leading" constant="4" id="pqe-QE-Gfy"/>
+                                    <constraint firstItem="bCn-jr-Ivm" firstAttribute="width" secondItem="aWn-GF-IfM" secondAttribute="width" id="r3i-Ap-xm7"/>
+                                    <constraint firstItem="JPA-4Y-rnY" firstAttribute="width" secondItem="BwT-7x-3RM" secondAttribute="width" id="sCq-Ea-Al5"/>
+                                    <constraint firstItem="eI1-sB-890" firstAttribute="width" secondItem="58f-bR-nMv" secondAttribute="width" id="uEc-pT-vgw"/>
+                                    <constraint firstItem="Wxn-Ou-vN4" firstAttribute="height" secondItem="BwT-7x-3RM" secondAttribute="height" id="vlt-Q2-ALS"/>
+                                    <constraint firstItem="XIZ-MJ-Qsb" firstAttribute="top" secondItem="JPA-4Y-rnY" secondAttribute="bottom" id="wJl-1g-x0C"/>
+                                </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="Oqo-DM-Cdr" appends="YES" id="SNN-28-VSR"/>
+                                    <outletCollection property="gestureRecognizers" destination="3b8-d8-m29" appends="YES" id="bhc-r6-zpy"/>
+                                    <outletCollection property="gestureRecognizers" destination="Nu7-1n-UAp" appends="YES" id="3mS-hc-HJF"/>
                                 </connections>
                             </view>
                         </subviews>
@@ -136,21 +404,37 @@
                             <constraint firstAttribute="trailingMargin" secondItem="8jf-XG-5Dr" secondAttribute="trailing" constant="-20" id="514-7t-s9n"/>
                             <constraint firstItem="8jf-XG-5Dr" firstAttribute="leading" secondItem="SUY-vd-v3S" secondAttribute="leadingMargin" constant="-20" id="9Du-r8-WCn"/>
                             <constraint firstItem="4J1-IS-N87" firstAttribute="top" secondItem="8jf-XG-5Dr" secondAttribute="bottom" id="H5w-QT-wbC"/>
+                            <constraint firstItem="1hy-vU-wmB" firstAttribute="leading" secondItem="SUY-vd-v3S" secondAttribute="leadingMargin" constant="-51" id="RKw-le-SIc"/>
+                            <constraint firstItem="1hy-vU-wmB" firstAttribute="centerY" secondItem="SUY-vd-v3S" secondAttribute="centerY" id="fqa-v6-Qeh"/>
+                            <constraint firstItem="PTQ-sN-g6B" firstAttribute="centerY" secondItem="SUY-vd-v3S" secondAttribute="centerY" id="lQg-iP-d7X"/>
                             <constraint firstItem="8jf-XG-5Dr" firstAttribute="top" secondItem="SUY-vd-v3S" secondAttribute="topMargin" id="lhO-QV-kT5"/>
+                            <constraint firstItem="PTQ-sN-g6B" firstAttribute="trailing" secondItem="SUY-vd-v3S" secondAttribute="trailingMargin" constant="44" id="wJq-4w-302"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="amountLabel" destination="W8B-7M-xCe" id="jeJ-d8-YbQ"/>
+                        <outlet property="amountLabelHeight" destination="Yad-SF-uhE" id="Bb7-9f-UHh"/>
+                        <outlet property="cancelLabel" destination="1hy-vU-wmB" id="lVN-EE-TXh"/>
                         <outlet property="innerView" destination="8jf-XG-5Dr" id="17G-vE-NML"/>
+                        <outlet property="saveLabel" destination="PTQ-sN-g6B" id="aTH-9q-lrI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u3m-sb-OFS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="Oqo-DM-Cdr">
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="3b8-d8-m29">
+                    <rectEdge key="edges" left="YES"/>
                     <connections>
-                        <action selector="didPanInnerView:" destination="cSg-bm-eh6" id="h06-ko-Zut"/>
+                        <action selector="didPanOnInnerView:" destination="cSg-bm-eh6" id="poA-FL-8cb"/>
                     </connections>
-                </panGestureRecognizer>
+                </screenEdgePanGestureRecognizer>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="Nu7-1n-UAp">
+                    <rectEdge key="edges" right="YES"/>
+                    <connections>
+                        <action selector="didPanRightOnInnerView:" destination="cSg-bm-eh6" id="a0I-TP-Wvg"/>
+                    </connections>
+                </screenEdgePanGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1982" y="205"/>
+            <point key="canvasLocation" x="1981.5" y="204.5"/>
         </scene>
     </scenes>
 </document>

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SView.h"
+#import <pop/POP.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<POPAnimationDelegate>
 
 
 @end

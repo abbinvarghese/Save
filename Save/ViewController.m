@@ -7,17 +7,16 @@
 //
 
 #import "ViewController.h"
-#import <pop/POP.h>
 #import "SDetailViewController.h"
 
 #define kraiseAnimation @"raise"
 #define klowerAnimation @"lower"
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *incomeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *expenseLabel;
 @property (weak, nonatomic) IBOutlet SView *upperView;
 @property (weak, nonatomic) IBOutlet SView *lowerView;
+@property (weak, nonatomic) IBOutlet UIButton *expenseButton;
+@property (weak, nonatomic) IBOutlet UIButton *incomeButton;
 
 @property(nonatomic,strong)POPBasicAnimation *raiseAnimation;
 @property(nonatomic,strong)POPBasicAnimation *lowerAnimation;
@@ -58,7 +57,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [UIView animateWithDuration:0.3 animations:^(void){
+        self.upperView.alpha = 1;
+        self.lowerView.alpha = 1;
+    }];
+}
+
 - (IBAction)didSwipeDownOnUpperView:(UISwipeGestureRecognizer *)sender {
+    self.view.backgroundColor = [UIColor lightGrayColor];
     [self.upperView pop_addAnimation:self.lowerAnimation forKey:klowerAnimation];
     [self.upperView touchesBegan:nil withEvent:nil];
     self.upperView.shouldTouch = NO;
@@ -75,7 +82,8 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
     [self presentViewController:vc animated:NO completion:^(void){
-        
+            self.upperView.alpha = 0;
+            self.lowerView.alpha = 0;
     }];
 //    [UIView animateWithDuration:0.2 animations:^(void){
 //        self.upperView.alpha = 0;
@@ -94,6 +102,20 @@
 //        self.upperView.hidden=YES;
 //        self.lowerView.hidden=YES;
 //    }];
+}
+
+- (void)pop_animationDidStart:(POPAnimation *)anim{
+    if ([anim.name isEqualToString:klowerAnimation]) {
+        self.view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+        self.incomeButton.enabled = NO;
+    }
+}
+
+- (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished{
+    if ([anim.name isEqualToString:kraiseAnimation]) {
+        self.view.backgroundColor = [UIColor whiteColor];
+        self.incomeButton.enabled = YES;
+    }
 }
 
 @end
