@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AKPickerView.h"
 
-@interface SDetailViewController : UIViewController
+@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate>
+
+@property(nonatomic,assign) BOOL isIncome;
 
 @end

@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *amountLabelHeight;
 
 @property(nonatomic,strong)NSMutableString *amount;
+@property (weak, nonatomic) IBOutlet AKPickerView *pickerViewCustom;
 
 @end
 
@@ -24,6 +25,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.pickerViewCustom.delegate = self;
+    self.pickerViewCustom.dataSource = self;
+    self.pickerViewCustom.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.pickerViewCustom.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:20];
+    self.pickerViewCustom.highlightedFont = [UIFont fontWithName:@"Adequate-ExtraLight" size:21];
+    self.pickerViewCustom.interitemSpacing = 20.0;
+    self.pickerViewCustom.fisheyeFactor = 0.001;
+    self.pickerViewCustom.pickerViewStyle = AKPickerViewStyle3D;
+    self.pickerViewCustom.maskDisabled = false;
+    if (self.isIncome) {
+        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+    }
+    else{
+        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
+    }
+
     self.amount = [NSMutableString string];
     if (IS_IPHONE_5) {
         self.amountLabel.font = [UIFont fontWithName:@"EuropeUnderground-Light" size:53];
@@ -35,9 +52,10 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [UIView animateWithDuration:0.5 animations:^(void){
+        self.innerView.alpha = 1;
+    }completion:^(BOOL finished){
         self.saveLabel.alpha = 1;
         self.cancelLabel.alpha = 1;
-        self.innerView.alpha = 1;
     }];
 }
 
@@ -75,7 +93,8 @@
             }];
         }
         else{
-            self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+            //self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+            self.view.backgroundColor = [UIColor colorWithRed:1.0 green:0.7 blue:0.7 alpha:1];
             [UIView animateWithDuration:0.3 animations:^(void){
                 self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
                 self.cancelLabel.center = CGPointMake(translation.x/2, self.cancelLabel.center.y);
@@ -87,32 +106,49 @@
 - (IBAction)didPanRightOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
     CGPoint translation = [sender translationInView:self.innerView];
     if ((int)translation.x < -[UIScreen mainScreen].bounds.size.width/2) {
-        sender.enabled = NO;
-        [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-            self.innerView.frame = CGRectMake(-[UIScreen mainScreen].bounds.size.width-20, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-            self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
-            self.cancelLabel.hidden = YES;
-        }completion:^(BOOL finished){
-            self.saveLabel.textColor = [UIColor blueColor];
-            [NSTimer scheduledTimerWithTimeInterval:0.5
-                                             target:self
-                                           selector:@selector(dismissView)
-                                           userInfo:nil
-                                            repeats:NO];
-        }];
+        if ([self.amount intValue]>0) {
+            sender.enabled = NO;
+            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake(-[UIScreen mainScreen].bounds.size.width-20, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
+                self.cancelLabel.hidden = YES;
+            }completion:^(BOOL finished){
+                self.saveLabel.textColor = [UIColor blueColor];
+                [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                 target:self
+                                               selector:@selector(dismissView)
+                                               userInfo:nil
+                                                repeats:NO];
+            }];
+        }
+        else{
+            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width, self.cancelLabel.center.y);
+            }completion:^(BOOL finished){
+                self.view.backgroundColor = [UIColor whiteColor];
+            }];
+        }
     }
     else{
         if (sender.state == UIGestureRecognizerStateEnded) {
             
             [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
                 self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width, self.cancelLabel.center.y);
             }completion:^(BOOL finished){
                 self.view.backgroundColor = [UIColor whiteColor];
             }];
         }
         else{
-            self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+            //self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+            self.view.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:1 alpha:1];
+            if ([self.amount intValue]>0) {
+                self.saveLabel.text = @"save";
+            }
+            else{
+                self.saveLabel.text = @"huh?";
+            }
             [UIView animateWithDuration:0.3 animations:^(void){
                 self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
                 int left = ([UIScreen mainScreen].bounds.size.width);
@@ -139,6 +175,7 @@
     if (self.amount.length<9) {
         [self.amount appendString:@"1"];
         self.amountLabel.text = self.amount;
+        sender.titleLabel.textColor = [UIColor yellowColor];
     }
 }
 - (IBAction)twoTapped:(UIButton *)sender {
@@ -202,7 +239,28 @@
     }
 }
 - (IBAction)backspaceTapped:(UIButton *)sender {
+    if (self.amount.length>0) {
+        [self.amount setString:[self.amount substringToIndex:[self.amount length]-1]];
+        self.amountLabel.text = self.amount;
+    }
+}
 
+
+- (NSUInteger)numberOfItemsInPickerView:(AKPickerView *)pickerView
+{
+    return 15;
+}
+
+- (NSString *)pickerView:(AKPickerView *)pickerView titleForItem:(NSInteger)item
+{
+    return [NSString stringWithFormat:@"%ld",(long)item];
+}
+
+#pragma mark - AKPickerViewDelegate
+
+- (void)pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item
+{
+    
 }
 
 

@@ -20,6 +20,7 @@
 		584F2E5B1BD66A0800F91052 /* SDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 584F2E5A1BD66A0800F91052 /* SDetailViewController.m */; settings = {ASSET_TAGS = (); }; };
 		585F9F471BD506EF006CC223 /* Adequate-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 585F9F461BD506EF006CC223 /* Adequate-ExtraLight.ttf */; settings = {ASSET_TAGS = (); }; };
 		585F9F4A1BD513AE006CC223 /* SView.m in Sources */ = {isa = PBXBuildFile; fileRef = 585F9F491BD513AE006CC223 /* SView.m */; settings = {ASSET_TAGS = (); }; };
+		5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */; settings = {ASSET_TAGS = (); }; };
 		8C28FAE895FE3B71170C029C /* Pods_Save.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817266FE4409656ECCBD2ADF /* Pods_Save.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,8 @@
 		585F9F461BD506EF006CC223 /* Adequate-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Adequate-ExtraLight.ttf"; sourceTree = "<group>"; };
 		585F9F481BD513AE006CC223 /* SView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SView.h; sourceTree = "<group>"; };
 		585F9F491BD513AE006CC223 /* SView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SView.m; sourceTree = "<group>"; };
+		5873D3D91BDE260B00D5BBEC /* AKPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKPickerView.h; sourceTree = "<group>"; };
+		5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKPickerView.m; sourceTree = "<group>"; };
 		817266FE4409656ECCBD2ADF /* Pods_Save.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Save.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A91B8680B10D67FB5F073EAC /* Pods-Save.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Save.release.xcconfig"; path = "Pods/Target Support Files/Pods-Save/Pods-Save.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -186,6 +189,8 @@
 			children = (
 				585F9F481BD513AE006CC223 /* SView.h */,
 				585F9F491BD513AE006CC223 /* SView.m */,
+				5873D3D91BDE260B00D5BBEC /* AKPickerView.h */,
+				5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -390,6 +395,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */,
 				581C2FAC1BD4C2A90021ABA3 /* Save.xcdatamodeld in Sources */,
 				585F9F4A1BD513AE006CC223 /* SView.m in Sources */,
 				581C2FA61BD4C2A90021ABA3 /* ViewController.m in Sources */,

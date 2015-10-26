@@ -81,6 +81,7 @@
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
+    vc.isIncome = YES;
     [self presentViewController:vc animated:NO completion:^(void){
             self.upperView.alpha = 0;
             self.lowerView.alpha = 0;
@@ -95,6 +96,13 @@
 }
 
 - (IBAction)expenceTapped:(UIButton *)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
+    vc.isIncome = NO;
+    [self presentViewController:vc animated:NO completion:^(void){
+        self.upperView.alpha = 0;
+        self.lowerView.alpha = 0;
+    }];
 //    [UIView animateWithDuration:0.2 animations:^(void){
 //        self.upperView.alpha = 0;
 //        self.lowerView.alpha = 0;
