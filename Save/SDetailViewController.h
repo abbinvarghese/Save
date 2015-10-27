@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AKPickerView.h"
+@import MediaPlayer;
 
 @interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate>
 

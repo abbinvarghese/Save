@@ -553,6 +553,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Paadam.Save;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "f2e8fb16-ad54-4412-859f-81342fcb6a44";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -567,6 +568,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Paadam.Save;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "f2e8fb16-ad54-4412-859f-81342fcb6a44";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

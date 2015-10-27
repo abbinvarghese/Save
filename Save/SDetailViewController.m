@@ -8,16 +8,57 @@
 
 #import "SDetailViewController.h"
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+#define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
 
 @interface SDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIView *innerView;
 @property (weak, nonatomic) IBOutlet UILabel *saveLabel;
 @property (weak, nonatomic) IBOutlet UILabel *cancelLabel;
 @property (weak, nonatomic) IBOutlet UILabel *amountLabel;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *amountLabelHeight;
 
 @property(nonatomic,strong)NSMutableString *amount;
 @property (weak, nonatomic) IBOutlet AKPickerView *pickerViewCustom;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *amountLabelUpper;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *currencyUpper;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pickerViewUpper;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pickerViewLower;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *pickerViewGesture;
+
+
+@property (weak, nonatomic) IBOutlet UIButton *one;
+@property (weak, nonatomic) IBOutlet UIButton *two;
+@property (weak, nonatomic) IBOutlet UIButton *three;
+@property (weak, nonatomic) IBOutlet UIButton *four;
+@property (weak, nonatomic) IBOutlet UIButton *five;
+@property (weak, nonatomic) IBOutlet UIButton *six;
+@property (weak, nonatomic) IBOutlet UIButton *seven;
+@property (weak, nonatomic) IBOutlet UIButton *eight;
+@property (weak, nonatomic) IBOutlet UIButton *nine;
+@property (weak, nonatomic) IBOutlet UIButton *point;
+@property (weak, nonatomic) IBOutlet UIButton *zero;
+@property (weak, nonatomic) IBOutlet UIButton *cancel;
+
+@property (weak, nonatomic) IBOutlet UITextView *notesView;
+@property (weak, nonatomic) IBOutlet UIButton *dateView;
+@property (weak, nonatomic) IBOutlet UIButton *imageButtonView;
+
+
+@property (nonatomic,assign) CGPoint onePoint;
+@property (nonatomic,assign) CGPoint twoPoint;
+@property (nonatomic,assign) CGPoint threePoint;
+@property (nonatomic,assign) CGPoint fourPoint;
+@property (nonatomic,assign) CGPoint fivePoint;
+@property (nonatomic,assign) CGPoint sixPoint;
+@property (nonatomic,assign) CGPoint sevenPoint;
+@property (nonatomic,assign) CGPoint eightPoint;
+@property (nonatomic,assign) CGPoint ninePoint;
+@property (nonatomic,assign) CGPoint zeroPoint;
+@property (nonatomic,assign) CGPoint pointPoint;
+@property (nonatomic,assign) CGPoint cancelPoint;
+@property (nonatomic,assign) CGPoint pickerPoint;
+
+@property (nonatomic,assign) int panInt;
 
 @end
 
@@ -44,7 +85,16 @@
     self.amount = [NSMutableString string];
     if (IS_IPHONE_5) {
         self.amountLabel.font = [UIFont fontWithName:@"EuropeUnderground-Light" size:53];
-        self.amountLabelHeight.constant = self.amountLabelHeight.constant+17;
+        self.currencyUpper.constant = self.currencyUpper.constant-6;
+        self.pickerViewUpper.constant = 20;
+        self.pickerViewLower.constant = 20;
+    }
+    else if (IS_IPHONE_4s){
+        self.amountLabel.font = [UIFont fontWithName:@"EuropeUnderground-Light" size:53];
+        self.amountLabelUpper.constant = self.amountLabelUpper.constant-20;
+        self.currencyUpper.constant = self.currencyUpper.constant-26;
+        self.pickerViewUpper.constant = 10;
+        self.pickerViewLower.constant = 5;
     }
     // Do any additional setup after loading the view.
 }
@@ -65,6 +115,7 @@
 }
 
 - (IBAction)didPanOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
     CGPoint translation = [sender translationInView:self.innerView];
     
     if ((int)translation.x >[UIScreen mainScreen].bounds.size.width/2) {
@@ -93,8 +144,8 @@
             }];
         }
         else{
-            //self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            self.view.backgroundColor = [UIColor colorWithRed:1.0 green:0.7 blue:0.7 alpha:1];
+            self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+//            self.view.backgroundColor = [UIColor colorWithRed:1.0 green:0.7 blue:0.7 alpha:1];
             [UIView animateWithDuration:0.3 animations:^(void){
                 self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
                 self.cancelLabel.center = CGPointMake(translation.x/2, self.cancelLabel.center.y);
@@ -104,6 +155,7 @@
 }
 
 - (IBAction)didPanRightOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
     CGPoint translation = [sender translationInView:self.innerView];
     if ((int)translation.x < -[UIScreen mainScreen].bounds.size.width/2) {
         if ([self.amount intValue]>0) {
@@ -263,5 +315,228 @@
     
 }
 
+- (IBAction)didSwipeDownNumPads:(UISwipeGestureRecognizer *)sender {
+    [self animateIntoOptions];
+}
+
+
+-(void)animateIntoOptions{
+    [UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.pointPoint = self.point.center;
+        self.point.center = CGPointMake(self.point.center.x, [UIScreen mainScreen].bounds.size.height+self.point.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.sevenPoint = self.seven.center;
+        self.seven.center = CGPointMake(self.seven.center.x, [UIScreen mainScreen].bounds.size.height+self.seven.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.fourPoint = self.four.center;
+        self.four.center = CGPointMake(self.four.center.x, [UIScreen mainScreen].bounds.size.height+self.four.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.4 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.onePoint = self.one.center;
+        self.one.center = CGPointMake(self.one.center.x, [UIScreen mainScreen].bounds.size.height+self.one.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    
+    
+
+    [UIView animateWithDuration:0.1 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.zeroPoint = self.zero.center;
+        self.zero.center = CGPointMake(self.zero.center.x, [UIScreen mainScreen].bounds.size.height+self.zero.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.2 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.eightPoint = self.eight.center;
+        self.eight.center = CGPointMake(self.eight.center.x, [UIScreen mainScreen].bounds.size.height+self.eight.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.fivePoint = self.five.center;
+        self.five.center = CGPointMake(self.five.center.x, [UIScreen mainScreen].bounds.size.height+self.five.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.twoPoint = self.two.center;
+        self.two.center = CGPointMake(self.two.center.x, [UIScreen mainScreen].bounds.size.height+self.two.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    
+    
+    [UIView animateWithDuration:0.1 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.cancelPoint = self.cancel.center;
+        self.cancel.center = CGPointMake(self.cancel.center.x, [UIScreen mainScreen].bounds.size.height+self.cancel.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.2 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.ninePoint = self.nine.center;
+        self.nine.center = CGPointMake(self.nine.center.x, [UIScreen mainScreen].bounds.size.height+self.nine.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.3 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.sixPoint = self.six.center;
+        self.six.center = CGPointMake(self.six.center.x, [UIScreen mainScreen].bounds.size.height+self.six.bounds.size.height);
+    }completion:^(BOOL finished){
+        
+    }];
+    [UIView animateWithDuration:0.4 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.threePoint = self.three.center;
+        self.three.center = CGPointMake(self.three.center.x, [UIScreen mainScreen].bounds.size.height+self.three.bounds.size.height);
+    }completion:^(BOOL finished){
+        [UIView animateWithDuration:0.3 animations:^(void){
+//            self.notesView.layer.cornerRadius = 5;
+//            self.notesView.layer.masksToBounds = YES;
+            self.notesView.layer.borderWidth = 1;
+            self.notesView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
+            self.notesView.alpha = 1;
+//            self.dateView.layer.cornerRadius = 5;
+//            self.dateView.layer.masksToBounds = YES;
+            self.dateView.alpha = 1;
+            self.dateView.layer.borderWidth = 1;
+            self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
+            self.imageButtonView.alpha = 1;
+            
+        }completion:^(BOOL finished){
+            self.pickerViewGesture.enabled=YES;
+        }];
+    }];
+    [UIView animateWithDuration:0.2 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.pickerPoint = self.pickerViewCustom.center;
+        self.pickerViewCustom.center = CGPointMake(self.pickerViewCustom.center.x, self.pickerViewCustom.bounds.size.height/2+20);
+    }completion:^(BOOL finished){
+        
+    }];
+    
+
+}
+
+- (IBAction)didSwipeDownPickerView:(UISwipeGestureRecognizer *)sender {
+    [self animateBack];
+}
+
+
+-(void)animateBack{
+    
+    [UIView animateWithDuration:0.3 animations:^(void){
+        self.notesView.layer.borderWidth = 1;
+        self.notesView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
+        self.notesView.alpha = 0;
+        self.dateView.alpha = 0;
+        self.dateView.layer.borderWidth = 1;
+        self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
+        self.imageButtonView.alpha = 0;
+    }completion:^(BOOL finished){
+        
+        [UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.point.center = self.pointPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.seven.center = self.sevenPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.four.center = self.fourPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.4 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.one.center = self.onePoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        
+        
+        
+        [UIView animateWithDuration:0.1 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.zero.center = self.zeroPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.2 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.eight.center = self.eightPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.3 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.five.center = self.fivePoint ;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.two.center = self.twoPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        
+        
+        [UIView animateWithDuration:0.1 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.cancel.center = self.cancelPoint ;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.2 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.nine.center = self.ninePoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.3 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.six.center = self.sixPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+        [UIView animateWithDuration:0.4 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.three.center = self.threePoint;
+        }completion:^(BOOL finished){
+            self.pickerViewGesture.enabled=NO;
+        }];
+        [UIView animateWithDuration:0.2 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.pickerViewCustom.center = self.pickerPoint;
+        }completion:^(BOOL finished){
+            
+        }];
+
+        
+    }];
+}
+- (IBAction)dateButtonClicked:(UIButton *)sender {
+    if ([self.notesView isFirstResponder]) {
+        [self.view endEditing:YES];
+    }
+    else{
+        
+    }
+}
+- (IBAction)imageButtonClicked:(UIButton *)sender {
+    if ([self.notesView isFirstResponder]) {
+        [self.view endEditing:YES];
+    }
+    else{
+       
+    }
+}
+- (IBAction)didPanDateButton:(UIPanGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        
+    }
+    else{
+        CGPoint translation = [sender translationInView:self.dateView];
+    }
+}
 
 @end
