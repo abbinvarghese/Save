@@ -10,7 +10,7 @@
 #import "AKPickerView.h"
 @import MediaPlayer;
 
-@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate>
+@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property(nonatomic,assign) BOOL isIncome;
 

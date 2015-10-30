@@ -58,6 +58,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [UIView animateWithDuration:0.3 animations:^(void){
         self.upperView.alpha = 1;
         self.lowerView.alpha = 1;
@@ -76,6 +77,7 @@
     self.upperView.shouldTouch = YES;
     [self.upperView touchesEnded:nil withEvent:nil];
 }
+
 
 - (IBAction)incomeTapped:(UIButton *)sender {
     

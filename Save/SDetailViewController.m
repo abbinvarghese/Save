@@ -7,10 +7,24 @@
 //
 
 #import "SDetailViewController.h"
+#import "SCollectionViewCell.h"
+#include <AssetsLibrary/AssetsLibrary.h> 
+
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
 
 @interface SDetailViewController ()
+
+{
+    NSDate *newDate1;
+    ALAssetsLibrary *library;
+    NSArray *imageArray;
+    NSMutableArray *mutableArray;
+}
+
+
+@property (weak, nonatomic) IBOutlet UICollectionView *photoGallary;
+
 @property (weak, nonatomic) IBOutlet UIView *innerView;
 @property (weak, nonatomic) IBOutlet UILabel *saveLabel;
 @property (weak, nonatomic) IBOutlet UILabel *cancelLabel;
@@ -23,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *currencyUpper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *pickerViewUpper;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *pickerViewLower;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *notesUpper;
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *pickerViewGesture;
 
 
@@ -40,7 +55,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancel;
 
 @property (weak, nonatomic) IBOutlet UITextView *notesView;
-@property (weak, nonatomic) IBOutlet UIButton *dateView;
+@property (weak, nonatomic) IBOutlet UILabel *dateView;
 @property (weak, nonatomic) IBOutlet UIButton *imageButtonView;
 
 
@@ -59,13 +74,17 @@
 @property (nonatomic,assign) CGPoint pickerPoint;
 
 @property (nonatomic,assign) int panInt;
+@property (nonatomic,strong) NSDate *selectedDate;
 
 @end
+
+static int count=0;
 
 @implementation SDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.selectedDate = [NSDate date];
     self.pickerViewCustom.delegate = self;
     self.pickerViewCustom.dataSource = self;
     self.pickerViewCustom.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -88,6 +107,7 @@
         self.currencyUpper.constant = self.currencyUpper.constant-6;
         self.pickerViewUpper.constant = 20;
         self.pickerViewLower.constant = 20;
+        self.notesUpper.constant = 37;
     }
     else if (IS_IPHONE_4s){
         self.amountLabel.font = [UIFont fontWithName:@"EuropeUnderground-Light" size:53];
@@ -407,7 +427,12 @@
             self.dateView.alpha = 1;
             self.dateView.layer.borderWidth = 1;
             self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
-            self.imageButtonView.alpha = 1;
+            if (imageArray.count==0 || imageArray == nil) {
+                self.imageButtonView.alpha = 1;
+            }
+            if (imageArray.count>0) {
+                self.photoGallary.alpha = 1;
+            }
             
         }completion:^(BOOL finished){
             self.pickerViewGesture.enabled=YES;
@@ -429,7 +454,7 @@
 
 
 -(void)animateBack{
-    
+    [self.view endEditing:YES];
     [UIView animateWithDuration:0.3 animations:^(void){
         self.notesView.layer.borderWidth = 1;
         self.notesView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
@@ -438,6 +463,7 @@
         self.dateView.layer.borderWidth = 1;
         self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
         self.imageButtonView.alpha = 0;
+        self.photoGallary.alpha = 0;
     }completion:^(BOOL finished){
         
         [UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
@@ -527,16 +553,113 @@
         [self.view endEditing:YES];
     }
     else{
-       
+//        [self.imageButtonView setTitle:@"accessing.." forState:UIControlStateNormal];
+//        [self getAllPictures];
+        [self performSelectorInBackground:@selector(getAllPictures) withObject:nil];
     }
 }
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return mutableArray.count;
+}
+
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    SCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cellIdentifier" forIndexPath:indexPath];
+    cell.imageViewC.image = [mutableArray objectAtIndex:indexPath.row];
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(150, 150);
+}
+
+
+
 - (IBAction)didPanDateButton:(UIPanGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
-        
+        self.selectedDate = newDate1;
     }
     else{
-        CGPoint translation = [sender translationInView:self.dateView];
+        CGPoint tran = [sender translationInView:self.view];
+        NSString *string = [NSString stringWithFormat:@"%i",(int)tran.y];
+        if (string.length>1) {
+            string = [string substringToIndex:[string length]-1];
+        }
+        newDate1 = [self.selectedDate dateByAddingTimeInterval:60*60*24*[string intValue]];
+        NSDateFormatter *form = [[NSDateFormatter alloc]init];
+        [form setDateFormat:@"dd MMMM yyyy"];
+        [self.dateView setText:[form stringFromDate:newDate1]];
+        
     }
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];
+}
+
+-(void)getAllPictures
+{
+    imageArray=[[NSMutableArray alloc] init];
+    mutableArray =[[NSMutableArray alloc]init];
+    NSMutableArray* assetURLDictionaries = [[NSMutableArray alloc] init];
+    
+    library = [[ALAssetsLibrary alloc] init];
+    
+    void (^assetEnumerator)( ALAsset *, NSUInteger, BOOL *) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+        if(result != nil) {
+            if([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto]) {
+                [assetURLDictionaries addObject:[result valueForProperty:ALAssetPropertyURLs]];
+                
+                NSURL *url= (NSURL*) [[result defaultRepresentation]url];
+                
+                [library assetForURL:url
+                         resultBlock:^(ALAsset *asset) {
+                             [mutableArray addObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]]];
+                             NSLog(@"%d       %lu",count,(unsigned long)mutableArray.count);
+//                             if ([mutableArray count]==count)
+//                             {
+//                                 imageArray=[[NSArray alloc] initWithArray:mutableArray];
+//                                 [self allPhotosCollected:imageArray];
+                             [self performSelectorOnMainThread:@selector(allPhotosCollected:) withObject:nil waitUntilDone:YES];
+//                             }
+                         }
+                        failureBlock:^(NSError *error){ NSLog(@"operation was not successfull!"); } ];
+                
+            }
+        }
+    };
+    
+    NSMutableArray *assetGroups = [[NSMutableArray alloc] init];
+    
+    void (^ assetGroupEnumerator) ( ALAssetsGroup *, BOOL *)= ^(ALAssetsGroup *group, BOOL *stop) {
+        if(group != nil) {
+            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
+            [group enumerateAssetsUsingBlock:assetEnumerator];
+            [assetGroups addObject:group];
+            count=(int)[group numberOfAssets];
+        }
+    };
+    
+    assetGroups = [[NSMutableArray alloc] init];
+    
+    [library enumerateGroupsWithTypes:ALAssetsGroupAll
+                           usingBlock:assetGroupEnumerator
+                         failureBlock:^(NSError *error) {NSLog(@"There is an error");}];
+}
+
+-(void)allPhotosCollected:(NSArray*)imgArray
+{
+    [self.photoGallary reloadData];
+    self.imageButtonView.alpha = 0;
+    [UIView animateWithDuration:0.5 animations:^(void){
+        self.photoGallary.alpha = 1;
+    }completion:^(BOOL finished){
+        
+    }];
 }
 
 @end
