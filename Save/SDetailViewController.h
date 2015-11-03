@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "AKPickerView.h"
+#import "SButton.h"
+
 @import MediaPlayer;
 
-@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SButtonDelegate>
 
 @property(nonatomic,assign) BOOL isIncome;
 

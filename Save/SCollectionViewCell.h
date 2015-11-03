@@ -2,7 +2,7 @@
 //  SCollectionViewCell.h
 //  Save
 //
-//  Created by Abbin on 29/10/15.
+//  Created by Abbin on 02/11/15.
 //  Copyright © 2015 Abbin. All rights reserved.
 //
 
@@ -11,5 +11,6 @@
 @interface SCollectionViewCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageViewC;
+
 
 @end

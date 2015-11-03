@@ -8,19 +8,22 @@
 
 #import "ViewController.h"
 #import "SDetailViewController.h"
+#import "SLabel.h"
 
 #define kraiseAnimation @"raise"
 #define klowerAnimation @"lower"
+#define kLowerShadowAnimation @"raiseShadow"
+#define kRaiseShadowAnimation @"lowerShadow"
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet SView *upperView;
-@property (weak, nonatomic) IBOutlet SView *lowerView;
-@property (weak, nonatomic) IBOutlet UIButton *expenseButton;
-@property (weak, nonatomic) IBOutlet UIButton *incomeButton;
 
 @property(nonatomic,strong)POPBasicAnimation *raiseAnimation;
 @property(nonatomic,strong)POPBasicAnimation *lowerAnimation;
-
+@property(nonatomic,strong)POPBasicAnimation *raiseShadowAnimation;
+@property(nonatomic,strong)POPBasicAnimation *lowerShadowAnimation;
+@property (weak, nonatomic) IBOutlet SLabel *incomeButton;
+@property (weak, nonatomic) IBOutlet SLabel *expenseButton;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *incomeTap;
 
 @end
 
@@ -28,8 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.upperView.viewTag = 0;
-    self.lowerView.viewTag = 1;
+    [self drawCustomeView];
     self.raiseAnimation = [POPBasicAnimation animation];
     self.raiseAnimation.name = kraiseAnimation;
     self.raiseAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
@@ -50,6 +52,24 @@
     self.lowerAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
     self.lowerAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(screenWidth/2,middle + middleOfMiddle+50)];
     self.lowerAnimation.delegate=self;
+    
+    
+    self.lowerShadowAnimation = [POPBasicAnimation animation];
+    self.lowerShadowAnimation.name = kLowerShadowAnimation;
+    self.lowerShadowAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerShadowOpacity];
+    self.lowerShadowAnimation.toValue=@(1);
+    self.lowerShadowAnimation.delegate=self;
+    
+    self.raiseShadowAnimation = [POPBasicAnimation animation];
+    self.raiseShadowAnimation.name = kRaiseShadowAnimation;
+    self.raiseShadowAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerShadowOpacity];
+    self.raiseShadowAnimation.toValue=@(0);
+    self.raiseShadowAnimation.delegate=self;
+}
+
+-(void)drawCustomeView{
+    [self.incomeButton drawRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:YES];
+    [self.expenseButton drawRect:CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:NO];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,71 +80,52 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [UIView animateWithDuration:0.3 animations:^(void){
-        self.upperView.alpha = 1;
-        self.lowerView.alpha = 1;
+        self.incomeButton.alpha = 1;
+        self.expenseButton.alpha = 1;
     }];
 }
 
 - (IBAction)didSwipeDownOnUpperView:(UISwipeGestureRecognizer *)sender {
-    self.view.backgroundColor = [UIColor lightGrayColor];
-    [self.upperView pop_addAnimation:self.lowerAnimation forKey:klowerAnimation];
-    [self.upperView touchesBegan:nil withEvent:nil];
-    self.upperView.shouldTouch = NO;
+    [self.incomeButton pop_addAnimation:self.lowerAnimation forKey:klowerAnimation];
+    [self.incomeButton.layer pop_addAnimation:self.lowerShadowAnimation forKey:kLowerShadowAnimation];
 }
 
 - (IBAction)didSwipeUpOnUpperView:(UISwipeGestureRecognizer *)sender {
-    [self.upperView pop_addAnimation:self.raiseAnimation forKey:kraiseAnimation];
-    self.upperView.shouldTouch = YES;
-    [self.upperView touchesEnded:nil withEvent:nil];
+    [self.incomeButton pop_addAnimation:self.raiseAnimation forKey:kraiseAnimation];
+    [self.incomeButton.layer pop_addAnimation:self.raiseShadowAnimation forKey:kRaiseShadowAnimation];
 }
 
-
-- (IBAction)incomeTapped:(UIButton *)sender {
-    
+- (IBAction)incomeTapped:(UITapGestureRecognizer *)sender {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
     vc.isIncome = YES;
     [self presentViewController:vc animated:NO completion:^(void){
-            self.upperView.alpha = 0;
-            self.lowerView.alpha = 0;
+        self.incomeButton.alpha = 0;
+        self.expenseButton.alpha = 0;
     }];
-//    [UIView animateWithDuration:0.2 animations:^(void){
-//        self.upperView.alpha = 0;
-//        self.lowerView.alpha = 0;
-//    }completion:^(BOOL finished){
-//        self.upperView.hidden=YES;
-//        self.lowerView.hidden=YES;
-//    }];
 }
-
-- (IBAction)expenceTapped:(UIButton *)sender {
+- (IBAction)expenseTapped:(UITapGestureRecognizer *)sender {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
     vc.isIncome = NO;
     [self presentViewController:vc animated:NO completion:^(void){
-        self.upperView.alpha = 0;
-        self.lowerView.alpha = 0;
+        self.incomeButton.alpha = 0;
+        self.expenseButton.alpha = 0;
     }];
-//    [UIView animateWithDuration:0.2 animations:^(void){
-//        self.upperView.alpha = 0;
-//        self.lowerView.alpha = 0;
-//    }completion:^(BOOL finished){
-//        self.upperView.hidden=YES;
-//        self.lowerView.hidden=YES;
-//    }];
 }
+
 
 - (void)pop_animationDidStart:(POPAnimation *)anim{
     if ([anim.name isEqualToString:klowerAnimation]) {
-        self.view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
-        self.incomeButton.enabled = NO;
+        self.incomeButton.shouldTouch = NO;
+        self.incomeTap.enabled = NO;
     }
 }
 
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished{
     if ([anim.name isEqualToString:kraiseAnimation]) {
-        self.view.backgroundColor = [UIColor whiteColor];
-        self.incomeButton.enabled = YES;
+        self.incomeButton.shouldTouch = YES;
+        self.incomeTap.enabled = YES;
     }
 }
 

@@ -8,38 +8,43 @@
 
 #import "SDetailViewController.h"
 #import "SCollectionViewCell.h"
-#include <AssetsLibrary/AssetsLibrary.h> 
+#import "AppDelegate.h"
+#include <Photos/Photos.h>
+#import "UICollectionView+UICollectionView_Convenience.h"
+#import "NSIndexSet+NSIndexSet_Convenience.h"
+
 
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
 
-@interface SDetailViewController ()
+@interface SDetailViewController ()<PHPhotoLibraryChangeObserver>
 
 {
     NSDate *newDate1;
-    ALAssetsLibrary *library;
-    NSArray *imageArray;
-    NSMutableArray *mutableArray;
+    int buttonHeight;
+    int buttonWidth;
+    NSArray *typeArray;
 }
 
+@property (nonatomic, strong) NSArray *sectionFetchResults;
+@property (nonatomic, strong) PHFetchResult *assetsFetchResults;
+@property (nonatomic, strong) PHCachingImageManager *imageManager;
+@property CGRect previousPreheatRect;
 
-@property (weak, nonatomic) IBOutlet UICollectionView *photoGallary;
+
+@property (strong, nonatomic) UICollectionView *photoGallary;
 
 @property (weak, nonatomic) IBOutlet UIView *innerView;
 @property (weak, nonatomic) IBOutlet UILabel *saveLabel;
 @property (weak, nonatomic) IBOutlet UILabel *cancelLabel;
 @property (weak, nonatomic) IBOutlet UILabel *amountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currenzyLabel;
 
 @property(nonatomic,strong)NSMutableString *amount;
+
 @property (weak, nonatomic) IBOutlet AKPickerView *pickerViewCustom;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *amountLabelUpper;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *currencyUpper;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pickerViewUpper;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pickerViewLower;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *notesUpper;
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *pickerViewGesture;
-
 
 @property (weak, nonatomic) IBOutlet UIButton *one;
 @property (weak, nonatomic) IBOutlet UIButton *two;
@@ -54,10 +59,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *zero;
 @property (weak, nonatomic) IBOutlet UIButton *cancel;
 
-@property (weak, nonatomic) IBOutlet UITextView *notesView;
-@property (weak, nonatomic) IBOutlet UILabel *dateView;
-@property (weak, nonatomic) IBOutlet UIButton *imageButtonView;
-
+@property (strong, nonatomic)  UITextView *notesView;
+@property (strong, nonatomic)  UILabel *dateView;
+@property (strong, nonatomic)  SButton *imageButtonView;
 
 @property (nonatomic,assign) CGPoint onePoint;
 @property (nonatomic,assign) CGPoint twoPoint;
@@ -78,12 +82,27 @@
 
 @end
 
-static int count=0;
 
 @implementation SDetailViewController
 
+static CGSize AssetGridThumbnailSize;
+
+- (void)awakeFromNib {
+    self.imageManager = [[PHCachingImageManager alloc] init];
+    [self resetCachedAssets];
+    
+    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+}
+
+- (void)dealloc {
+    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    buttonWidth = [UIScreen mainScreen].bounds.size.width/3;
+    buttonHeight = [UIScreen mainScreen].bounds.size.height/2/4;
+    [self drawPrimaryView];
     self.selectedDate = [NSDate date];
     self.pickerViewCustom.delegate = self;
     self.pickerViewCustom.dataSource = self;
@@ -95,32 +114,30 @@ static int count=0;
     self.pickerViewCustom.pickerViewStyle = AKPickerViewStyle3D;
     self.pickerViewCustom.maskDisabled = false;
     if (self.isIncome) {
+        typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"income"];
         self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
     }
     else{
+        typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"expense"];
         self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
     }
 
     self.amount = [NSMutableString string];
     if (IS_IPHONE_5) {
         self.amountLabel.font = [UIFont fontWithName:@"EuropeUnderground-Light" size:53];
-        self.currencyUpper.constant = self.currencyUpper.constant-6;
-        self.pickerViewUpper.constant = 20;
-        self.pickerViewLower.constant = 20;
-        self.notesUpper.constant = 37;
     }
     else if (IS_IPHONE_4s){
         self.amountLabel.font = [UIFont fontWithName:@"EuropeUnderground-Light" size:53];
-        self.amountLabelUpper.constant = self.amountLabelUpper.constant-20;
-        self.currencyUpper.constant = self.currencyUpper.constant-26;
-        self.pickerViewUpper.constant = 10;
-        self.pickerViewLower.constant = 5;
     }
     // Do any additional setup after loading the view.
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    // Begin caching assets in and around collection view's visible rect.
+    [self updateCachedAssets];
+    
     [UIView animateWithDuration:0.5 animations:^(void){
         self.innerView.alpha = 1;
     }completion:^(BOOL finished){
@@ -134,106 +151,7 @@ static int count=0;
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)didPanOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
-    [self.view endEditing:YES];
-    CGPoint translation = [sender translationInView:self.innerView];
-    
-    if ((int)translation.x >[UIScreen mainScreen].bounds.size.width/2) {
-        sender.enabled = NO;
-        [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-            self.innerView.frame = CGRectMake( [UIScreen mainScreen].bounds.size.width, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-            self.cancelLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
-            self.saveLabel.hidden = YES;
-        }completion:^(BOOL finished){
-            self.cancelLabel.textColor = [UIColor redColor];
-            [NSTimer scheduledTimerWithTimeInterval:0.5
-                                             target:self
-                                           selector:@selector(dismissView)
-                                           userInfo:nil
-                                            repeats:NO];
-        }];
-    }
-    else{
-        if (sender.state == UIGestureRecognizerStateEnded) {
-            
-            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-                self.cancelLabel.center = CGPointMake(0, self.cancelLabel.center.y);
-            }completion:^(BOOL finished){
-                self.view.backgroundColor = [UIColor whiteColor];
-            }];
-        }
-        else{
-            self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-//            self.view.backgroundColor = [UIColor colorWithRed:1.0 green:0.7 blue:0.7 alpha:1];
-            [UIView animateWithDuration:0.3 animations:^(void){
-                self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-                self.cancelLabel.center = CGPointMake(translation.x/2, self.cancelLabel.center.y);
-            }];
-        }
-    }
-}
-
-- (IBAction)didPanRightOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
-    [self.view endEditing:YES];
-    CGPoint translation = [sender translationInView:self.innerView];
-    if ((int)translation.x < -[UIScreen mainScreen].bounds.size.width/2) {
-        if ([self.amount intValue]>0) {
-            sender.enabled = NO;
-            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-                self.innerView.frame = CGRectMake(-[UIScreen mainScreen].bounds.size.width-20, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
-                self.cancelLabel.hidden = YES;
-            }completion:^(BOOL finished){
-                self.saveLabel.textColor = [UIColor blueColor];
-                [NSTimer scheduledTimerWithTimeInterval:0.5
-                                                 target:self
-                                               selector:@selector(dismissView)
-                                               userInfo:nil
-                                                repeats:NO];
-            }];
-        }
-        else{
-            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width, self.cancelLabel.center.y);
-            }completion:^(BOOL finished){
-                self.view.backgroundColor = [UIColor whiteColor];
-            }];
-        }
-    }
-    else{
-        if (sender.state == UIGestureRecognizerStateEnded) {
-            
-            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width, self.cancelLabel.center.y);
-            }completion:^(BOOL finished){
-                self.view.backgroundColor = [UIColor whiteColor];
-            }];
-        }
-        else{
-            //self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            self.view.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:1 alpha:1];
-            if ([self.amount intValue]>0) {
-                self.saveLabel.text = @"save";
-            }
-            else{
-                self.saveLabel.text = @"huh?";
-            }
-            [UIView animateWithDuration:0.3 animations:^(void){
-                self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-                int left = ([UIScreen mainScreen].bounds.size.width);
-                int center = left+(translation.x/2);
-                self.saveLabel.center = CGPointMake(center, self.cancelLabel.center.y);
-            }];
-        }
-
-    }
-}
-
 -(void)dismissView{
-    
     [UIView animateWithDuration:0.3 animations:^(void){
         self.view.backgroundColor = [UIColor whiteColor];
         self.saveLabel.alpha = 0;
@@ -243,6 +161,143 @@ static int count=0;
     }];
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark - AKPickerViewDelegate
+
+- (NSUInteger)numberOfItemsInPickerView:(AKPickerView *)pickerView{
+    return typeArray.count;
+}
+
+- (NSString *)pickerView:(AKPickerView *)pickerView titleForItem:(NSInteger)item{
+    return [typeArray objectAtIndex:item];
+}
+
+- (void)pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item{
+    
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark Initilize and Draw Methods
+
+-(void)drawPrimaryView{
+    self.innerView.frame = [UIScreen mainScreen].bounds;
+    self.point.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
+    self.zero.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
+    self.cancel.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
+    self.seven.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight*2, buttonWidth, buttonHeight);
+    self.eight.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight*2, buttonWidth, buttonHeight);
+    self.nine.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight*2, buttonWidth, buttonHeight);
+    self.four.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight*3, buttonWidth, buttonHeight);
+    self.five.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight*3, buttonWidth, buttonHeight);
+    self.six.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight*3, buttonWidth, buttonHeight);
+    self.one.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight*4, buttonWidth, buttonHeight);
+    self.two.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight*4, buttonWidth, buttonHeight);
+    self.three.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight*4, buttonWidth, buttonHeight);
+    
+    self.cancelLabel.frame = CGRectMake(-32.5, [UIScreen mainScreen].bounds.size.height/2, 65, 25);
+    self.saveLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-23, [UIScreen mainScreen].bounds.size.height/2, 46, 25);
+    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-20, [UIScreen mainScreen].bounds.size.height/4-20);
+    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width, 20, 20, [UIScreen mainScreen].bounds.size.height/4-20);
+    self.pickerViewCustom.frame = CGRectMake(0, self.amountLabel.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4);
+}
+
+-(void)initSecondryUIElements{
+    if (!self.notesView) {
+        self.notesView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.pickerViewCustom.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4-50)];
+        [self.innerView addSubview:self.notesView];
+    }
+    self.notesView.backgroundColor = [UIColor whiteColor];
+    self.notesView.alpha = 0;
+    
+    if (!self.dateView) {
+        self.dateView = [[UILabel alloc]initWithFrame:CGRectMake(0, self.notesView.frame.size.height+self.pickerViewCustom.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, 30)];
+        UIPanGestureRecognizer *datePan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(didPanDateButton:)];
+        self.dateView.userInteractionEnabled = YES;
+        [self.dateView addGestureRecognizer:datePan];
+        [self.innerView addSubview:self.dateView];
+    }
+    
+    self.dateView.backgroundColor = [UIColor whiteColor];
+    self.dateView.alpha = 0;
+    [self.dateView setTextColor:[UIColor blackColor]];
+    [self.dateView setTextAlignment:NSTextAlignmentCenter];
+    self.dateView.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:15];
+    self.dateView.text = @"today";
+    
+    
+    if (!self.imageButtonView) {
+        self.imageButtonView = [[SButton alloc]initWithFrame:CGRectMake(0,
+                                                                        [UIScreen mainScreen].bounds.size.height/2,
+                                                                        [UIScreen mainScreen].bounds.size.width,
+                                                                        [UIScreen mainScreen].bounds.size.height/2)];
+        [self.innerView addSubview:self.imageButtonView];
+    }
+    [self.imageButtonView setTitle:@"add image" forState:UIControlStateNormal];
+    [self.imageButtonView.titleLabel setFont:[UIFont fontWithName:@"EuropeUnderground-Light" size:20]];
+    [self.imageButtonView setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.imageButtonView.alpha = 0;
+    self.imageButtonView.delegate = self;
+    self.imageButtonView.backgroundColor = [UIColor clearColor];
+    [self.innerView addSubview:self.imageButtonView];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark UICollectionView Delegates
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.assetsFetchResults.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    SCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cellIdentifier" forIndexPath:indexPath];
+    PHAsset *asset = self.assetsFetchResults[indexPath.item];
+    [self.imageManager requestImageForAsset:asset
+                                 targetSize:AssetGridThumbnailSize
+                                contentMode:PHImageContentModeAspectFill
+                                    options:nil
+                              resultHandler:^(UIImage *result, NSDictionary *info) {
+                                  // Set the cell's thumbnail image if it's still showing the same asset.
+                                  
+                                  cell.imageViewC.image = result;
+                                  
+                              }];
+    
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    double ss= [UIScreen mainScreen].bounds.size.height/4-5;
+    return CGSizeMake(ss, ss);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark Action Methods
+
+-(void)didTapSButton:(SButton *)button{
+    if ([self.notesView isFirstResponder]) {
+        [self.view endEditing:YES];
+    }
+    else{
+        [self.imageButtonView setTitle:@"accessing...." forState:UIControlStateNormal];
+        [self performSelector:@selector(getAllPictures) withObject:nil afterDelay:1];
+    }
+}
 - (IBAction)oneTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"1"];
@@ -318,27 +373,112 @@ static int count=0;
 }
 
 
-- (NSUInteger)numberOfItemsInPickerView:(AKPickerView *)pickerView
-{
-    return 15;
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (NSString *)pickerView:(AKPickerView *)pickerView titleForItem:(NSInteger)item
-{
-    return [NSString stringWithFormat:@"%ld",(long)item];
-}
 
-#pragma mark - AKPickerViewDelegate
+#pragma mark-
+#pragma mark GestureRecognizers & Animate Methods
 
-- (void)pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item
-{
+- (IBAction)didPanOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
+    CGPoint translation = [sender translationInView:self.innerView];
     
+    if ((int)translation.x >[UIScreen mainScreen].bounds.size.width/2) {
+        sender.enabled = NO;
+        [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+            self.innerView.frame = CGRectMake( [UIScreen mainScreen].bounds.size.width, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+            self.cancelLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
+            self.saveLabel.hidden = YES;
+        }completion:^(BOOL finished){
+            self.cancelLabel.textColor = [UIColor redColor];
+            [NSTimer scheduledTimerWithTimeInterval:0.5
+                                             target:self
+                                           selector:@selector(dismissView)
+                                           userInfo:nil
+                                            repeats:NO];
+        }];
+    }
+    else{
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            
+            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                self.cancelLabel.center = CGPointMake(0, self.cancelLabel.center.y);
+            }completion:^(BOOL finished){
+                self.view.backgroundColor = [UIColor whiteColor];
+            }];
+        }
+        else{
+            self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+            [UIView animateWithDuration:0.3 animations:^(void){
+                self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                self.cancelLabel.center = CGPointMake(translation.x/2, self.cancelLabel.center.y);
+            }];
+        }
+    }
+}
+
+- (IBAction)didPanRightOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
+    CGPoint translation = [sender translationInView:self.innerView];
+    if ((int)translation.x < -[UIScreen mainScreen].bounds.size.width/2) {
+        if ([self.amount intValue]>0) {
+            sender.enabled = NO;
+            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake(-[UIScreen mainScreen].bounds.size.width-20, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
+                self.cancelLabel.hidden = YES;
+            }completion:^(BOOL finished){
+                self.saveLabel.textColor = [UIColor blueColor];
+                [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                 target:self
+                                               selector:@selector(dismissView)
+                                               userInfo:nil
+                                                repeats:NO];
+            }];
+        }
+        else{
+            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width, self.cancelLabel.center.y);
+            }completion:^(BOOL finished){
+                self.view.backgroundColor = [UIColor whiteColor];
+            }];
+        }
+    }
+    else{
+        if (sender.state == UIGestureRecognizerStateEnded) {
+            
+            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake( 0, self.innerView.frame.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width, self.cancelLabel.center.y);
+            }completion:^(BOOL finished){
+                self.view.backgroundColor = [UIColor whiteColor];
+            }];
+        }
+        else{
+            self.view.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:1 alpha:1];
+            if ([self.amount intValue]>0) {
+                self.saveLabel.text = @"save";
+            }
+            else{
+                self.saveLabel.text = @"huh?";
+            }
+            [UIView animateWithDuration:0.3 animations:^(void){
+                self.innerView.frame = CGRectMake( translation.x, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                int left = ([UIScreen mainScreen].bounds.size.width);
+                int center = left+(translation.x/2);
+                self.saveLabel.center = CGPointMake(center, self.cancelLabel.center.y);
+            }];
+        }
+        
+    }
 }
 
 - (IBAction)didSwipeDownNumPads:(UISwipeGestureRecognizer *)sender {
     [self animateIntoOptions];
+    [self initSecondryUIElements];
 }
-
 
 -(void)animateIntoOptions{
     [UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
@@ -367,7 +507,7 @@ static int count=0;
     }];
     
     
-
+    
     [UIView animateWithDuration:0.1 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
         self.zeroPoint = self.zero.center;
         self.zero.center = CGPointMake(self.zero.center.x, [UIScreen mainScreen].bounds.size.height+self.zero.bounds.size.height);
@@ -417,20 +557,14 @@ static int count=0;
         self.three.center = CGPointMake(self.three.center.x, [UIScreen mainScreen].bounds.size.height+self.three.bounds.size.height);
     }completion:^(BOOL finished){
         [UIView animateWithDuration:0.3 animations:^(void){
-//            self.notesView.layer.cornerRadius = 5;
-//            self.notesView.layer.masksToBounds = YES;
-            self.notesView.layer.borderWidth = 1;
-            self.notesView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
             self.notesView.alpha = 1;
-//            self.dateView.layer.cornerRadius = 5;
-//            self.dateView.layer.masksToBounds = YES;
             self.dateView.alpha = 1;
             self.dateView.layer.borderWidth = 1;
             self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
-            if (imageArray.count==0 || imageArray == nil) {
+            if (self.assetsFetchResults.count==0 || self.assetsFetchResults == nil) {
                 self.imageButtonView.alpha = 1;
             }
-            if (imageArray.count>0) {
+            if (self.assetsFetchResults.count>0) {
                 self.photoGallary.alpha = 1;
             }
             
@@ -444,24 +578,13 @@ static int count=0;
     }completion:^(BOOL finished){
         
     }];
-    
-
 }
 
 - (IBAction)didSwipeDownPickerView:(UISwipeGestureRecognizer *)sender {
-    [self animateBack];
-}
-
-
--(void)animateBack{
     [self.view endEditing:YES];
     [UIView animateWithDuration:0.3 animations:^(void){
-        self.notesView.layer.borderWidth = 1;
-        self.notesView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
         self.notesView.alpha = 0;
         self.dateView.alpha = 0;
-        self.dateView.layer.borderWidth = 1;
-        self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
         self.imageButtonView.alpha = 0;
         self.photoGallary.alpha = 0;
     }completion:^(BOOL finished){
@@ -536,50 +659,10 @@ static int count=0;
         }completion:^(BOOL finished){
             
         }];
-
-        
     }];
 }
-- (IBAction)dateButtonClicked:(UIButton *)sender {
-    if ([self.notesView isFirstResponder]) {
-        [self.view endEditing:YES];
-    }
-    else{
-        
-    }
-}
-- (IBAction)imageButtonClicked:(UIButton *)sender {
-    if ([self.notesView isFirstResponder]) {
-        [self.view endEditing:YES];
-    }
-    else{
-//        [self.imageButtonView setTitle:@"accessing.." forState:UIControlStateNormal];
-//        [self getAllPictures];
-        [self performSelectorInBackground:@selector(getAllPictures) withObject:nil];
-    }
-}
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return mutableArray.count;
-}
-
-// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    SCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cellIdentifier" forIndexPath:indexPath];
-    cell.imageViewC.image = [mutableArray objectAtIndex:indexPath.row];
-    return cell;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(150, 150);
-}
-
-
-
-- (IBAction)didPanDateButton:(UIPanGestureRecognizer *)sender {
+- (void)didPanDateButton:(UIPanGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
         self.selectedDate = newDate1;
     }
@@ -601,65 +684,190 @@ static int count=0;
     [self.view endEditing:YES];
 }
 
--(void)getAllPictures
-{
-    imageArray=[[NSMutableArray alloc] init];
-    mutableArray =[[NSMutableArray alloc]init];
-    NSMutableArray* assetURLDictionaries = [[NSMutableArray alloc] init];
-    
-    library = [[ALAssetsLibrary alloc] init];
-    
-    void (^assetEnumerator)( ALAsset *, NSUInteger, BOOL *) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
-        if(result != nil) {
-            if([[result valueForProperty:ALAssetPropertyType] isEqualToString:ALAssetTypePhoto]) {
-                [assetURLDictionaries addObject:[result valueForProperty:ALAssetPropertyURLs]];
-                
-                NSURL *url= (NSURL*) [[result defaultRepresentation]url];
-                
-                [library assetForURL:url
-                         resultBlock:^(ALAsset *asset) {
-                             [mutableArray addObject:[UIImage imageWithCGImage:[[asset defaultRepresentation] fullScreenImage]]];
-                             NSLog(@"%d       %lu",count,(unsigned long)mutableArray.count);
-//                             if ([mutableArray count]==count)
-//                             {
-//                                 imageArray=[[NSArray alloc] initWithArray:mutableArray];
-//                                 [self allPhotosCollected:imageArray];
-                             [self performSelectorOnMainThread:@selector(allPhotosCollected:) withObject:nil waitUntilDone:YES];
-//                             }
-                         }
-                        failureBlock:^(NSError *error){ NSLog(@"operation was not successfull!"); } ];
-                
-            }
-        }
-    };
-    
-    NSMutableArray *assetGroups = [[NSMutableArray alloc] init];
-    
-    void (^ assetGroupEnumerator) ( ALAssetsGroup *, BOOL *)= ^(ALAssetsGroup *group, BOOL *stop) {
-        if(group != nil) {
-            [group setAssetsFilter:[ALAssetsFilter allPhotos]];
-            [group enumerateAssetsUsingBlock:assetEnumerator];
-            [assetGroups addObject:group];
-            count=(int)[group numberOfAssets];
-        }
-    };
-    
-    assetGroups = [[NSMutableArray alloc] init];
-    
-    [library enumerateGroupsWithTypes:ALAssetsGroupAll
-                           usingBlock:assetGroupEnumerator
-                         failureBlock:^(NSError *error) {NSLog(@"There is an error");}];
-}
-
--(void)allPhotosCollected:(NSArray*)imgArray
-{
+-(void)allPhotosCollected{
     [self.photoGallary reloadData];
     self.imageButtonView.alpha = 0;
     [UIView animateWithDuration:0.5 animations:^(void){
         self.photoGallary.alpha = 1;
     }completion:^(BOOL finished){
-        
+        [self.imageButtonView removeFromSuperview];
     }];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark Photo Manage Methods
+
+-(void)getAllPictures{
+    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+    [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.photoGallary=[[UICollectionView alloc] initWithFrame:self.imageButtonView.frame collectionViewLayout:layout];
+    [self.photoGallary setDataSource:self];
+    [self.photoGallary setDelegate:self];
+    [self.photoGallary registerClass:[SCollectionViewCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
+    [self.photoGallary setBackgroundColor:[UIColor whiteColor]];
+    self.photoGallary.alpha = 0;
+    [self.innerView addSubview:self.photoGallary];
+    
+    // Create a PHFetchResult object for each section in the table view.
+    PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
+    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
+    CGFloat scale = [UIScreen mainScreen].scale;
+    CGSize cellSize = ((UICollectionViewFlowLayout *)layout).itemSize;
+    AssetGridThumbnailSize = CGSizeMake(cellSize.width * scale, cellSize.height * scale);
+    [self allPhotosCollected];
+    
+}
+
+- (void)resetCachedAssets {
+    [self.imageManager stopCachingImagesForAllAssets];
+    self.previousPreheatRect = CGRectZero;
+}
+
+- (void)updateCachedAssets {
+    BOOL isViewVisible = [self isViewLoaded] && [[self view] window] != nil;
+    if (!isViewVisible) { return; }
+    
+    // The preheat window is twice the height of the visible rect.
+    CGRect preheatRect = self.photoGallary.bounds;
+    preheatRect = CGRectInset(preheatRect, 0.0f, -0.5f * CGRectGetHeight(preheatRect));
+    
+    /*
+     Check if the collection view is showing an area that is significantly
+     different to the last preheated area.
+     */
+    CGFloat delta = ABS(CGRectGetMidY(preheatRect) - CGRectGetMidY(self.previousPreheatRect));
+    if (delta > CGRectGetHeight(self.photoGallary.bounds) / 3.0f) {
+        
+        // Compute the assets to start caching and to stop caching.
+        NSMutableArray *addedIndexPaths = [NSMutableArray array];
+        NSMutableArray *removedIndexPaths = [NSMutableArray array];
+        
+        [self computeDifferenceBetweenRect:self.previousPreheatRect andRect:preheatRect removedHandler:^(CGRect removedRect) {
+            NSArray *indexPaths = [self.photoGallary aapl_indexPathsForElementsInRect:removedRect];
+            [removedIndexPaths addObjectsFromArray:indexPaths];
+        } addedHandler:^(CGRect addedRect) {
+            NSArray *indexPaths = [self.photoGallary aapl_indexPathsForElementsInRect:addedRect];
+            [addedIndexPaths addObjectsFromArray:indexPaths];
+        }];
+        
+        NSArray *assetsToStartCaching = [self assetsAtIndexPaths:addedIndexPaths];
+        NSArray *assetsToStopCaching = [self assetsAtIndexPaths:removedIndexPaths];
+        
+        // Update the assets the PHCachingImageManager is caching.
+        [self.imageManager startCachingImagesForAssets:assetsToStartCaching
+                                            targetSize:AssetGridThumbnailSize
+                                           contentMode:PHImageContentModeAspectFill
+                                               options:nil];
+        [self.imageManager stopCachingImagesForAssets:assetsToStopCaching
+                                           targetSize:AssetGridThumbnailSize
+                                          contentMode:PHImageContentModeAspectFill
+                                              options:nil];
+        
+        // Store the preheat rect to compare against in the future.
+        self.previousPreheatRect = preheatRect;
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // Update cached assets for the new visible area.
+    [self updateCachedAssets];
+}
+
+- (NSArray *)assetsAtIndexPaths:(NSArray *)indexPaths {
+    if (indexPaths.count == 0) { return nil; }
+    
+    NSMutableArray *assets = [NSMutableArray arrayWithCapacity:indexPaths.count];
+    for (NSIndexPath *indexPath in indexPaths) {
+        PHAsset *asset = self.assetsFetchResults[indexPath.item];
+        [assets addObject:asset];
+    }
+    
+    return assets;
+}
+
+- (void)computeDifferenceBetweenRect:(CGRect)oldRect andRect:(CGRect)newRect removedHandler:(void (^)(CGRect removedRect))removedHandler addedHandler:(void (^)(CGRect addedRect))addedHandler {
+    if (CGRectIntersectsRect(newRect, oldRect)) {
+        CGFloat oldMaxY = CGRectGetMaxY(oldRect);
+        CGFloat oldMinY = CGRectGetMinY(oldRect);
+        CGFloat newMaxY = CGRectGetMaxY(newRect);
+        CGFloat newMinY = CGRectGetMinY(newRect);
+        
+        if (newMaxY > oldMaxY) {
+            CGRect rectToAdd = CGRectMake(newRect.origin.x, oldMaxY, newRect.size.width, (newMaxY - oldMaxY));
+            addedHandler(rectToAdd);
+        }
+        
+        if (oldMinY > newMinY) {
+            CGRect rectToAdd = CGRectMake(newRect.origin.x, newMinY, newRect.size.width, (oldMinY - newMinY));
+            addedHandler(rectToAdd);
+        }
+        
+        if (newMaxY < oldMaxY) {
+            CGRect rectToRemove = CGRectMake(newRect.origin.x, newMaxY, newRect.size.width, (oldMaxY - newMaxY));
+            removedHandler(rectToRemove);
+        }
+        
+        if (oldMinY < newMinY) {
+            CGRect rectToRemove = CGRectMake(newRect.origin.x, oldMinY, newRect.size.width, (newMinY - oldMinY));
+            removedHandler(rectToRemove);
+        }
+    } else {
+        addedHandler(newRect);
+        removedHandler(oldRect);
+    }
+}
+
+- (void)photoLibraryDidChange:(PHChange *)changeInstance {
+    // Check if there are changes to the assets we are showing.
+    PHFetchResultChangeDetails *collectionChanges = [changeInstance changeDetailsForFetchResult:self.assetsFetchResults];
+    if (collectionChanges == nil) {
+        return;
+    }
+    
+    /*
+     Change notifications may be made on a background queue. Re-dispatch to the
+     main queue before acting on the change as we'll be updating the UI.
+     */
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Get the new fetch result.
+        self.assetsFetchResults = [collectionChanges fetchResultAfterChanges];
+        
+        UICollectionView *collectionView = self.photoGallary;
+        
+        if (![collectionChanges hasIncrementalChanges] || [collectionChanges hasMoves]) {
+            // Reload the collection view if the incremental diffs are not available
+            [collectionView reloadData];
+            
+        } else {
+            /*
+             Tell the collection view to animate insertions and deletions if we
+             have incremental diffs.
+             */
+            [collectionView performBatchUpdates:^{
+                NSIndexSet *removedIndexes = [collectionChanges removedIndexes];
+                if ([removedIndexes count] > 0) {
+                    [collectionView deleteItemsAtIndexPaths:[removedIndexes aapl_indexPathsFromIndexesWithSection:0]];
+                }
+                
+                NSIndexSet *insertedIndexes = [collectionChanges insertedIndexes];
+                if ([insertedIndexes count] > 0) {
+                    [collectionView insertItemsAtIndexPaths:[insertedIndexes aapl_indexPathsFromIndexesWithSection:0]];
+                }
+                
+                NSIndexSet *changedIndexes = [collectionChanges changedIndexes];
+                if ([changedIndexes count] > 0) {
+                    [collectionView reloadItemsAtIndexPaths:[changedIndexes aapl_indexPathsFromIndexesWithSection:0]];
+                }
+            } completion:NULL];
+        }
+        
+        [self resetCachedAssets];
+    });
 }
 
 @end

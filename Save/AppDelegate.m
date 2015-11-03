@@ -16,6 +16,16 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
+        NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
+        [defaults setObject:expense forKey:@"expense"];
+        [defaults setObject:income forKey:@"income"];
+        [defaults synchronize];
+    }
+    
     return YES;
 }
 
