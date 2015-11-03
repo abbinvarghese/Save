@@ -6,7 +6,6 @@ platform :ios, ‘8.0’
 target 'Save' do
 
 pod 'Charts'
-pod 'pop', '~> 1.0'
 
 end
 

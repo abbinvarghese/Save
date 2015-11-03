@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <pop/POP.h>
 
-@interface ViewController : UIViewController<POPAnimationDelegate>
+@interface ViewController : UIViewController
 
 
 @end

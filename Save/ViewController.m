@@ -10,17 +10,15 @@
 #import "SDetailViewController.h"
 #import "SLabel.h"
 
-#define kraiseAnimation @"raise"
-#define klowerAnimation @"lower"
-#define kLowerShadowAnimation @"raiseShadow"
-#define kRaiseShadowAnimation @"lowerShadow"
-
 @interface ViewController ()
 
-@property(nonatomic,strong)POPBasicAnimation *raiseAnimation;
-@property(nonatomic,strong)POPBasicAnimation *lowerAnimation;
-@property(nonatomic,strong)POPBasicAnimation *raiseShadowAnimation;
-@property(nonatomic,strong)POPBasicAnimation *lowerShadowAnimation;
+{
+    int screenWidth;
+    int screenHeight;
+    int middle;
+    int middleOfMiddle;
+}
+
 @property (weak, nonatomic) IBOutlet SLabel *incomeButton;
 @property (weak, nonatomic) IBOutlet SLabel *expenseButton;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *incomeTap;
@@ -32,39 +30,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self drawCustomeView];
-    self.raiseAnimation = [POPBasicAnimation animation];
-    self.raiseAnimation.name = kraiseAnimation;
-    self.raiseAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    int screenWidth = screenRect.size.width;
-    int screenHeight = screenRect.size.height;
+    screenWidth = screenRect.size.width;
+    screenHeight = screenRect.size.height;
     if (screenHeight % 2) {
         screenHeight++;
     }
-    int middle = screenHeight/2;
-    int middleOfMiddle = middle/2;
-    
-    self.raiseAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(screenWidth/2,middleOfMiddle)];
-    self.raiseAnimation.delegate=self;
-    
-    self.lowerAnimation = [POPBasicAnimation animation];
-    self.lowerAnimation.name = klowerAnimation;
-    self.lowerAnimation.property = [POPAnimatableProperty propertyWithName:kPOPViewCenter];
-    self.lowerAnimation.toValue=[NSValue valueWithCGPoint:CGPointMake(screenWidth/2,middle + middleOfMiddle+50)];
-    self.lowerAnimation.delegate=self;
-    
-    
-    self.lowerShadowAnimation = [POPBasicAnimation animation];
-    self.lowerShadowAnimation.name = kLowerShadowAnimation;
-    self.lowerShadowAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerShadowOpacity];
-    self.lowerShadowAnimation.toValue=@(1);
-    self.lowerShadowAnimation.delegate=self;
-    
-    self.raiseShadowAnimation = [POPBasicAnimation animation];
-    self.raiseShadowAnimation.name = kRaiseShadowAnimation;
-    self.raiseShadowAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerShadowOpacity];
-    self.raiseShadowAnimation.toValue=@(0);
-    self.raiseShadowAnimation.delegate=self;
+    middle = screenHeight/2;
+    middleOfMiddle = middle/2;
 }
 
 -(void)drawCustomeView{
@@ -86,13 +59,27 @@
 }
 
 - (IBAction)didSwipeDownOnUpperView:(UISwipeGestureRecognizer *)sender {
-    [self.incomeButton pop_addAnimation:self.lowerAnimation forKey:klowerAnimation];
-    [self.incomeButton.layer pop_addAnimation:self.lowerShadowAnimation forKey:kLowerShadowAnimation];
+    
+    self.incomeButton.shouldTouch = NO;
+    self.incomeTap.enabled = NO;
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.incomeButton.center = CGPointMake(screenWidth/2,middle + middleOfMiddle+50);
+        self.incomeButton.layer.shadowOpacity = 1;
+    }completion:^(BOOL finished){
+        
+    }];
 }
 
 - (IBAction)didSwipeUpOnUpperView:(UISwipeGestureRecognizer *)sender {
-    [self.incomeButton pop_addAnimation:self.raiseAnimation forKey:kraiseAnimation];
-    [self.incomeButton.layer pop_addAnimation:self.raiseShadowAnimation forKey:kRaiseShadowAnimation];
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.incomeButton.center = CGPointMake(screenWidth/2,middleOfMiddle);
+        self.incomeButton.layer.shadowOpacity = 0;
+    }completion:^(BOOL finished){
+        self.incomeButton.shouldTouch = YES;
+        self.incomeTap.enabled = YES;
+    }];
 }
 
 - (IBAction)incomeTapped:(UITapGestureRecognizer *)sender {
@@ -112,21 +99,6 @@
         self.incomeButton.alpha = 0;
         self.expenseButton.alpha = 0;
     }];
-}
-
-
-- (void)pop_animationDidStart:(POPAnimation *)anim{
-    if ([anim.name isEqualToString:klowerAnimation]) {
-        self.incomeButton.shouldTouch = NO;
-        self.incomeTap.enabled = NO;
-    }
-}
-
-- (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished{
-    if ([anim.name isEqualToString:kraiseAnimation]) {
-        self.incomeButton.shouldTouch = YES;
-        self.incomeTap.enabled = YES;
-    }
 }
 
 @end

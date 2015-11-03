@@ -60,6 +60,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancel;
 
 @property (strong, nonatomic)  UITextView *notesView;
+@property (strong, nonatomic) UILabel *placeHolderText;
 @property (strong, nonatomic)  UILabel *dateView;
 @property (strong, nonatomic)  SButton *imageButtonView;
 
@@ -89,13 +90,17 @@ static CGSize AssetGridThumbnailSize;
 
 - (void)awakeFromNib {
     self.imageManager = [[PHCachingImageManager alloc] init];
-    [self resetCachedAssets];
-    
-    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    if ([PHPhotoLibrary authorizationStatus] == PHAuthorizationStatusAuthorized) {
+        [self resetCachedAssets];
+        
+        [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    }
 }
 
 - (void)dealloc {
-    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+    if ([PHPhotoLibrary authorizationStatus]== PHAuthorizationStatusAuthorized) {
+        [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+    }
 }
 
 - (void)viewDidLoad {
@@ -216,6 +221,17 @@ static CGSize AssetGridThumbnailSize;
     }
     self.notesView.backgroundColor = [UIColor whiteColor];
     self.notesView.alpha = 0;
+    
+    if (!self.placeHolderText) {
+        self.placeHolderText = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20)];
+    }
+    self.placeHolderText.center = self.notesView.center;
+    self.placeHolderText.text = @"notes";
+    [self.placeHolderText setTextAlignment:NSTextAlignmentCenter];
+    self.placeHolderText.alpha = 0;
+    [self.placeHolderText setBackgroundColor:[UIColor clearColor]];
+    [self.placeHolderText setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:15]];
+    [self.innerView addSubview:self.placeHolderText];
     
     if (!self.dateView) {
         self.dateView = [[UILabel alloc]initWithFrame:CGRectMake(0, self.notesView.frame.size.height+self.pickerViewCustom.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, 30)];
@@ -559,6 +575,7 @@ static CGSize AssetGridThumbnailSize;
         [UIView animateWithDuration:0.3 animations:^(void){
             self.notesView.alpha = 1;
             self.dateView.alpha = 1;
+            self.placeHolderText.alpha = 0.5;
             self.dateView.layer.borderWidth = 1;
             self.dateView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1].CGColor;
             if (self.assetsFetchResults.count==0 || self.assetsFetchResults == nil) {
@@ -585,6 +602,7 @@ static CGSize AssetGridThumbnailSize;
     [UIView animateWithDuration:0.3 animations:^(void){
         self.notesView.alpha = 0;
         self.dateView.alpha = 0;
+        self.placeHolderText.alpha = 0;
         self.imageButtonView.alpha = 0;
         self.photoGallary.alpha = 0;
     }completion:^(BOOL finished){
@@ -702,25 +720,55 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark Photo Manage Methods
 
 -(void)getAllPictures{
-    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
-    [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.photoGallary=[[UICollectionView alloc] initWithFrame:self.imageButtonView.frame collectionViewLayout:layout];
-    [self.photoGallary setDataSource:self];
-    [self.photoGallary setDelegate:self];
-    [self.photoGallary registerClass:[SCollectionViewCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
-    [self.photoGallary setBackgroundColor:[UIColor whiteColor]];
-    self.photoGallary.alpha = 0;
-    [self.innerView addSubview:self.photoGallary];
+    if ([PHPhotoLibrary authorizationStatus]==PHAuthorizationStatusAuthorized) {
+        UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+        [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        self.photoGallary=[[UICollectionView alloc] initWithFrame:self.imageButtonView.frame collectionViewLayout:layout];
+        [self.photoGallary setDataSource:self];
+        [self.photoGallary setDelegate:self];
+        [self.photoGallary registerClass:[SCollectionViewCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
+        [self.photoGallary setBackgroundColor:[UIColor whiteColor]];
+        self.photoGallary.alpha = 0;
+        [self.innerView addSubview:self.photoGallary];
+        
+        // Create a PHFetchResult object for each section in the table view.
+        PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
+        allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+        self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
+        CGFloat scale = [UIScreen mainScreen].scale;
+        CGSize cellSize = ((UICollectionViewFlowLayout *)layout).itemSize;
+        AssetGridThumbnailSize = CGSizeMake(cellSize.width * scale, cellSize.height * scale);
+        [self allPhotosCollected];
+    }
+    else{
+        [self photoAccessDeniedProtocol];
+    }
     
-    // Create a PHFetchResult object for each section in the table view.
-    PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
-    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-    self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
-    CGFloat scale = [UIScreen mainScreen].scale;
-    CGSize cellSize = ((UICollectionViewFlowLayout *)layout).itemSize;
-    AssetGridThumbnailSize = CGSizeMake(cellSize.width * scale, cellSize.height * scale);
-    [self allPhotosCollected];
-    
+}
+
+-(void)photoAccessDeniedProtocol{
+    self.imageButtonView.enabled = NO;
+    [self performSelector:@selector(setImageButtonTitleAccessDenied) withObject:nil afterDelay:0];
+    [self performSelector:@selector(setImageButtonTitletwo) withObject:nil afterDelay:3];
+    [self performSelector:@selector(setImageButtonTitlethree) withObject:nil afterDelay:6];
+    [self performSelector:@selector(setImageButtonTitlefour) withObject:nil afterDelay:9];
+    [self performSelector:@selector(photoAccessDeniedProtocol) withObject:nil afterDelay:12];
+}
+
+-(void)setImageButtonTitleAccessDenied{
+    [self.imageButtonView setTitle:@"access to photo library denied" forState:UIControlStateNormal];
+}
+
+-(void)setImageButtonTitletwo{
+    [self.imageButtonView setTitle:@"go to settings" forState:UIControlStateNormal];
+}
+
+-(void)setImageButtonTitlethree{
+    [self.imageButtonView setTitle:@"save app" forState:UIControlStateNormal];
+}
+
+-(void)setImageButtonTitlefour{
+    [self.imageButtonView setTitle:@"turn on Photo" forState:UIControlStateNormal];
 }
 
 - (void)resetCachedAssets {
