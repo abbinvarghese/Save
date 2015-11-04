@@ -16,7 +16,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IoS-h6-4O3">
                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                         <animations/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.95276442309999998" green="0.95276442309999998" blue="0.95276442309999998" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
                 </subviews>
                 <animations/>

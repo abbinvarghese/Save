@@ -12,6 +12,7 @@
 #include <Photos/Photos.h>
 #import "UICollectionView+UICollectionView_Convenience.h"
 #import "NSIndexSet+NSIndexSet_Convenience.h"
+#import <objc/runtime.h>
 
 
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -294,8 +295,88 @@ static CGSize AssetGridThumbnailSize;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    double ss= [UIScreen mainScreen].bounds.size.height/4-5;
+    double ss= [UIScreen mainScreen].bounds.size.height/4-15;
     return CGSizeMake(ss, ss);
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    if ([self.notesView isFirstResponder]) {
+        [self.view endEditing:YES];
+    }
+    else{
+        SCollectionViewCell *cell = (SCollectionViewCell*)[self.photoGallary cellForItemAtIndexPath:indexPath];
+        UIImageView* iv = cell.imageViewC;
+        
+        CGFloat scale = [UIScreen mainScreen].scale;
+        CGSize cellSize = self.photoGallary.frame.size;
+        
+        CGSize AssetGridThumbnailSize2X = CGSizeMake(cellSize.width * scale, cellSize.height * scale);
+        
+        PHAsset *asset = self.assetsFetchResults[indexPath.item];
+        
+        UIImageView* ivExpand = [[UIImageView alloc] initWithImage: iv.image];
+        
+        [self.imageManager requestImageForAsset:asset
+                                     targetSize:AssetGridThumbnailSize2X
+                                    contentMode:PHImageContentModeAspectFill
+                                        options:nil
+                                  resultHandler:^(UIImage *result, NSDictionary *info) {
+                                      // Set the cell's thumbnail image if it's still showing the same asset.
+                                      
+                                      ivExpand.image = result;
+                                      
+                                  }];
+        
+        ivExpand.contentMode = iv.contentMode;
+        ivExpand.frame = [self.view convertRect: iv.frame fromView: iv.superview];
+        ivExpand.userInteractionEnabled = YES;
+        ivExpand.clipsToBounds = YES;
+        
+        objc_setAssociatedObject( ivExpand,
+                                 "original_frame",
+                                 [NSValue valueWithCGRect: ivExpand.frame],
+                                 OBJC_ASSOCIATION_RETAIN);
+        
+        [self.view addSubview: ivExpand];
+        
+        [UIView transitionWithView: self.view
+                          duration: 0.1
+                           options: UIViewAnimationOptionCurveEaseOut
+                        animations:^{
+                            
+                            self.photoGallary.alpha=0;
+                            
+                        } completion:^(BOOL finished) {
+                            
+                            [UIView transitionWithView: self.view
+                                              duration: 0.2
+                                               options: UIViewAnimationOptionCurveEaseOut
+                                            animations:^{
+                                                
+                                                ivExpand.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/2);
+                                                
+                                            } completion:^(BOOL finished) {
+                                                
+                                                UITapGestureRecognizer* tgr = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector( onTap: )];
+                                                [ivExpand addGestureRecognizer: tgr];
+                                            }];
+                            
+                        }];
+
+    }
+}
+
+- (void) onTap: (UITapGestureRecognizer*) tgr
+{
+    [UIView animateWithDuration: 0.2
+                     animations:^{
+                         self.photoGallary.alpha=1;
+                         tgr.view.frame = [objc_getAssociatedObject( tgr.view,
+                                                                    "original_frame" ) CGRectValue];
+                     } completion:^(BOOL finished) {
+                         
+                         [tgr.view removeFromSuperview];
+                     }];
 }
 
 
@@ -722,6 +803,7 @@ static CGSize AssetGridThumbnailSize;
 -(void)getAllPictures{
     if ([PHPhotoLibrary authorizationStatus]==PHAuthorizationStatusAuthorized) {
         UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+        layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
         [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
         self.photoGallary=[[UICollectionView alloc] initWithFrame:self.imageButtonView.frame collectionViewLayout:layout];
         [self.photoGallary setDataSource:self];
@@ -733,6 +815,7 @@ static CGSize AssetGridThumbnailSize;
         
         // Create a PHFetchResult object for each section in the table view.
         PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
+        
         allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
         self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
         CGFloat scale = [UIScreen mainScreen].scale;

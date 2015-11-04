@@ -31,6 +31,8 @@
         }
         
         self = [arrayOfViews objectAtIndex:0];
+        self.imageViewC.layer.cornerRadius = 5;
+        self.imageViewC.layer.masksToBounds = YES;
     }
     
     
