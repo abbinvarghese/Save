@@ -25,7 +25,7 @@
         [defaults setObject:income forKey:@"income"];
         [defaults synchronize];
     }
-    
+    //NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     return YES;
 }
 

@@ -24,10 +24,9 @@
     NSDate *newDate1;
     int buttonHeight;
     int buttonWidth;
-    NSArray *typeArray;
+    BOOL touchShouldEnd;
 }
 
-@property (nonatomic, strong) NSArray *sectionFetchResults;
 @property (nonatomic, strong) PHFetchResult *assetsFetchResults;
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 @property CGRect previousPreheatRect;
@@ -64,6 +63,7 @@
 @property (strong, nonatomic) UILabel *placeHolderText;
 @property (strong, nonatomic)  UILabel *dateView;
 @property (strong, nonatomic)  SButton *imageButtonView;
+@property (strong, nonatomic) UIImageView* ivExpand;
 
 @property (nonatomic,assign) CGPoint onePoint;
 @property (nonatomic,assign) CGPoint twoPoint;
@@ -81,6 +81,9 @@
 
 @property (nonatomic,assign) int panInt;
 @property (nonatomic,strong) NSDate *selectedDate;
+@property (nonatomic,weak) NSString *selectedType;
+@property (nonatomic,weak) UIImage *selectedimage;
+@property (nonatomic,weak) NSArray *typeArray;
 
 @end
 
@@ -102,6 +105,12 @@ static CGSize AssetGridThumbnailSize;
     if ([PHPhotoLibrary authorizationStatus]== PHAuthorizationStatusAuthorized) {
         [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
     }
+//    self.selectedimage=nil;
+//    self.selectedType = nil;
+//    self.selectedDate=nil;
+//    self.ivExpand = nil;
+//    self.assetsFetchResults = nil;
+    
 }
 
 - (void)viewDidLoad {
@@ -120,13 +129,15 @@ static CGSize AssetGridThumbnailSize;
     self.pickerViewCustom.pickerViewStyle = AKPickerViewStyle3D;
     self.pickerViewCustom.maskDisabled = false;
     if (self.isIncome) {
-        typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"income"];
+        self.typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"income"];
         self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
     }
     else{
-        typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"expense"];
+        self.typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"expense"];
         self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
     }
+    
+    self.selectedType = [self.typeArray objectAtIndex:0];
 
     self.amount = [NSMutableString string];
     if (IS_IPHONE_5) {
@@ -175,15 +186,15 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark - AKPickerViewDelegate
 
 - (NSUInteger)numberOfItemsInPickerView:(AKPickerView *)pickerView{
-    return typeArray.count;
+    return self.typeArray.count;
 }
 
 - (NSString *)pickerView:(AKPickerView *)pickerView titleForItem:(NSInteger)item{
-    return [typeArray objectAtIndex:item];
+    return [self.typeArray objectAtIndex:item];
 }
 
 - (void)pickerView:(AKPickerView *)pickerView didSelectItem:(NSInteger)item{
-    
+    self.selectedType = [self.typeArray objectAtIndex:item];
 }
 
 
@@ -220,6 +231,7 @@ static CGSize AssetGridThumbnailSize;
         self.notesView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.pickerViewCustom.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4-50)];
         [self.innerView addSubview:self.notesView];
     }
+    self.notesView.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:15];
     self.notesView.backgroundColor = [UIColor whiteColor];
     self.notesView.alpha = 0;
     
@@ -228,6 +240,7 @@ static CGSize AssetGridThumbnailSize;
     }
     self.placeHolderText.center = self.notesView.center;
     self.placeHolderText.text = @"notes";
+    self.notesView.delegate = self;
     [self.placeHolderText setTextAlignment:NSTextAlignmentCenter];
     self.placeHolderText.alpha = 0;
     [self.placeHolderText setBackgroundColor:[UIColor clearColor]];
@@ -265,6 +278,28 @@ static CGSize AssetGridThumbnailSize;
     self.imageButtonView.backgroundColor = [UIColor clearColor];
     [self.innerView addSubview:self.imageButtonView];
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark UITextView Delegate
+
+-(void)textViewDidBeginEditing:(UITextView *)textView{
+    [UIView animateWithDuration:0.3 animations:^(void){
+       self.placeHolderText.alpha=0;
+    }];
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView{
+    if (self.notesView.text.length==0) {
+        [UIView animateWithDuration:0.3 animations:^(void){
+            self.placeHolderText.alpha=0.5;
+        }];
+    }
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +349,7 @@ static CGSize AssetGridThumbnailSize;
         
         PHAsset *asset = self.assetsFetchResults[indexPath.item];
         
-        UIImageView* ivExpand = [[UIImageView alloc] initWithImage: iv.image];
+        self.ivExpand = [[UIImageView alloc] initWithImage: iv.image];
         
         [self.imageManager requestImageForAsset:asset
                                      targetSize:AssetGridThumbnailSize2X
@@ -323,21 +358,22 @@ static CGSize AssetGridThumbnailSize;
                                   resultHandler:^(UIImage *result, NSDictionary *info) {
                                       // Set the cell's thumbnail image if it's still showing the same asset.
                                       
-                                      ivExpand.image = result;
+                                      self.ivExpand.image = result;
+                                      self.selectedimage = result;
                                       
                                   }];
         
-        ivExpand.contentMode = iv.contentMode;
-        ivExpand.frame = [self.view convertRect: iv.frame fromView: iv.superview];
-        ivExpand.userInteractionEnabled = YES;
-        ivExpand.clipsToBounds = YES;
+        self.ivExpand.contentMode = iv.contentMode;
+        self.ivExpand.frame = [self.view convertRect: iv.frame fromView: iv.superview];
+        self.ivExpand.userInteractionEnabled = YES;
+        self.ivExpand.clipsToBounds = YES;
         
-        objc_setAssociatedObject( ivExpand,
+        objc_setAssociatedObject( self.ivExpand,
                                  "original_frame",
-                                 [NSValue valueWithCGRect: ivExpand.frame],
+                                 [NSValue valueWithCGRect: self.ivExpand.frame],
                                  OBJC_ASSOCIATION_RETAIN);
         
-        [self.view addSubview: ivExpand];
+        [self.innerView addSubview: self.ivExpand];
         
         [UIView transitionWithView: self.view
                           duration: 0.1
@@ -353,12 +389,12 @@ static CGSize AssetGridThumbnailSize;
                                                options: UIViewAnimationOptionCurveEaseOut
                                             animations:^{
                                                 
-                                                ivExpand.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/2);
+                                                self.ivExpand.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height/2, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/2);
                                                 
                                             } completion:^(BOOL finished) {
                                                 
                                                 UITapGestureRecognizer* tgr = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector( onTap: )];
-                                                [ivExpand addGestureRecognizer: tgr];
+                                                [self.ivExpand addGestureRecognizer: tgr];
                                             }];
                             
                         }];
@@ -376,6 +412,7 @@ static CGSize AssetGridThumbnailSize;
                      } completion:^(BOOL finished) {
                          
                          [tgr.view removeFromSuperview];
+                         self.selectedimage = nil;
                      }];
 }
 
@@ -482,18 +519,22 @@ static CGSize AssetGridThumbnailSize;
     
     if ((int)translation.x >[UIScreen mainScreen].bounds.size.width/2) {
         sender.enabled = NO;
-        [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-            self.innerView.frame = CGRectMake( [UIScreen mainScreen].bounds.size.width, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-            self.cancelLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
-            self.saveLabel.hidden = YES;
-        }completion:^(BOOL finished){
-            self.cancelLabel.textColor = [UIColor redColor];
-            [NSTimer scheduledTimerWithTimeInterval:0.5
-                                             target:self
-                                           selector:@selector(dismissView)
-                                           userInfo:nil
-                                            repeats:NO];
-        }];
+        if (!touchShouldEnd) {
+            touchShouldEnd = YES;
+            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.innerView.frame = CGRectMake( [UIScreen mainScreen].bounds.size.width, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                self.cancelLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
+                self.saveLabel.hidden = YES;
+            }completion:^(BOOL finished){
+                self.cancelLabel.textColor = [UIColor redColor];
+                [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                 target:self
+                                               selector:@selector(dismissView)
+                                               userInfo:nil
+                                                repeats:NO];
+            }];
+
+        }
     }
     else{
         if (sender.state == UIGestureRecognizerStateEnded) {
@@ -521,18 +562,22 @@ static CGSize AssetGridThumbnailSize;
     if ((int)translation.x < -[UIScreen mainScreen].bounds.size.width/2) {
         if ([self.amount intValue]>0) {
             sender.enabled = NO;
-            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-                self.innerView.frame = CGRectMake(-[UIScreen mainScreen].bounds.size.width-20, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
-                self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
-                self.cancelLabel.hidden = YES;
-            }completion:^(BOOL finished){
-                self.saveLabel.textColor = [UIColor blueColor];
-                [NSTimer scheduledTimerWithTimeInterval:0.5
-                                                 target:self
-                                               selector:@selector(dismissView)
-                                               userInfo:nil
-                                                repeats:NO];
-            }];
+            if (!touchShouldEnd) {
+                touchShouldEnd = YES;
+                [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:1 initialSpringVelocity:5 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                    self.innerView.frame = CGRectMake(-[UIScreen mainScreen].bounds.size.width-20, self.innerView.frame.origin.y, self.innerView.frame.size.width, self.innerView.frame.size.height);
+                    self.saveLabel.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, self.cancelLabel.center.y);
+                    self.cancelLabel.hidden = YES;
+                }completion:^(BOOL finished){
+                    self.saveLabel.textColor = [UIColor blueColor];
+                    [self performSelectorInBackground:@selector(save) withObject:nil];
+                    [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                     target:self
+                                                   selector:@selector(dismissView)
+                                                   userInfo:nil
+                                                    repeats:NO];
+                }];
+            }
         }
         else{
             [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
@@ -663,7 +708,13 @@ static CGSize AssetGridThumbnailSize;
                 self.imageButtonView.alpha = 1;
             }
             if (self.assetsFetchResults.count>0) {
-                self.photoGallary.alpha = 1;
+                if (self.ivExpand) {
+                    self.ivExpand.alpha = 1;
+                }
+                else{
+                   self.photoGallary.alpha = 1;
+                }
+                
             }
             
         }completion:^(BOOL finished){
@@ -686,6 +737,7 @@ static CGSize AssetGridThumbnailSize;
         self.placeHolderText.alpha = 0;
         self.imageButtonView.alpha = 0;
         self.photoGallary.alpha = 0;
+        self.ivExpand.alpha = 0;
     }completion:^(BOOL finished){
         
         [UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
@@ -999,6 +1051,47 @@ static CGSize AssetGridThumbnailSize;
         
         [self resetCachedAssets];
     });
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark Core Data and Save Methods
+
+- (NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectContext *context = nil;
+    id delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate performSelector:@selector(managedObjectContext)]) {
+        context = [delegate managedObjectContext];
+    }
+    return context;
+}
+
+-(void)save{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    // Create a new managed object
+    NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Entries" inManagedObjectContext:context];
+    [newDevice setValue:[NSNumber numberWithInt:[self.amount intValue]] forKey:@"amount"];
+    [newDevice setValue:self.selectedType forKey:@"type"];
+    [newDevice setValue:self.selectedDate forKey:@"date"];
+    [newDevice setValue:[NSNumber numberWithBool:self.isIncome] forKey:@"isIncome"];
+    if (self.notesView.text.length>0) {
+        [newDevice setValue:self.notesView.text forKey:@"note"];
+    }
+    if (self.selectedimage) {
+        NSData *imageData = UIImagePNGRepresentation(self.selectedimage);
+        [newDevice setValue:imageData forKey:@"attachment"];
+    }
+    
+    NSError *error = nil;
+    // Save the object to persistent store
+    if (![context save:&error]) {
+        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+    }
 }
 
 @end

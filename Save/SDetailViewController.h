@@ -12,7 +12,7 @@
 
 @import MediaPlayer;
 
-@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SButtonDelegate>
+@interface SDetailViewController : UIViewController<AKPickerViewDataSource, AKPickerViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SButtonDelegate,UITextViewDelegate>
 
 @property(nonatomic,assign) BOOL isIncome;
 
