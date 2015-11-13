@@ -68,6 +68,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="expenceTap" destination="Gh4-PS-tmj" id="jd0-Gh-FX5"/>
                         <outlet property="expenseButton" destination="fwn-ZR-HzN" id="AdC-M7-NpV"/>
                         <outlet property="incomeButton" destination="wg2-J3-VN8" id="Lln-0h-DFL"/>
                         <outlet property="incomeTap" destination="mHL-VG-yOq" id="COZ-Ew-akm"/>
@@ -158,7 +159,7 @@
                                         <rect key="frame" x="0.0" y="582" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                         <state key="normal" title=".">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -239,6 +240,16 @@
                                             <action selector="fourTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="spn-aV-xgI"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" id="wMo-Wb-Eys" customClass="AKPickerView">
+                                        <rect key="frame" x="0.0" y="147" width="375" height="150"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <color key="backgroundColor" red="1" green="0.78645351610000003" blue="0.8175633537" alpha="1" colorSpace="calibratedRGB"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="Tjs-yG-uqp" appends="YES" id="fmb-uu-Nej"/>
+                                        </connections>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eI1-sB-890">
                                         <rect key="frame" x="250" y="412" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -287,16 +298,6 @@
                                             <action selector="threeTapped:" destination="cSg-bm-eh6" eventType="touchUpInside" id="x7S-LZ-iXj"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" id="wMo-Wb-Eys" customClass="AKPickerView">
-                                        <rect key="frame" x="0.0" y="147" width="375" height="150"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <animations/>
-                                        <color key="backgroundColor" red="1" green="0.78645351610000003" blue="0.8175633537" alpha="1" colorSpace="calibratedRGB"/>
-                                        <gestureRecognizers/>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="Tjs-yG-uqp" appends="YES" id="fmb-uu-Nej"/>
-                                        </connections>
-                                    </view>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
