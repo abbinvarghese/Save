@@ -24,8 +24,17 @@
         [defaults setObject:expense forKey:@"expense"];
         [defaults setObject:income forKey:@"income"];
         [defaults synchronize];
+        
+        
+        NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"FinalBalances" inManagedObjectContext:self.managedObjectContext];
+        [newDevice setValue:[NSNumber numberWithDouble:15000.0] forKey:@"amount"];
+        NSError *error = nil;
+        // Save the object to persistent store
+        if (![self.managedObjectContext save:&error]) {
+            NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+        }
     }
-    //NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+    NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     return YES;
 }
 

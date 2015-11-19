@@ -13,6 +13,7 @@
 #import "UICollectionView+UICollectionView_Convenience.h"
 #import "NSIndexSet+NSIndexSet_Convenience.h"
 #import <objc/runtime.h>
+#import "CoreDataHelper.h"
 
 
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -105,16 +106,12 @@ static CGSize AssetGridThumbnailSize;
     if ([PHPhotoLibrary authorizationStatus]== PHAuthorizationStatusAuthorized) {
         [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
     }
-//    self.selectedimage=nil;
-//    self.selectedType = nil;
-//    self.selectedDate=nil;
-//    self.ivExpand = nil;
-//    self.assetsFetchResults = nil;
     
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     buttonWidth = [UIScreen mainScreen].bounds.size.width/3;
     buttonHeight = [UIScreen mainScreen].bounds.size.height/2/4;
     [self drawPrimaryView];
@@ -1061,37 +1058,11 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark-
 #pragma mark Core Data and Save Methods
 
-- (NSManagedObjectContext *)managedObjectContext {
-    NSManagedObjectContext *context = nil;
-    id delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate performSelector:@selector(managedObjectContext)]) {
-        context = [delegate managedObjectContext];
-    }
-    return context;
-}
 
 -(void)save{
-    NSManagedObjectContext *context = [self managedObjectContext];
     
-    // Create a new managed object
-    NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Entries" inManagedObjectContext:context];
-    [newDevice setValue:[NSNumber numberWithInt:[self.amount intValue]] forKey:@"amount"];
-    [newDevice setValue:self.selectedType forKey:@"type"];
-    [newDevice setValue:self.selectedDate forKey:@"date"];
-    [newDevice setValue:[NSNumber numberWithBool:self.isIncome] forKey:@"isIncome"];
-    if (self.notesView.text.length>0) {
-        [newDevice setValue:self.notesView.text forKey:@"note"];
-    }
-    if (self.selectedimage) {
-        NSData *imageData = UIImagePNGRepresentation(self.selectedimage);
-        [newDevice setValue:imageData forKey:@"attachment"];
-    }
+    [[CoreDataHelper sharedCLCoreDataHelper] saveEntriesWithAmount:[self.amount doubleValue] type:self.selectedType notes:self.notesView.text date:self.selectedDate image:self.selectedimage isIncome:self.isIncome];
     
-    NSError *error = nil;
-    // Save the object to persistent store
-    if (![context save:&error]) {
-        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-    }
 }
 
 @end

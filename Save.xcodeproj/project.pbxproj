@@ -22,6 +22,7 @@
 		5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */; };
 		5874725A1BE791D700F3470D /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587472591BE791D700F3470D /* Photos.framework */; };
 		5878467F1BE35F6300181EC4 /* SLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5878467E1BE35F6300181EC4 /* SLabel.m */; };
+		58F173381BFC6FF600A3CF82 /* CoreDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F173371BFC6FF600A3CF82 /* CoreDataHelper.m */; };
 		58FA04401BE73EE800787B58 /* SButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FA043F1BE73EE800787B58 /* SButton.m */; };
 		58FA04441BE7521900787B58 /* SCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FA04421BE7521900787B58 /* SCollectionViewCell.m */; };
 		58FA04451BE7521900787B58 /* SCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58FA04431BE7521900787B58 /* SCollectionViewCell.xib */; };
@@ -75,6 +76,8 @@
 		587472591BE791D700F3470D /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		5878467D1BE35F6300181EC4 /* SLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLabel.h; sourceTree = "<group>"; };
 		5878467E1BE35F6300181EC4 /* SLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLabel.m; sourceTree = "<group>"; };
+		58F173361BFC6FF600A3CF82 /* CoreDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataHelper.h; sourceTree = "<group>"; };
+		58F173371BFC6FF600A3CF82 /* CoreDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataHelper.m; sourceTree = "<group>"; };
 		58FA043E1BE73EE800787B58 /* SButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SButton.h; sourceTree = "<group>"; };
 		58FA043F1BE73EE800787B58 /* SButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SButton.m; sourceTree = "<group>"; };
 		58FA04411BE7521900787B58 /* SCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCollectionViewCell.h; sourceTree = "<group>"; };
@@ -217,6 +220,8 @@
 				58FC99FD1BE87EBC001F5F49 /* UICollectionView+UICollectionView_Convenience.m */,
 				58FC99FF1BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.h */,
 				58FC9A001BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.m */,
+				58F173361BFC6FF600A3CF82 /* CoreDataHelper.h */,
+				58F173371BFC6FF600A3CF82 /* CoreDataHelper.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -429,6 +434,7 @@
 				58FA04401BE73EE800787B58 /* SButton.m in Sources */,
 				584F2E5B1BD66A0800F91052 /* SDetailViewController.m in Sources */,
 				58FC99FE1BE87EBC001F5F49 /* UICollectionView+UICollectionView_Convenience.m in Sources */,
+				58F173381BFC6FF600A3CF82 /* CoreDataHelper.m in Sources */,
 				581C2FA31BD4C2A90021ABA3 /* AppDelegate.m in Sources */,
 				58FC9A011BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.m in Sources */,
 				5878467F1BE35F6300181EC4 /* SLabel.m in Sources */,
