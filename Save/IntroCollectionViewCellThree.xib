@@ -21,6 +21,9 @@
                         <state key="normal" title=":)">
                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
+                        <connections>
+                            <action selector="nextTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="VTh-Pa-ppX"/>
+                        </connections>
                     </button>
                 </subviews>
                 <animations/>

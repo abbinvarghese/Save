@@ -11,6 +11,6 @@
 #import "IntroCollectionViewCellTwo.h"
 #import "IntroCollectionViewCellThree.h"
 
-@interface IntroCollectionViewController : UICollectionViewController<IntroCellDelegate,IntroCellTwoDelegate>
+@interface IntroCollectionViewController : UICollectionViewController<IntroCellDelegate,IntroCellTwoDelegate,IntroCellThreeDelegate>
 
 @end

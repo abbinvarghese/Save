@@ -1,10 +1,13 @@
 PODS:
   - Charts (2.1.4)
+  - FLAnimatedImage (1.0.8)
 
 DEPENDENCIES:
   - Charts
+  - FLAnimatedImage (~> 1.0)
 
 SPEC CHECKSUMS:
   Charts: 870589b6b4bf8468baacea8869c28983d71f602c
+  FLAnimatedImage: f9422f796135aff80d8c00b2afc48015bb746e24
 
 COCOAPODS: 0.39.0

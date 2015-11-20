@@ -50,6 +50,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    [self didSwipeDownOnUpperView:nil];
     // Dispose of any resources that can be recreated.
 }
 
@@ -63,7 +64,7 @@
     
     
     // CREATES THE TYPE ARRAYS IN USER DEFAULTS AND LAUNCHS THE INTRO SCREEN IF ITS THE FIRST TIME LAUNCH
-  //  if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {
+    //if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
         NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
@@ -76,7 +77,7 @@
         [self presentViewController:vc animated:NO completion:^(void){
             
         }];
-  //  }
+   // }
 
 }
 
@@ -86,7 +87,7 @@
     self.incomeTap.enabled = NO;
     self.expenseButton.enabled=NO;
     self.expenceTap.enabled=NO;
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+    [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
         self.incomeButton.center = CGPointMake(screenWidth/2,middle + middleOfMiddle+50);
         self.incomeButton.layer.shadowOpacity = 1;
     }completion:^(BOOL finished){
@@ -135,7 +136,7 @@
             _chartView.alpha = 0;
             [self.view insertSubview:_chartView atIndex:0];
             [UIView animateWithDuration:0.5 animations:^(void){
-                 _chartView.alpha = 0;
+                 _chartView.alpha = 1;
             }];
         }
     }];

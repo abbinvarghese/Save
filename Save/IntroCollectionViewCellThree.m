@@ -81,13 +81,45 @@
             smileLabel3.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
             
         }completion:^(BOOL finished){
-            
+            [self showLoader];
         }];
     }];
     
+}
+
+-(void)showLoader{
+    if (!self.loader) {
+        self.loader = [[FLAnimatedImageView alloc] init];
+        self.loader.contentMode = UIViewContentModeScaleAspectFit;
+        self.loader.clipsToBounds = YES;
+    }
+    CGFloat borderWidth = 1.0f;
+    self.loader.frame = CGRectInset(self.loader.frame, -borderWidth, -borderWidth);
+    self.loader.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.loader.layer.borderWidth = borderWidth;
+    self.loader.alpha = 0;
+    [self addSubview:self.loader];
     
-
-
+    self.loader.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/1.68, [UIScreen mainScreen].bounds.size.height/1.68);
+    self.loader.center = CGPointMake(self.frame.size.width  / 2,
+                                     self.frame.size.height / 1.65);
+    self.loader.layer.masksToBounds = YES;
+    self.loader.layer.cornerRadius = 10;
+    NSURL *url1 = [[NSBundle mainBundle] URLForResource:@"Charts" withExtension:@"gif"];
+    NSData *data1 = [NSData dataWithContentsOfURL:url1];
+    FLAnimatedImage *animatedImage1 = [FLAnimatedImage animatedImageWithGIFData:data1];
+    self.loader.animatedImage = animatedImage1;
+    [UIView animateWithDuration:1 animations:^(void){
+        self.loader.alpha = 1;
+    }];
+}
+- (IBAction)nextTapped:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(introCelldidtapNextThree:)]) {
+        [self.loader stopAnimating];
+        [self.loader removeFromSuperview];
+        [self.delegate introCelldidtapNextThree:self];
+    }
+    
 }
 
 @end

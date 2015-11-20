@@ -63,7 +63,7 @@ static NSString * const reuseIdentifierThree = @"CellThree";
     }
     else if (indexPath.row == 3){
         IntroCollectionViewCellThree *cellthree = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifierThree forIndexPath:indexPath];
-
+        cellthree.delegate = self;
         return cellthree;
     }
     else{
@@ -83,6 +83,10 @@ static NSString * const reuseIdentifierThree = @"CellThree";
 -(void)introCelldidtapNextTwo:(IntroCollectionViewCellTwo *)cell{
     NSIndexPath *index = [NSIndexPath indexPathForRow:3 inSection:0];
     [self.collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
+-(void)introCelldidtapNextThree:(IntroCollectionViewCellThree *)cell{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark <UICollectionViewDelegate>
