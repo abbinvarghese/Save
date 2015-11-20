@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "SDetailViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,14 +19,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
-        NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
-        [defaults setObject:expense forKey:@"expense"];
-        [defaults setObject:income forKey:@"income"];
-        [defaults synchronize];
-        
-        
         NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"FinalBalances" inManagedObjectContext:self.managedObjectContext];
         [newDevice setValue:[NSNumber numberWithDouble:15000.0] forKey:@"amount"];
         NSError *error = nil;
@@ -34,7 +27,7 @@
             NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
         }
     }
-    NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+   // NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     return YES;
 }
 

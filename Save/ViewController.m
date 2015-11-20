@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "SDetailViewController.h"
 #import "SLabel.h"
+#import "IntroCollectionViewController.h"
 
 @interface ViewController ()
 
@@ -58,6 +59,25 @@
         self.incomeButton.alpha = 1;
         self.expenseButton.alpha = 1;
     }];
+    
+    
+    
+    // CREATES THE TYPE ARRAYS IN USER DEFAULTS AND LAUNCHS THE INTRO SCREEN IF ITS THE FIRST TIME LAUNCH
+  //  if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
+        NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
+        [defaults setObject:expense forKey:@"expense"];
+        [defaults setObject:income forKey:@"income"];
+        [defaults synchronize];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        IntroCollectionViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"IntroCollectionViewController"];
+        [self presentViewController:vc animated:NO completion:^(void){
+            
+        }];
+  //  }
+
 }
 
 - (IBAction)didSwipeDownOnUpperView:(UISwipeGestureRecognizer *)sender {
@@ -112,7 +132,11 @@
             l.xEntrySpace = 4.0;
             [self setDataCount:20];
             [_chartView animateWithXAxisDuration:2.0 yAxisDuration:2.0];
+            _chartView.alpha = 0;
             [self.view insertSubview:_chartView atIndex:0];
+            [UIView animateWithDuration:0.5 animations:^(void){
+                 _chartView.alpha = 0;
+            }];
         }
     }];
 }
