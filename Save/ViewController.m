@@ -6,10 +6,15 @@
 //  Copyright © 2015 Abbin. All rights reserved.
 //
 
+#define DegreesToRadians(x) ((x) * M_PI / 180.0)
+
 #import "ViewController.h"
 #import "SDetailViewController.h"
 #import "SLabel.h"
 #import "IntroCollectionViewController.h"
+#import "CoreDataHelper.h"
+#import "NSDate+SDate.h"
+#import "SEntriesTableViewController.h"
 
 @interface ViewController ()
 
@@ -23,8 +28,6 @@
 @property (nonatomic, strong) BarChartView *chartView;
 @property (weak, nonatomic) IBOutlet SLabel *incomeButton;
 @property (weak, nonatomic) IBOutlet SLabel *expenseButton;
-@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *incomeTap;
-@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *expenceTap;
 
 @end
 
@@ -41,6 +44,67 @@
     }
     middle = screenHeight/2;
     middleOfMiddle = middle/2;
+    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(orientationChanged:)
+     name:UIDeviceOrientationDidChangeNotification
+     object:[UIDevice currentDevice]];
+}
+
+- (void) orientationChanged:(NSNotification *)note
+{
+    UIDevice * device = note.object;
+    switch(device.orientation)
+    {
+        case UIDeviceOrientationPortrait:
+        {
+            [self setNeedsStatusBarAppearanceUpdate];
+            [UIView animateWithDuration:0.3 animations:^(void){
+                _chartView.alpha = 0;
+                self.incomeButton.alpha = 1;
+                self.expenseButton.alpha = 1;
+            }completion:^(BOOL finished){
+                [_chartView removeFromSuperview];
+            }];
+        }
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:{
+            [self setNeedsStatusBarAppearanceUpdate];
+            [UIView animateWithDuration:0.3 animations:^(void){
+                self.incomeButton.alpha = 0;
+                self.expenseButton.alpha = 0;
+            }completion:^(BOOL finished){
+                [self drawChartWithOrintation:device.orientation];
+            }];
+        }
+        case UIDeviceOrientationLandscapeRight:{
+            [self setNeedsStatusBarAppearanceUpdate];
+            [UIView animateWithDuration:0.3 animations:^(void){
+                self.incomeButton.alpha = 0;
+                self.expenseButton.alpha = 0;
+            }completion:^(BOOL finished){
+                [self drawChartWithOrintation:device.orientation];
+            }];
+        }
+            break;
+            
+        default:
+        {
+            [self setNeedsStatusBarAppearanceUpdate];
+        }
+            break;
+    };
+}
+
+- (BOOL)prefersStatusBarHidden {
+    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft || [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
+        return YES;
+    }
+    else{
+        return NO;
+    }
 }
 
 -(void)drawCustomeView{
@@ -50,7 +114,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    [self didSwipeDownOnUpperView:nil];
     // Dispose of any resources that can be recreated.
 }
 
@@ -61,98 +124,84 @@
         self.expenseButton.alpha = 1;
     }];
     
-    
-    
     // CREATES THE TYPE ARRAYS IN USER DEFAULTS AND LAUNCHS THE INTRO SCREEN IF ITS THE FIRST TIME LAUNCH
-    //if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
-        NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
-        [defaults setObject:expense forKey:@"expense"];
-        [defaults setObject:income forKey:@"income"];
-        [defaults synchronize];
-        
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {        
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         IntroCollectionViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"IntroCollectionViewController"];
         [self presentViewController:vc animated:NO completion:^(void){
-            
+            self.incomeButton.alpha = 0;
+            self.expenseButton.alpha = 0;
         }];
-   // }
+    }
 
 }
 
-- (IBAction)didSwipeDownOnUpperView:(UISwipeGestureRecognizer *)sender {
+-(void)drawChartWithOrintation:(UIDeviceOrientation)orintation{
+    if (!_chartView) {
+        _chartView = [[BarChartView alloc]init];
+        [_chartView animateWithXAxisDuration:2.0 yAxisDuration:2.0];
+    }
     
-    self.incomeButton.shouldTouch = NO;
-    self.incomeTap.enabled = NO;
-    self.expenseButton.enabled=NO;
-    self.expenceTap.enabled=NO;
-    [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-        self.incomeButton.center = CGPointMake(screenWidth/2,middle + middleOfMiddle+50);
-        self.incomeButton.layer.shadowOpacity = 1;
-    }completion:^(BOOL finished){
-        if (!_chartView) {
-            _chartView = [[BarChartView alloc]initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/2)];
-            _chartView.delegate = self;
-            
-            _chartView.descriptionText = @"";
-            _chartView.noDataTextDescription = @"You need to provide data for the chart.";
-            
-            _chartView.drawBarShadowEnabled = NO;
-            _chartView.drawValueAboveBarEnabled = YES;
-            _chartView.maxVisibleValueCount = 60;
-            _chartView.pinchZoomEnabled = NO;
-            _chartView.drawGridBackgroundEnabled = NO;
-            
-            ChartXAxis *xAxis = _chartView.xAxis;
-            xAxis.labelPosition = XAxisLabelPositionBottom;
-            xAxis.labelFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:10.f];
-            xAxis.drawGridLinesEnabled = NO;
-            xAxis.enabled = NO;
-            
-            ChartYAxis *leftAxis = _chartView.leftAxis;
-            leftAxis.labelFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:10.f];
-            leftAxis.labelCount = 6;
-            leftAxis.startAtZeroEnabled = NO;
-            leftAxis.axisMinimum = -2.5;
-            leftAxis.axisMaximum = 2.5;
-            
-            ChartYAxis *rightAxis = _chartView.rightAxis;
-            rightAxis.drawGridLinesEnabled = NO;
-            rightAxis.labelFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:10.f];
-            rightAxis.labelCount = 6;
-            rightAxis.startAtZeroEnabled = NO;
-            rightAxis.axisMinimum = -2.5;
-            rightAxis.axisMaximum = 2.5;
-            
-            ChartLegend *l = _chartView.legend;
-            l.position = ChartLegendPositionBelowChartLeft;
-            l.form = ChartLegendFormSquare;
-            l.formSize = 9.0;
-            l.font = [UIFont systemFontOfSize:11.f];
-            l.xEntrySpace = 4.0;
-            [self setDataCount:20];
-            [_chartView animateWithXAxisDuration:2.0 yAxisDuration:2.0];
-            _chartView.alpha = 0;
-            [self.view insertSubview:_chartView atIndex:0];
-            [UIView animateWithDuration:0.5 animations:^(void){
-                 _chartView.alpha = 1;
-            }];
-        }
+    if (orintation == UIDeviceOrientationLandscapeLeft) {
+        _chartView.transform = CGAffineTransformMakeRotation(DegreesToRadians(90));
+    }
+    else{
+        _chartView.transform = CGAffineTransformMakeRotation(DegreesToRadians(270));
+    }
+    
+    if (![_chartView isDescendantOfView:self.view]) {
+        _chartView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/1.1, [UIScreen mainScreen].bounds.size.height/1.1);
+        _chartView.center = self.view.center;
+        _chartView.delegate = self;
+        
+        _chartView.descriptionText = @"";
+        _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+        
+        _chartView.drawBarShadowEnabled = NO;
+        _chartView.drawValueAboveBarEnabled = YES;
+        
+        _chartView.maxVisibleValueCount = 60;
+        _chartView.pinchZoomEnabled = NO;
+        _chartView.drawGridBackgroundEnabled = NO;
+        
+        ChartXAxis *xAxis = _chartView.xAxis;
+        xAxis.labelPosition = XAxisLabelPositionBottom;
+        xAxis.labelFont = [UIFont systemFontOfSize:10.f];
+        xAxis.drawGridLinesEnabled = NO;
+        xAxis.spaceBetweenLabels = 2.0;
+        
+        ChartYAxis *leftAxis = _chartView.leftAxis;
+        leftAxis.labelFont = [UIFont systemFontOfSize:10.f];
+        leftAxis.labelCount = 8;
+        leftAxis.valueFormatter = [[NSNumberFormatter alloc] init];
+        leftAxis.valueFormatter.maximumFractionDigits = 1;
+        leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
+        leftAxis.spaceTop = 0.15;
+        
+        ChartYAxis *rightAxis = _chartView.rightAxis;
+        rightAxis.drawGridLinesEnabled = NO;
+        rightAxis.labelFont = [UIFont systemFontOfSize:10.f];
+        rightAxis.labelCount = 8;
+        rightAxis.valueFormatter = leftAxis.valueFormatter;
+        rightAxis.spaceTop = 0.15;
+        
+        _chartView.legend.position = ChartLegendPositionBelowChartLeft;
+        _chartView.legend.form = ChartLegendFormSquare;
+        _chartView.legend.formSize = 9.0;
+        _chartView.legend.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:11.f];
+        _chartView.legend.xEntrySpace = 4.0;
+        
+        
+        _chartView.alpha = 0;
+        
+        [self setDataCount:12 range:50];
+    }
+    [self.view addSubview:_chartView];
+    
+    [UIView animateWithDuration:0.5 animations:^(void){
+        _chartView.alpha = 1;
     }];
-}
 
-- (IBAction)didSwipeUpOnUpperView:(UISwipeGestureRecognizer *)sender {
-    
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
-        self.incomeButton.center = CGPointMake(screenWidth/2,middleOfMiddle);
-    }completion:^(BOOL finished){
-        self.incomeButton.layer.shadowOpacity = 0;
-        self.incomeButton.shouldTouch = YES;
-        self.incomeTap.enabled = YES;
-        self.expenseButton.enabled=YES;
-        self.expenceTap.enabled=YES;
-    }];
 }
 
 - (IBAction)incomeTapped:(UITapGestureRecognizer *)sender {
@@ -178,73 +227,57 @@
     }];
 }
 
-- (void)setDataCount:(int)count
+- (IBAction)expenseSwiped:(UISwipeGestureRecognizer *)sender {
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+       self.expenseButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width+self.expenseButton.frame.size.width,self.expenseButton.center.y);
+    }completion:^(BOOL finished){
+        
+    }];
+    
+    [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+        self.incomeButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width+self.incomeButton.frame.size.width,self.incomeButton.center.y);
+    }completion:^(BOOL finished){
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        SEntriesTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SEntriesTableViewController"];
+
+        [self presentViewController:vc animated:NO completion:^(void){
+            
+        }];
+
+    }];
+}
+
+- (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    NSMutableArray *entries = [[NSMutableArray alloc] init];
+    NSMutableArray *xVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceDate];
     
-        [xVals addObject:@"da"];
-        [entries addObject:[[BarChartDataEntry alloc] initWithValue:23 xIndex:0]];
-    [xVals addObject:@"da"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:23 xIndex:1]];
-    [xVals addObject:@"adsa"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:11 xIndex:2]];
-    [xVals addObject:@"dasda"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:42 xIndex:3]];
-    [xVals addObject:@"dsada"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-11 xIndex:4]];
-    [xVals addObject:@"dara"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-54 xIndex:5]];
-    [xVals addObject:@"dsgdfa"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:22 xIndex:6]];
-    [xVals addObject:@"gsdfda"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:54 xIndex:7]];
-    [xVals addObject:@"daxxc"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:12 xIndex:8]];
-    [xVals addObject:@"dkya"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-11 xIndex:9]];
-    [xVals addObject:@"dtya"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:42 xIndex:10]];
-    [xVals addObject:@"dsfdga"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:99 xIndex:11]];
-    [xVals addObject:@"dytuia"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-54 xIndex:12]];
-    [xVals addObject:@"d67a"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-12 xIndex:13]];
-    [xVals addObject:@"dafg"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:23 xIndex:14]];
-    [xVals addObject:@"dwya"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:23 xIndex:15]];
-    [xVals addObject:@"drtha"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:11 xIndex:16]];
-    [xVals addObject:@"65"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:42 xIndex:17]];
-    [xVals addObject:@"d56ja"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-11 xIndex:18]];
-    [xVals addObject:@"dhwa"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-54 xIndex:19]];
-    [xVals addObject:@"hgfh"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:22 xIndex:20]];
-    [xVals addObject:@"sth"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:54 xIndex:21]];
-    [xVals addObject:@"y43"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:12 xIndex:22]];
-    [xVals addObject:@"o9"];
-    [entries addObject:[[BarChartDataEntry alloc] initWithValue:-11 xIndex:23]];
-    [xVals addObject:@"dasgf"];
-
-
+    NSMutableArray *yVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceAmount];
+    BarChartDataEntry *last = [yVals objectAtIndex:yVals.count-1];
+    NSString *lastStr = [NSString stringWithFormat:@"%f",last.value];
+    BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:[self currencyFormString:lastStr]];
+    set1.barSpace = 0.35;
     
-    BarChartDataSet *set = [[BarChartDataSet alloc] initWithYVals:entries label:@"Sinus Function"];
-    set.barSpace = 0.4;
-    [set setColor:[UIColor colorWithRed:240/255.f green:120/255.f blue:124/255.f alpha:1.f]];
+    NSMutableArray *dataSets = [[NSMutableArray alloc] init];
+    [dataSets addObject:set1];
     
-    BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSet:set];
-    [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:10.f]];
-    [data setDrawValues:NO];
+    BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
+    [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:5.f]];
     
     _chartView.data = data;
 }
+
+-(NSString*)currencyFormString:(NSString*)string{
+    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
+    [currencyFormatter setLocale:[NSLocale currentLocale]];
+    [currencyFormatter setMaximumFractionDigits:2];
+    [currencyFormatter setMinimumFractionDigits:2];
+    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
+    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
+    return [currencyFormatter stringFromNumber:someAmount];
+}
+
 
 
 @end

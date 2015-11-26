@@ -16,5 +16,7 @@
 + (CoreDataHelper *)sharedCLCoreDataHelper;
 
 -(void)saveEntriesWithAmount: (double)amount type :(NSString*)type notes:(NSString*)note date:(NSDate*)date image:(UIImage*)image isIncome:(BOOL) isIncome;
+-(NSMutableArray*)collectFinalBalanceDate;
+-(NSMutableArray*)collectFinalBalanceAmount;
 
 @end

@@ -201,6 +201,19 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark-
 #pragma mark Initilize and Draw Methods
 
+-(NSString*)LocalcurrencySymbol{
+    
+    NSLocale* japanese_japan = [NSLocale currentLocale];
+    NSNumberFormatter* fmtr = [[NSNumberFormatter alloc] init];
+    [fmtr setNumberStyle:NSNumberFormatterCurrencyStyle];
+    [fmtr setLocale:japanese_japan];
+    
+    // Local currency symbol (what you're asking for)
+    NSString* currencySymbol = [fmtr currencySymbol];
+
+    return currencySymbol;
+}
+
 -(void)drawPrimaryView{
     self.innerView.frame = [UIScreen mainScreen].bounds;
     self.point.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
@@ -218,8 +231,15 @@ static CGSize AssetGridThumbnailSize;
     
     self.cancelLabel.frame = CGRectMake(-32.5, [UIScreen mainScreen].bounds.size.height/2, 65, 25);
     self.saveLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-23, [UIScreen mainScreen].bounds.size.height/2, 46, 25);
-    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-20, [UIScreen mainScreen].bounds.size.height/4-20);
-    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width, 20, 20, [UIScreen mainScreen].bounds.size.height/4-20);
+    
+    
+    NSAttributedString *str2 = [[NSAttributedString alloc]initWithString:[self LocalcurrencySymbol] attributes:@{NSFontAttributeName:self.currenzyLabel.font}];
+    CGRect rect2 = [str2 boundingRectWithSize:(CGSize){50, CGFLOAT_MAX}
+                                      options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+
+    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/4-20);
+    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width, 20, rect2.size.width, [UIScreen mainScreen].bounds.size.height/4-20);
+    self.currenzyLabel.text = [self LocalcurrencySymbol];
     self.pickerViewCustom.frame = CGRectMake(0, self.amountLabel.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4);
 }
 

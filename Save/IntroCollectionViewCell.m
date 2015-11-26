@@ -218,9 +218,7 @@
                 self.smileLabel6.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
                 self.smileLabel6.alpha = 1;
             }completion:^(BOOL finished){
-                if (self.smileLabel2) {
-                    [self performSelector:@selector(animatelabel) withObject:nil afterDelay:1];
-                }
+        
             }];
 
         }];

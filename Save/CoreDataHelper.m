@@ -7,6 +7,8 @@
 //
 
 #import "CoreDataHelper.h"
+#import "NSDate+SDate.h"
+@import Charts;
 
 @implementation CoreDataHelper
 
@@ -50,32 +52,6 @@ static CoreDataHelper *coreDataHelper = nil;
         [newDevice setValue:imageData forKey:@"attachment"];
     }
     
-    
-    // GETTING LAST FINAL AMOUNT AND CALCULATING NEW
-    newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"FinalBalances" inManagedObjectContext:self.managedObjectContext];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription
-                                   entityForName:@"FinalBalances" inManagedObjectContext:self.managedObjectContext];
-    [request setEntity:entity];
-    
-    // Results should be in descending order of timeStamp.
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
-    [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:NULL];
-    NSManagedObject *latestEntity = [results objectAtIndex:0];
-    double lastAmt = [[latestEntity valueForKey:@"amount"] doubleValue];
-    NSNumber *newlastnum;
-    if (isIncome) {
-        newlastnum = [NSNumber numberWithDouble:lastAmt + amount];
-    }
-    else{
-        newlastnum = [NSNumber numberWithDouble:lastAmt - amount];
-    }
-    [newDevice setValue:newlastnum forKey:@"amount"];
-    
-    
     // FINAL SAVE
     NSError *error = nil;
     // Save the object to persistent store
@@ -83,6 +59,69 @@ static CoreDataHelper *coreDataHelper = nil;
         NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
     }
     
+}
+
+//-(NSArray*)getAllEntries{
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription
+//                                   entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+//    [fetchRequest setEntity:entity];
+//    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//    NSError *error = nil;
+//    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+//    
+//    
+//}
+
+-(NSMutableArray*)collectFinalBalanceDate{
+    NSMutableArray *dateVals = [[NSMutableArray alloc] init];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    NSDate *date = [[NSUserDefaults standardUserDefaults]objectForKey:@"monthlyLimitDay"];
+    
+    [dateVals addObject:[NSString stringWithFormat:@"%ld",(long)date.day]];
+    
+    for (NSManagedObject *info in fetchedObjects) {
+        NSDate *date = [info valueForKey:@"date"];
+        [dateVals addObject:[NSString stringWithFormat:@"%ld",(long)date.day]];
+    }
+    return dateVals;
+}
+
+-(NSMutableArray*)collectFinalBalanceAmount{
+    NSMutableArray *dateVals = [[NSMutableArray alloc] init];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    [dateVals addObject:[[BarChartDataEntry alloc]initWithValue:[[[NSUserDefaults standardUserDefaults]objectForKey:@"monthlyLimit"] doubleValue] xIndex:0]];
+    
+    for (int i = 0; i < fetchedObjects.count; i++) {
+        BarChartDataEntry *entry = [dateVals objectAtIndex:i];
+        double amt;
+        if ([[[fetchedObjects objectAtIndex:i] valueForKey:@"isIncome"]boolValue]) {
+            amt = entry.value+[[[fetchedObjects objectAtIndex:i] valueForKey:@"amount"] doubleValue];
+        }
+        else{
+            amt = entry.value-[[[fetchedObjects objectAtIndex:i] valueForKey:@"amount"] doubleValue];
+        }
+        [dateVals addObject:[[BarChartDataEntry alloc] initWithValue:amt xIndex:i+1]];
+    }
+    
+    return dateVals;
 }
 
 

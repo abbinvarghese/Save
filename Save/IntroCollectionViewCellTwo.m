@@ -7,6 +7,8 @@
 //
 
 #import "IntroCollectionViewCellTwo.h"
+#import "CoreDataHelper.h"
+#import "NSDate+SDate.h"
 
 
 @implementation IntroCollectionViewCellTwo
@@ -184,7 +186,7 @@ int buttonWidth;
     }
 }
 - (void)zeroTapped:(UIButton *)sender {
-    if (self.amount.length<9) {
+    if (self.amount.length<8) {
         [self.amount appendString:@"0"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
@@ -220,7 +222,7 @@ int buttonWidth;
             self.amountLabel.center = CGPointMake(self.amountLabel.center.x, self.amountLabel.center.y+50);
             self.amountLabel.alpha = 1;
         }completion:^(BOOL finished){
-            [self animateLabel];
+            
         }];
     }];
 }
@@ -228,7 +230,20 @@ int buttonWidth;
 - (IBAction)nextTaped:(UIButton *)sender {
     if ([self.delegate respondsToSelector:@selector(introCelldidtapNextTwo:)]) {
         [self.delegate introCelldidtapNextTwo:self];
+        [self performSelectorInBackground:@selector(saveInBackThread) withObject:nil];
     }
+    
+}
+
+-(void)saveInBackThread{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
+    NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
+    [defaults setObject:expense forKey:@"expense"];
+    [defaults setObject:income forKey:@"income"];
+    [defaults setObject:[NSDate date] forKey:@"monthlyLimitDay"];
+    [defaults setObject:self.amount forKey:@"monthlyLimit"];
+    [defaults synchronize];
 }
 
 @end

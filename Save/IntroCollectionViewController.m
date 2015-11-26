@@ -86,7 +86,7 @@ static NSString * const reuseIdentifierThree = @"CellThree";
 }
 
 -(void)introCelldidtapNextThree:(IntroCollectionViewCellThree *)cell{
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 #pragma mark <UICollectionViewDelegate>

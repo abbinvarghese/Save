@@ -46,6 +46,7 @@
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="Gh4-PS-tmj" appends="YES" id="WU7-uL-zPO"/>
+                                    <outletCollection property="gestureRecognizers" destination="oS2-2f-gGF" appends="YES" id="6Rp-RI-Eja"/>
                                 </connections>
                             </label>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="income" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wg2-J3-VN8" customClass="SLabel">
@@ -58,8 +59,6 @@
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="A1e-Cg-WLL" appends="YES" id="9hg-OB-Sj8"/>
-                                    <outletCollection property="gestureRecognizers" destination="WTC-Jl-8sa" appends="YES" id="bjZ-Tm-k26"/>
                                     <outletCollection property="gestureRecognizers" destination="mHL-VG-yOq" appends="YES" id="znz-5v-FfY"/>
                                 </connections>
                             </label>
@@ -67,24 +66,13 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="expenceTap" destination="Gh4-PS-tmj" id="jd0-Gh-FX5"/>
                         <outlet property="expenseButton" destination="fwn-ZR-HzN" id="AdC-M7-NpV"/>
                         <outlet property="incomeButton" destination="wg2-J3-VN8" id="Lln-0h-DFL"/>
-                        <outlet property="incomeTap" destination="mHL-VG-yOq" id="COZ-Ew-akm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="down" id="A1e-Cg-WLL">
-                    <connections>
-                        <action selector="didSwipeDownOnUpperView:" destination="BYZ-38-t0r" id="App-NC-Ver"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="up" id="WTC-Jl-8sa">
-                    <connections>
-                        <action selector="didSwipeUpOnUpperView:" destination="BYZ-38-t0r" id="Kgl-mX-f6x"/>
-                    </connections>
-                </swipeGestureRecognizer>
                 <tapGestureRecognizer cancelsTouchesInView="NO" id="mHL-VG-yOq">
                     <connections>
                         <action selector="incomeTapped:" destination="BYZ-38-t0r" id="BKi-ue-1rs"/>
@@ -95,8 +83,45 @@
                         <action selector="expenseTapped:" destination="BYZ-38-t0r" id="yIH-Ap-zfu"/>
                     </connections>
                 </tapGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="oS2-2f-gGF">
+                    <connections>
+                        <action selector="expenseSwiped:" destination="BYZ-38-t0r" id="3wl-k0-4mE"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="205" y="206"/>
+            <point key="canvasLocation" x="152" y="227"/>
+        </scene>
+        <!--Entries Table View Controller-->
+        <scene sceneID="ib3-Qd-Wpr">
+            <objects>
+                <tableViewController storyboardIdentifier="SEntriesTableViewController" id="poD-IF-eQf" customClass="SEntriesTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="6Jw-1d-Oie">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="contentInset" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SEntriesTableViewControllerCell" id="wHb-65-7xB">
+                                <rect key="frame" x="0.0" y="48" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wHb-65-7xB" id="JPQ-2g-ywj">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </tableViewCellContentView>
+                                <animations/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="poD-IF-eQf" id="Lxz-NU-Cb7"/>
+                            <outlet property="delegate" destination="poD-IF-eQf" id="Ka4-y5-iXj"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jgn-w6-SE7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="495" y="259"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="xSR-WK-9f1">
@@ -358,7 +383,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="398.5" y="263.5"/>
+            <point key="canvasLocation" x="928.5" y="269.5"/>
         </scene>
         <!--Intro Collection View Controller-->
         <scene sceneID="HrO-ET-6LO">
@@ -384,7 +409,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MJ1-mD-3s8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="806" y="209"/>
+            <point key="canvasLocation" x="1173" y="227"/>
         </scene>
     </scenes>
 </document>

@@ -13,6 +13,9 @@
 		58036B841BFF24AA00F04877 /* IntroCollectionViewCellThree.m in Sources */ = {isa = PBXBuildFile; fileRef = 58036B821BFF24AA00F04877 /* IntroCollectionViewCellThree.m */; };
 		58036B851BFF24AA00F04877 /* IntroCollectionViewCellThree.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58036B831BFF24AA00F04877 /* IntroCollectionViewCellThree.xib */; };
 		58036B891BFF481100F04877 /* Charts.gif in Resources */ = {isa = PBXBuildFile; fileRef = 58036B881BFF481100F04877 /* Charts.gif */; };
+		5804829C1C06EAD100541450 /* NSDate+SDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5804829B1C06EAD100541450 /* NSDate+SDate.m */; };
+		580482A21C070EC200541450 /* SEntriesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 580482A11C070EC200541450 /* SEntriesTableViewController.m */; };
+		580482A51C07171D00541450 /* EntryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 580482A41C07171D00541450 /* EntryObject.m */; };
 		581C2FA01BD4C2A90021ABA3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2F9F1BD4C2A90021ABA3 /* main.m */; };
 		581C2FA31BD4C2A90021ABA3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FA21BD4C2A90021ABA3 /* AppDelegate.m */; };
 		581C2FA61BD4C2A90021ABA3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FA51BD4C2A90021ABA3 /* ViewController.m */; };
@@ -69,6 +72,12 @@
 		58036B821BFF24AA00F04877 /* IntroCollectionViewCellThree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroCollectionViewCellThree.m; sourceTree = "<group>"; };
 		58036B831BFF24AA00F04877 /* IntroCollectionViewCellThree.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroCollectionViewCellThree.xib; sourceTree = "<group>"; };
 		58036B881BFF481100F04877 /* Charts.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Charts.gif; sourceTree = "<group>"; };
+		5804829A1C06EAD100541450 /* NSDate+SDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+SDate.h"; sourceTree = "<group>"; };
+		5804829B1C06EAD100541450 /* NSDate+SDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SDate.m"; sourceTree = "<group>"; };
+		580482A01C070EC200541450 /* SEntriesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEntriesTableViewController.h; sourceTree = "<group>"; };
+		580482A11C070EC200541450 /* SEntriesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEntriesTableViewController.m; sourceTree = "<group>"; };
+		580482A31C07171D00541450 /* EntryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryObject.h; sourceTree = "<group>"; };
+		580482A41C07171D00541450 /* EntryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntryObject.m; sourceTree = "<group>"; };
 		581C2F9B1BD4C2A90021ABA3 /* Save.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Save.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		581C2F9F1BD4C2A90021ABA3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		581C2FA11BD4C2A90021ABA3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -220,6 +229,8 @@
 				584F2E5A1BD66A0800F91052 /* SDetailViewController.m */,
 				58E41ADF1BFDA05C007AD3B9 /* IntroCollectionViewController.h */,
 				58E41AE01BFDA05C007AD3B9 /* IntroCollectionViewController.m */,
+				580482A01C070EC200541450 /* SEntriesTableViewController.h */,
+				580482A11C070EC200541450 /* SEntriesTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -264,6 +275,10 @@
 				58E41AEB1BFDC430007AD3B9 /* SIntroLabel.m */,
 				58036B791BFEFA9E00F04877 /* IntroButton.h */,
 				58036B7A1BFEFA9E00F04877 /* IntroButton.m */,
+				5804829A1C06EAD100541450 /* NSDate+SDate.h */,
+				5804829B1C06EAD100541450 /* NSDate+SDate.m */,
+				580482A31C07171D00541450 /* EntryObject.h */,
+				580482A41C07171D00541450 /* EntryObject.m */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -477,6 +492,8 @@
 				58036B841BFF24AA00F04877 /* IntroCollectionViewCellThree.m in Sources */,
 				58036B7B1BFEFA9E00F04877 /* IntroButton.m in Sources */,
 				58E41AE11BFDA05C007AD3B9 /* IntroCollectionViewController.m in Sources */,
+				5804829C1C06EAD100541450 /* NSDate+SDate.m in Sources */,
+				580482A21C070EC200541450 /* SEntriesTableViewController.m in Sources */,
 				5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */,
 				58036B7F1BFF0F8200F04877 /* IntroCollectionViewCellTwo.m in Sources */,
 				581C2FAC1BD4C2A90021ABA3 /* Save.xcdatamodeld in Sources */,
@@ -490,6 +507,7 @@
 				58FC9A011BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.m in Sources */,
 				5878467F1BE35F6300181EC4 /* SLabel.m in Sources */,
 				58E41AEC1BFDC430007AD3B9 /* SIntroLabel.m in Sources */,
+				580482A51C07171D00541450 /* EntryObject.m in Sources */,
 				58FA04441BE7521900787B58 /* SCollectionViewCell.m in Sources */,
 				581C2FA01BD4C2A90021ABA3 /* main.m in Sources */,
 			);
