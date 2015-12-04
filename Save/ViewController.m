@@ -35,6 +35,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    
+    
     [self drawCustomeView];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenWidth = screenRect.size.width;
@@ -122,6 +126,18 @@
     [UIView animateWithDuration:0.3 animations:^(void){
         self.incomeButton.alpha = 1;
         self.expenseButton.alpha = 1;
+    }];
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+        self.incomeButton.center = CGPointMake(self.view.center.x,self.incomeButton.center.y);
+    }completion:^(BOOL finished){
+        
+    }];
+    
+    [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+        self.expenseButton.center = CGPointMake(self.view.center.x,self.expenseButton.center.y);
+    }completion:^(BOOL finished){
+        
     }];
     
     // CREATES THE TYPE ARRAYS IN USER DEFAULTS AND LAUNCHS THE INTRO SCREEN IF ITS THE FIRST TIME LAUNCH

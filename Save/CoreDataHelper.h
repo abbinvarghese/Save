@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "AppDelegate.h"
+#import "Entries.h"
+#import "Entries+CoreDataProperties.h"
 
 @interface CoreDataHelper : NSObject
 
@@ -18,5 +20,7 @@
 -(void)saveEntriesWithAmount: (double)amount type :(NSString*)type notes:(NSString*)note date:(NSDate*)date image:(UIImage*)image isIncome:(BOOL) isIncome;
 -(NSMutableArray*)collectFinalBalanceDate;
 -(NSMutableArray*)collectFinalBalanceAmount;
+-(NSArray*)getAllEntries;
+-(void)deleteObject:(Entries*)object;
 
 @end

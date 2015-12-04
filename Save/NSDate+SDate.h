@@ -14,5 +14,6 @@
 -(NSInteger)month;
 -(NSInteger)year;
 -(NSString*)monthName;
+-(NSString*)shortDate;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "CoreDataHelper.h"
 #import "NSDate+SDate.h"
+
 @import Charts;
 
 @implementation CoreDataHelper
@@ -39,17 +40,17 @@ static CoreDataHelper *coreDataHelper = nil;
 
 -(void)saveEntriesWithAmount:(double)amount type:(NSString *)type notes:(NSString *)note date:(NSDate *)date image:(UIImage *)image isIncome:(BOOL)isIncome{
     // Create a new managed object
-    NSManagedObject *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
-    [newDevice setValue:[NSNumber numberWithDouble:amount] forKey:@"amount"];
-    [newDevice setValue:type forKey:@"type"];
-    [newDevice setValue:date forKey:@"date"];
-    [newDevice setValue:[NSNumber numberWithBool:isIncome] forKey:@"isIncome"];
+    Entries *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+    newDevice.amount = [NSNumber numberWithDouble:amount];
+    newDevice.type = type;
+    newDevice.date = date;
+    newDevice.isIncome = [NSNumber numberWithBool:isIncome];
     if (note.length>0) {
-        [newDevice setValue:note forKey:@"note"];
+        newDevice.note = note;
     }
     if (image) {
         NSData *imageData = UIImagePNGRepresentation(image);
-        [newDevice setValue:imageData forKey:@"attachment"];
+        newDevice.attachment = imageData;
     }
     
     // FINAL SAVE
@@ -61,18 +62,24 @@ static CoreDataHelper *coreDataHelper = nil;
     
 }
 
-//-(NSArray*)getAllEntries{
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription
-//                                   entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
-//    [fetchRequest setEntity:entity];
-//    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
-//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-//    NSError *error = nil;
-//    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-//    
-//    
-//}
+-(void)deleteObject:(Entries*)object{
+    [self.managedObjectContext deleteObject:object];
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        NSLog(@"Can't Delete! %@ %@", error, [error localizedDescription]);
+    }
+}
+
+-(NSArray*)getAllEntries{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    NSError *error = nil;
+    return [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+}
 
 -(NSMutableArray*)collectFinalBalanceDate{
     NSMutableArray *dateVals = [[NSMutableArray alloc] init];
@@ -89,8 +96,8 @@ static CoreDataHelper *coreDataHelper = nil;
     
     [dateVals addObject:[NSString stringWithFormat:@"%ld",(long)date.day]];
     
-    for (NSManagedObject *info in fetchedObjects) {
-        NSDate *date = [info valueForKey:@"date"];
+    for (Entries *info in fetchedObjects) {
+        NSDate *date = info.date;
         [dateVals addObject:[NSString stringWithFormat:@"%ld",(long)date.day]];
     }
     return dateVals;

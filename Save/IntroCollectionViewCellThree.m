@@ -44,11 +44,11 @@
     [self addSubview:smileLabel];;
     
     SIntroLabel *smileLabel2 = [[SIntroLabel alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/5+50, [UIScreen mainScreen].bounds.size.width, 50)];
-    smileLabel2.text = @"see your chart";
+    smileLabel2.text = @"rotate phone";
     [self addSubview:smileLabel2];
     
     SIntroLabel *smileLabel3 = [[SIntroLabel alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/5+50*2, [UIScreen mainScreen].bounds.size.width, 50)];
-    smileLabel3.text = @"under the income";
+    smileLabel3.text = @"to see your chart";
     [self addSubview:smileLabel3];
     
     [UIView animateWithDuration:1 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
@@ -100,7 +100,7 @@
     self.loader.alpha = 0;
     [self addSubview:self.loader];
     
-    self.loader.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/1.68, [UIScreen mainScreen].bounds.size.height/1.68);
+    self.loader.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width/1.8, [UIScreen mainScreen].bounds.size.height/1.8);
     self.loader.center = CGPointMake(self.frame.size.width  / 2,
                                      self.frame.size.height / 1.65);
     self.loader.layer.masksToBounds = YES;
@@ -111,8 +111,23 @@
     self.loader.animatedImage = animatedImage1;
     [UIView animateWithDuration:1 animations:^(void){
         self.loader.alpha = 1;
+    } completion:^(BOOL finished){
+        [self animateNextButton];
     }];
 }
+
+-(void)animateNextButton{
+    [UIView animateWithDuration:1 delay:5 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+        self.nextButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
+    }completion:^(BOOL finished){
+        [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+            self.nextButton.backgroundColor = [UIColor whiteColor];
+        }completion:^(BOOL finished){
+            
+        }];
+    }];
+}
+
 - (IBAction)nextTapped:(id)sender {
     if ([self.delegate respondsToSelector:@selector(introCelldidtapNextThree:)]) {
         [self.loader stopAnimating];

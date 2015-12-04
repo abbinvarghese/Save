@@ -6,6 +6,9 @@
 //  Copyright © 2015 Abbin. All rights reserved.
 //
 
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+#define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
+
 #import "IntroCollectionViewCellTwo.h"
 #import "CoreDataHelper.h"
 #import "NSDate+SDate.h"
@@ -39,6 +42,12 @@ int buttonWidth;
         buttonHeight = [UIScreen mainScreen].bounds.size.height/2/4;
         self.amount = [[NSMutableString alloc]init];
         [self drawThird];
+        if (self.amount.length>0) {
+            self.cellNextButton.enabled = YES;
+        }
+        else{
+            self.cellNextButton.enabled = NO;
+        }
     }
     
     return self;
@@ -101,7 +110,15 @@ int buttonWidth;
     self.amountLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/5, [UIScreen mainScreen].bounds.size.width, 50)];
     self.amountLabel.text = @"enter a monthly limit on your expence";
     self.amountLabel.alpha = 0;
-    [self.amountLabel setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:15]];
+    if (IS_IPHONE_4s) {
+        [self.amountLabel setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:10]];
+    }
+    else if (IS_IPHONE_5){
+        [self.amountLabel setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:12]];
+    }
+    else{
+        [self.amountLabel setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:14]];
+    }
     [self.amountLabel setTextAlignment:NSTextAlignmentCenter];
     [self addSubview:self.amountLabel];
     
@@ -130,11 +147,23 @@ int buttonWidth;
         [self.amount appendString:@"1"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
+    }
 }
 - (void)twoTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"2"];
         self.amountLabel.text = [self currencyFormString:self.amount];
+    }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
     }
 }
 - (void)threeTapped:(UIButton *)sender {
@@ -142,11 +171,23 @@ int buttonWidth;
         [self.amount appendString:@"3"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
+    }
 }
 - (void)fourTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"4"];
         self.amountLabel.text = [self currencyFormString:self.amount];
+    }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
     }
 }
 - (void)fiveTapped:(UIButton *)sender {
@@ -154,11 +195,23 @@ int buttonWidth;
         [self.amount appendString:@"5"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
+    }
 }
 - (void)sixTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"6"];
         self.amountLabel.text = [self currencyFormString:self.amount];
+    }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
     }
 }
 - (void)sevenTapped:(UIButton *)sender {
@@ -166,11 +219,23 @@ int buttonWidth;
         [self.amount appendString:@"7"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
+    }
 }
 - (void)eightTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"8"];
         self.amountLabel.text = [self currencyFormString:self.amount];
+    }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
     }
 }
 - (void)nineTapped:(UIButton *)sender {
@@ -178,11 +243,23 @@ int buttonWidth;
         [self.amount appendString:@"9"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
+    }
 }
 - (void)pointTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"."];
         self.amountLabel.text = [self currencyFormString:self.amount];
+    }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
     }
 }
 - (void)zeroTapped:(UIButton *)sender {
@@ -190,11 +267,23 @@ int buttonWidth;
         [self.amount appendString:@"0"];
         self.amountLabel.text = [self currencyFormString:self.amount];
     }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
+    }
 }
 - (void)backspaceTapped:(UIButton *)sender {
     if (self.amount.length>0) {
         [self.amount setString:[self.amount substringToIndex:[self.amount length]-1]];
         self.amountLabel.text = [self currencyFormString:self.amount];
+    }
+    if (self.amount.length>0) {
+        self.cellNextButton.enabled = YES;
+    }
+    else{
+        self.cellNextButton.enabled = NO;
     }
 }
 

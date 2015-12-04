@@ -31,4 +31,10 @@
     return [df stringFromDate:self];
 }
 
+-(NSString*)shortDate{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"dd-MMM-YYYY"];
+    return [df stringFromDate:self];
+}
+
 @end

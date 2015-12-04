@@ -12,8 +12,9 @@
 
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:(CGRect)frame]) {
-        [self setBackgroundColor:[UIColor colorWithWhite:0.99 alpha:1]];
-        [self setTitleColor:[UIColor colorWithWhite:0.5 alpha:1] forState:UIControlStateNormal];
+        [self setBackgroundColor:[UIColor whiteColor]];
+        [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.titleLabel setFont:[UIFont fontWithName:@"SFUIDisplay-Ultralight" size:25]];
         [self setAlpha:0];
     }
     return self;
