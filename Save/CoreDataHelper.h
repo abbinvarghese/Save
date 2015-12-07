@@ -17,9 +17,10 @@
 
 + (CoreDataHelper *)sharedCLCoreDataHelper;
 
+-(void)saveMonthlyEntryWithAmount:(double)amount;
 -(void)saveEntriesWithAmount: (double)amount type :(NSString*)type notes:(NSString*)note date:(NSDate*)date image:(UIImage*)image isIncome:(BOOL) isIncome;
--(NSMutableArray*)collectFinalBalanceDate;
--(NSMutableArray*)collectFinalBalanceAmount;
+-(NSMutableArray*)collectFinalBalanceWithMonthDate:(NSString*)monthDate;
+-(NSMutableArray*)collectFinalBalanceAmountWithMonthDate:(double)monthDate;
 -(NSArray*)getAllEntries;
 -(void)deleteObject:(Entries*)object;
 

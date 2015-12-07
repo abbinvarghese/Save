@@ -2,7 +2,7 @@
 //  Entries+CoreDataProperties.m
 //  Save
 //
-//  Created by Abbin on 27/11/15.
+//  Created by Abbin on 07/12/15.
 //  Copyright © 2015 Abbin. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -19,5 +19,7 @@
 @dynamic isIncome;
 @dynamic note;
 @dynamic type;
+@dynamic monthlyAdd;
+@dynamic monthDate;
 
 @end

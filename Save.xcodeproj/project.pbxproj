@@ -16,6 +16,8 @@
 		5804829C1C06EAD100541450 /* NSDate+SDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5804829B1C06EAD100541450 /* NSDate+SDate.m */; };
 		580482A21C070EC200541450 /* SEntriesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 580482A11C070EC200541450 /* SEntriesTableViewController.m */; };
 		580482A51C07171D00541450 /* EntryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 580482A41C07171D00541450 /* EntryObject.m */; };
+		580697D81C15B4BC00569A73 /* Entries+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 580697D51C15B4BC00569A73 /* Entries+CoreDataProperties.m */; };
+		580697D91C15B4BC00569A73 /* Entries.m in Sources */ = {isa = PBXBuildFile; fileRef = 580697D71C15B4BC00569A73 /* Entries.m */; };
 		581C2FA01BD4C2A90021ABA3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2F9F1BD4C2A90021ABA3 /* main.m */; };
 		581C2FA31BD4C2A90021ABA3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FA21BD4C2A90021ABA3 /* AppDelegate.m */; };
 		581C2FA61BD4C2A90021ABA3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FA51BD4C2A90021ABA3 /* ViewController.m */; };
@@ -26,8 +28,6 @@
 		581C2FBC1BD4C2A90021ABA3 /* SaveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FBB1BD4C2A90021ABA3 /* SaveTests.m */; };
 		581C2FC71BD4C2A90021ABA3 /* SaveUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2FC61BD4C2A90021ABA3 /* SaveUITests.m */; };
 		581C2FEF1BD4F8E70021ABA3 /* EuropeUnderground_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581C2FED1BD4F8E70021ABA3 /* EuropeUnderground_light.ttf */; };
-		5823E4F61C08266600AE5565 /* Entries+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5823E4F31C08266600AE5565 /* Entries+CoreDataProperties.m */; };
-		5823E4F71C08266600AE5565 /* Entries.m in Sources */ = {isa = PBXBuildFile; fileRef = 5823E4F51C08266600AE5565 /* Entries.m */; };
 		584F2E5B1BD66A0800F91052 /* SDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 584F2E5A1BD66A0800F91052 /* SDetailViewController.m */; };
 		585F9F471BD506EF006CC223 /* Adequate-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 585F9F461BD506EF006CC223 /* Adequate-ExtraLight.ttf */; };
 		5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */; };
@@ -81,6 +81,10 @@
 		580482A11C070EC200541450 /* SEntriesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEntriesTableViewController.m; sourceTree = "<group>"; };
 		580482A31C07171D00541450 /* EntryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryObject.h; sourceTree = "<group>"; };
 		580482A41C07171D00541450 /* EntryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntryObject.m; sourceTree = "<group>"; };
+		580697D41C15B4BC00569A73 /* Entries+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Entries+CoreDataProperties.h"; sourceTree = "<group>"; };
+		580697D51C15B4BC00569A73 /* Entries+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Entries+CoreDataProperties.m"; sourceTree = "<group>"; };
+		580697D61C15B4BC00569A73 /* Entries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entries.h; sourceTree = "<group>"; };
+		580697D71C15B4BC00569A73 /* Entries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entries.m; sourceTree = "<group>"; };
 		581C2F9B1BD4C2A90021ABA3 /* Save.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Save.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		581C2F9F1BD4C2A90021ABA3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		581C2FA11BD4C2A90021ABA3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -99,10 +103,6 @@
 		581C2FC61BD4C2A90021ABA3 /* SaveUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SaveUITests.m; sourceTree = "<group>"; };
 		581C2FC81BD4C2A90021ABA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		581C2FED1BD4F8E70021ABA3 /* EuropeUnderground_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EuropeUnderground_light.ttf; sourceTree = "<group>"; };
-		5823E4F21C08266600AE5565 /* Entries+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Entries+CoreDataProperties.h"; sourceTree = "<group>"; };
-		5823E4F31C08266600AE5565 /* Entries+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Entries+CoreDataProperties.m"; sourceTree = "<group>"; };
-		5823E4F41C08266600AE5565 /* Entries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entries.h; sourceTree = "<group>"; };
-		5823E4F51C08266600AE5565 /* Entries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entries.m; sourceTree = "<group>"; };
 		584F2E591BD66A0800F91052 /* SDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDetailViewController.h; sourceTree = "<group>"; };
 		584F2E5A1BD66A0800F91052 /* SDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDetailViewController.m; sourceTree = "<group>"; };
 		585F9F461BD506EF006CC223 /* Adequate-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Adequate-ExtraLight.ttf"; sourceTree = "<group>"; };
@@ -259,10 +259,10 @@
 			children = (
 				58F173361BFC6FF600A3CF82 /* CoreDataHelper.h */,
 				58F173371BFC6FF600A3CF82 /* CoreDataHelper.m */,
-				5823E4F21C08266600AE5565 /* Entries+CoreDataProperties.h */,
-				5823E4F31C08266600AE5565 /* Entries+CoreDataProperties.m */,
-				5823E4F41C08266600AE5565 /* Entries.h */,
-				5823E4F51C08266600AE5565 /* Entries.m */,
+				580697D41C15B4BC00569A73 /* Entries+CoreDataProperties.h */,
+				580697D51C15B4BC00569A73 /* Entries+CoreDataProperties.m */,
+				580697D61C15B4BC00569A73 /* Entries.h */,
+				580697D71C15B4BC00569A73 /* Entries.m */,
 			);
 			name = "Core Data";
 			sourceTree = "<group>";
@@ -537,7 +537,7 @@
 				58FA04401BE73EE800787B58 /* SButton.m in Sources */,
 				584F2E5B1BD66A0800F91052 /* SDetailViewController.m in Sources */,
 				58FC99FE1BE87EBC001F5F49 /* UICollectionView+UICollectionView_Convenience.m in Sources */,
-				5823E4F61C08266600AE5565 /* Entries+CoreDataProperties.m in Sources */,
+				580697D81C15B4BC00569A73 /* Entries+CoreDataProperties.m in Sources */,
 				58E41AE81BFDA179007AD3B9 /* IntroCollectionViewCell.m in Sources */,
 				58F173381BFC6FF600A3CF82 /* CoreDataHelper.m in Sources */,
 				581C2FA31BD4C2A90021ABA3 /* AppDelegate.m in Sources */,
@@ -545,7 +545,7 @@
 				5878467F1BE35F6300181EC4 /* SLabel.m in Sources */,
 				58E41AEC1BFDC430007AD3B9 /* SIntroLabel.m in Sources */,
 				580482A51C07171D00541450 /* EntryObject.m in Sources */,
-				5823E4F71C08266600AE5565 /* Entries.m in Sources */,
+				580697D91C15B4BC00569A73 /* Entries.m in Sources */,
 				58FA04441BE7521900787B58 /* SCollectionViewCell.m in Sources */,
 				581C2FA01BD4C2A90021ABA3 /* main.m in Sources */,
 			);

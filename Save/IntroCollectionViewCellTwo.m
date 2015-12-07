@@ -332,6 +332,7 @@ int buttonWidth;
     [defaults setObject:income forKey:@"income"];
     [defaults setObject:[NSDate date] forKey:@"monthlyLimitDay"];
     [defaults setObject:self.amount forKey:@"monthlyLimit"];
+    [[CoreDataHelper sharedCLCoreDataHelper]saveMonthlyEntryWithAmount:[self.amount doubleValue]];
     [defaults synchronize];
 }
 

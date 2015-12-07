@@ -2,7 +2,7 @@
 //  Entries+CoreDataProperties.h
 //  Save
 //
-//  Created by Abbin on 27/11/15.
+//  Created by Abbin on 07/12/15.
 //  Copyright © 2015 Abbin. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *isIncome;
 @property (nullable, nonatomic, retain) NSString *note;
 @property (nullable, nonatomic, retain) NSString *type;
+@property (nullable, nonatomic, retain) NSNumber *monthlyAdd;
+@property (nullable, nonatomic, retain) NSNumber *monthDate;
 
 @end
 

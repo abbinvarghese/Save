@@ -35,10 +35,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    
-    
     [self drawCustomeView];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenWidth = screenRect.size.width;
@@ -265,9 +261,9 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceDate];
+    NSMutableArray *xVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceWithMonthDate:[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month]];
     
-    NSMutableArray *yVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceAmount];
+    NSMutableArray *yVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceAmountWithMonthDate:[[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].month,(long)[NSDate date].year] doubleValue]];
     BarChartDataEntry *last = [yVals objectAtIndex:yVals.count-1];
     NSString *lastStr = [NSString stringWithFormat:@"%f",last.value];
     BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:[self currencyFormString:lastStr]];
