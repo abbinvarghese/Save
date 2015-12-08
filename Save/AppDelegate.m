@@ -10,7 +10,8 @@
 #import "SDetailViewController.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-
+#import "Entries+CoreDataProperties.h"
+#import "CoreDataHelper.h"
 
 @interface AppDelegate ()
 
@@ -34,10 +35,11 @@
 //        }
 //    }
     
-   // NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+    NSLog(@"Documents folder: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
 
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -45,6 +47,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -54,13 +57,45 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    if ([[CoreDataHelper sharedCLCoreDataHelper] didSaveMonthlyEntryInBackGround]) {
+        UILabel *alert = [[UILabel alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, 30)];
+        alert.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+        alert.textColor = [UIColor blackColor];
+        NSString *str = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"]];
+        
+        alert.text = [NSString stringWithFormat:@"%@ added to monthly balance",[self currencyFormString:str]];
+        [alert setTextAlignment:NSTextAlignmentCenter];
+        [alert setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:10]];
+        [self.window addSubview:alert];
+        [UIView animateWithDuration:0.5 delay:2 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+            alert.center = CGPointMake(alert.center.x, alert.center.y-30);
+        }completion:^(BOOL finished){
+            [UIView animateWithDuration:0.5 delay:5 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+                alert.center = CGPointMake(alert.center.x, alert.center.y+30);
+            }completion:^(BOOL finished){
+                [alert removeFromSuperview];
+            }];
+        }];
+    }
+//    [[CoreDataHelper sharedCLCoreDataHelper] saveMonthlyEntryInBackGround];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
+-(NSString*)currencyFormString:(NSString*)string{
+    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
+    [currencyFormatter setLocale:[NSLocale currentLocale]];
+    [currencyFormatter setMaximumFractionDigits:2];
+    [currencyFormatter setMinimumFractionDigits:2];
+    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
+    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
+    return [currencyFormatter stringFromNumber:someAmount];
 }
 
 #pragma mark - Core Data stack

@@ -38,11 +38,44 @@ static CoreDataHelper *coreDataHelper = nil;
     return coreDataHelper;
 }
 
+-(BOOL)didSaveMonthlyEntryInBackGround{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"monthlyAdd == 1"]];
+    NSError *error = nil;
+    NSArray *fetchedObject = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (fetchedObject.count>0) {
+        Entries *entry = [fetchedObject objectAtIndex:fetchedObject.count-1];
+        
+        if ([entry.monthDate doubleValue] > [[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month] doubleValue]) {
+            Entries *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
+            newDevice.amount = [NSNumber numberWithDouble:[[[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"] doubleValue]];
+            newDevice.monthlyAdd = [NSNumber numberWithBool:YES];
+            newDevice.monthDate = [NSNumber numberWithDouble:[[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month] doubleValue]];
+            newDevice.date = [NSDate date];
+            
+            // FINAL SAVE
+            NSError *error = nil;
+            // Save the object to persistent store
+            if (![self.managedObjectContext save:&error]) {
+                NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+            }
+            return YES;
+        }
+    }
+    return NO;
+}
+
 -(void)saveMonthlyEntryWithAmount:(double)amount{
     Entries *newDevice = [NSEntityDescription insertNewObjectForEntityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
     newDevice.amount = [NSNumber numberWithDouble:amount];
     newDevice.monthlyAdd = [NSNumber numberWithBool:YES];
     newDevice.monthDate = [NSNumber numberWithDouble:[[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month] doubleValue]];
+    newDevice.date = [NSDate date];
     
     // FINAL SAVE
     NSError *error = nil;
@@ -132,12 +165,12 @@ static CoreDataHelper *coreDataHelper = nil;
     double amt = 0;
     for (int i = 0; i < fetchedObjects.count; i++) {
         Entries *entry = [fetchedObjects objectAtIndex:i];
+        
         if ([entry.monthlyAdd boolValue] || [entry.isIncome boolValue]){
             amt = amt + [entry.amount doubleValue];
             if ([entry.monthDate isEqualToNumber:[NSNumber numberWithDouble:monthDate]]) {
                 [dateVals addObject:[[BarChartDataEntry alloc] initWithValue:amt xIndex:i]];
             }
-            
         }
         else{
             amt = amt - [entry.amount doubleValue];
@@ -146,7 +179,6 @@ static CoreDataHelper *coreDataHelper = nil;
             }
         }
     }
-
     
     return dateVals;
 }

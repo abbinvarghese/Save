@@ -54,49 +54,52 @@
 
 - (void) orientationChanged:(NSNotification *)note
 {
-    UIDevice * device = note.object;
-    switch(device.orientation)
-    {
-        case UIDeviceOrientationPortrait:
+    if (self.view.superview != nil && [[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"]) {
+        UIDevice * device = note.object;
+        switch(device.orientation)
         {
-            [self setNeedsStatusBarAppearanceUpdate];
-            [UIView animateWithDuration:0.3 animations:^(void){
-                _chartView.alpha = 0;
-                self.incomeButton.alpha = 1;
-                self.expenseButton.alpha = 1;
-            }completion:^(BOOL finished){
-                [_chartView removeFromSuperview];
-            }];
-        }
-            break;
-            
-        case UIDeviceOrientationLandscapeLeft:{
-            [self setNeedsStatusBarAppearanceUpdate];
-            [UIView animateWithDuration:0.3 animations:^(void){
-                self.incomeButton.alpha = 0;
-                self.expenseButton.alpha = 0;
-            }completion:^(BOOL finished){
-                [self drawChartWithOrintation:device.orientation];
-            }];
-        }
-        case UIDeviceOrientationLandscapeRight:{
-            [self setNeedsStatusBarAppearanceUpdate];
-            [UIView animateWithDuration:0.3 animations:^(void){
-                self.incomeButton.alpha = 0;
-                self.expenseButton.alpha = 0;
-            }completion:^(BOOL finished){
-                [self drawChartWithOrintation:device.orientation];
-            }];
-        }
-            break;
-            
-        default:
-        {
-            [self setNeedsStatusBarAppearanceUpdate];
-        }
-            break;
-    };
-}
+            case UIDeviceOrientationPortrait:
+            {
+                [self setNeedsStatusBarAppearanceUpdate];
+                [UIView animateWithDuration:0.3 animations:^(void){
+                    _chartView.alpha = 0;
+                    self.incomeButton.alpha = 1;
+                    self.expenseButton.alpha = 1;
+                }completion:^(BOOL finished){
+                    [_chartView removeFromSuperview];
+                }];
+            }
+                break;
+                
+            case UIDeviceOrientationLandscapeLeft:{
+                [self setNeedsStatusBarAppearanceUpdate];
+                [UIView animateWithDuration:0.3 animations:^(void){
+                    self.incomeButton.alpha = 0;
+                    self.expenseButton.alpha = 0;
+                }completion:^(BOOL finished){
+                    [self drawChartWithOrintation:device.orientation];
+                }];
+            }
+            case UIDeviceOrientationLandscapeRight:{
+                [self setNeedsStatusBarAppearanceUpdate];
+                [UIView animateWithDuration:0.3 animations:^(void){
+                    self.incomeButton.alpha = 0;
+                    self.expenseButton.alpha = 0;
+                }completion:^(BOOL finished){
+                    [self drawChartWithOrintation:device.orientation];
+                }];
+            }
+                break;
+                
+            default:
+            {
+                [self setNeedsStatusBarAppearanceUpdate];
+            }
+                break;
+        };
+
+    }
+    }
 
 - (BOOL)prefersStatusBarHidden {
     if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft || [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
@@ -263,19 +266,22 @@
 {
     NSMutableArray *xVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceWithMonthDate:[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month]];
     
-    NSMutableArray *yVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceAmountWithMonthDate:[[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].month,(long)[NSDate date].year] doubleValue]];
-    BarChartDataEntry *last = [yVals objectAtIndex:yVals.count-1];
-    NSString *lastStr = [NSString stringWithFormat:@"%f",last.value];
-    BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:[self currencyFormString:lastStr]];
-    set1.barSpace = 0.35;
+    NSMutableArray *yVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceAmountWithMonthDate:[[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month] doubleValue]];
     
-    NSMutableArray *dataSets = [[NSMutableArray alloc] init];
-    [dataSets addObject:set1];
-    
-    BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
-    [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:5.f]];
-    
-    _chartView.data = data;
+    if (yVals.count>0 && xVals.count>0) {
+        BarChartDataEntry *last = [yVals objectAtIndex:yVals.count-1];
+        NSString *lastStr = [NSString stringWithFormat:@"%f",last.value];
+        BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:[self currencyFormString:lastStr]];
+        set1.barSpace = 0.35;
+        
+        NSMutableArray *dataSets = [[NSMutableArray alloc] init];
+        [dataSets addObject:set1];
+        
+        BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
+        [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:5.f]];
+        
+        _chartView.data = data;
+    }
 }
 
 -(NSString*)currencyFormString:(NSString*)string{

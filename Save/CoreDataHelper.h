@@ -23,5 +23,6 @@
 -(NSMutableArray*)collectFinalBalanceAmountWithMonthDate:(double)monthDate;
 -(NSArray*)getAllEntries;
 -(void)deleteObject:(Entries*)object;
+-(BOOL)didSaveMonthlyEntryInBackGround;
 
 @end
