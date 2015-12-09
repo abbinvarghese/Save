@@ -8,12 +8,18 @@
 
 #import "EntriesDetailViewController.h"
 
+#define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+#define IS_IPHONE_6 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )667 ) < DBL_EPSILON )
+#define IS_IPHONE_6Plus ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )736 ) < DBL_EPSILON )
+
 @interface EntriesDetailViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *amountLabel;
-@property (weak, nonatomic) IBOutlet UILabel *typeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (strong, nonatomic) UITextView *notesTextView;
-@property (strong, nonatomic) UIImageView *imageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *typeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *amountLabel;
+@property (weak, nonatomic) IBOutlet UITextView *notesLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *attachmentView;
+@property (weak, nonatomic) IBOutlet UILabel *noImageLabel;
 
 @end
 
@@ -21,47 +27,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self drawView];
-    // Do any additional setup after loading the view from its nib.
-}
-
--(void)drawView{
-    self.amountLabel.frame = CGRectMake(0,
-                                        64,
-                                        [UIScreen mainScreen].bounds.size.width/2,
-                                        [UIScreen mainScreen].bounds.size.height/12);
+    if (IS_IPHONE_4s) {
+        self.attachmentView.layer.cornerRadius = self.attachmentView.frame.size.width/2;
+    }
+    else if (IS_IPHONE_5){
+        self.attachmentView.layer.cornerRadius = self.attachmentView.frame.size.width/2;
+    }
+    else if(IS_IPHONE_6){
+        self.attachmentView.layer.cornerRadius = self.attachmentView.frame.size.width/1.6;
+    }
+    else if (IS_IPHONE_6Plus){
+        self.attachmentView.layer.cornerRadius = self.attachmentView.frame.size.width/1.4;
+    }
+    self.attachmentView.clipsToBounds = YES;
+    self.dateLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.dateLabel.layer.borderWidth = 0.5;
+    self.typeLabel.text = self.obj.type;
     self.amountLabel.text = [self currencyFormString:[NSString stringWithFormat:@"%@",self.obj.amount]];
-    
-    self.typeLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2,
-                                      64,
-                                      [UIScreen mainScreen].bounds.size.width/2,
-                                      [UIScreen mainScreen].bounds.size.height/12);
-    self.typeLabel.text = [NSString stringWithFormat:@"%@",self.obj.type];
-    
-    self.dateLabel.frame = CGRectMake(0,
-                                      self.amountLabel.frame.size.height+64,
-                                      [UIScreen mainScreen].bounds.size.width,
-                                      [UIScreen mainScreen].bounds.size.height/17);
-    self.dateLabel.text = [NSString stringWithFormat:@"%@",self.obj.date];
-    
+    if (self.obj.isIncome) {
+        self.amountLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+        self.typeLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+    }
+    else{
+        self.typeLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+        self.amountLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
+    }
     if (self.obj.note.length>0) {
-        self.notesTextView = [[UITextView alloc]initWithFrame:CGRectMake(0,
-                                                                         self.dateLabel.frame.size.height+self.amountLabel.frame.size.height+64,
-                                                                         [UIScreen mainScreen].bounds.size.width,
-                                                                         [UIScreen mainScreen].bounds.size.height/3)];
-        self.notesTextView.editable = NO;
-        self.notesTextView.text = self.obj.note;
-        [self.view addSubview:self.notesTextView];
+        self.notesLabel.text = self.obj.note;
     }
     if (self.obj.attachment) {
-        self.imageLabel = [[UIImageView alloc]initWithFrame:CGRectMake(0,
-                                                                       self.notesTextView.frame.size.height+self.dateLabel.frame.size.height+self.amountLabel.frame.size.height+64,[UIScreen mainScreen].bounds.size.width,
-                                                                       [UIScreen mainScreen].bounds.size.height/2.35)];
-        self.imageLabel.image = [UIImage imageWithData:self.obj.attachment];
-        [self.imageLabel setContentMode:UIViewContentModeScaleAspectFit];
-        [self.view addSubview:self.imageLabel];
+        self.attachmentView.image = [UIImage imageWithData:self.obj.attachment];
+        self.noImageLabel.hidden = YES;
     }
-
+    // Do any additional setup after loading the view from its nib.
 }
 
 -(NSString*)currencyFormString:(NSString*)string{

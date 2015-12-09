@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Adequate-ExtraLight.ttf">
             <string>Adequate-ExtraLight</string>
             <string>Adequate-ExtraLight</string>
             <string>Adequate-ExtraLight</string>
+            <string>Adequate-ExtraLight</string>
+            <string>Adequate-ExtraLight</string>
+        </mutableArray>
+        <mutableArray key="EuropeUnderground_light.ttf">
+            <string>EuropeUnderground-Light</string>
         </mutableArray>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EntriesDetailViewController">
             <connections>
-                <outlet property="amountLabel" destination="iX4-hS-iLy" id="7wM-jN-w4a"/>
-                <outlet property="dateLabel" destination="dt2-SI-PEg" id="fac-ZW-EQC"/>
-                <outlet property="typeLabel" destination="bts-YE-6Vr" id="lSe-QT-3xs"/>
+                <outlet property="amountLabel" destination="yfv-ec-u4S" id="ACd-oM-inc"/>
+                <outlet property="attachmentView" destination="sNj-Kw-6HO" id="1Mx-XY-KZL"/>
+                <outlet property="dateLabel" destination="jjT-RZ-YV9" id="NKG-kG-eU7"/>
+                <outlet property="noImageLabel" destination="v3f-dj-xsJ" id="DsK-zl-d3X"/>
+                <outlet property="notesLabel" destination="S2D-r6-gpm" id="nXP-iH-jOP"/>
+                <outlet property="typeLabel" destination="OuL-2J-rYZ" id="W0M-dF-0rh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,33 +33,97 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dt2-SI-PEg">
-                    <rect key="frame" x="8" y="117" width="304" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OuL-2J-rYZ">
+                    <rect key="frame" x="0.0" y="20" width="177" height="72"/>
                     <animations/>
-                    <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="15"/>
+                    <color key="backgroundColor" red="0.14117647058823529" green="0.66274509803921566" blue="0.78823529411764703" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="OuL-2J-rYZ" secondAttribute="height" multiplier="32:13" id="xbB-ZV-OcK"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="amount" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iX4-hS-iLy">
-                    <rect key="frame" x="8" y="66" width="152" height="43"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="25,00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfv-ec-u4S">
+                    <rect key="frame" x="177" y="20" width="177" height="72"/>
+                    <animations/>
+                    <color key="backgroundColor" red="0.14117647058823529" green="0.66274509803921566" blue="0.78823529411764703" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="yfv-ec-u4S" secondAttribute="height" multiplier="32:13" id="Jvm-mu-VP9"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="notes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="47R-Hy-dE7">
+                    <rect key="frame" x="8" y="105" width="41" height="20"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="47R-Hy-dE7" secondAttribute="height" multiplier="2:1" id="inV-55-go1"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="12"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="S2D-r6-gpm">
+                    <rect key="frame" x="58" y="100" width="309" height="156"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="S2D-r6-gpm" secondAttribute="height" multiplier="127:64" id="BeO-V8-AZA"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="20-25-2015" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jjT-RZ-YV9">
+                    <rect key="frame" x="0.0" y="229" width="317" height="54"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="jjT-RZ-YV9" secondAttribute="height" multiplier="160:27" id="EDH-zd-OFG"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="no image" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v3f-dj-xsJ">
+                    <rect key="frame" x="0.0" y="415" width="320" height="21"/>
                     <animations/>
                     <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="type" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bts-YE-6Vr">
-                    <rect key="frame" x="160" y="66" width="152" height="43"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sNj-Kw-6HO">
+                    <rect key="frame" x="60" y="326" width="200" height="200"/>
                     <animations/>
-                    <fontDescription key="fontDescription" name="Adequate-ExtraLight" family="Adequate" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                    <color key="backgroundColor" red="0.94117647059999998" green="0.87843137250000003" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="sNj-Kw-6HO" secondAttribute="height" multiplier="1:1" id="WL4-fv-hEg"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="47R-Hy-dE7" firstAttribute="top" secondItem="OuL-2J-rYZ" secondAttribute="bottom" constant="13" id="09t-4f-7Cu"/>
+                <constraint firstItem="sNj-Kw-6HO" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="60" id="4lk-r2-V4D"/>
+                <constraint firstItem="yfv-ec-u4S" firstAttribute="leading" secondItem="OuL-2J-rYZ" secondAttribute="trailing" id="5aP-7z-Cuf"/>
+                <constraint firstAttribute="bottom" secondItem="sNj-Kw-6HO" secondAttribute="bottom" constant="42" id="8bq-od-0eX"/>
+                <constraint firstItem="47R-Hy-dE7" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="9md-NY-AMp"/>
+                <constraint firstItem="jjT-RZ-YV9" firstAttribute="top" secondItem="S2D-r6-gpm" secondAttribute="bottom" constant="8" id="AZ2-qR-m5B"/>
+                <constraint firstItem="yfv-ec-u4S" firstAttribute="width" secondItem="OuL-2J-rYZ" secondAttribute="width" id="Buz-0b-fqd"/>
+                <constraint firstItem="S2D-r6-gpm" firstAttribute="leading" secondItem="47R-Hy-dE7" secondAttribute="trailing" constant="9" id="GR8-JJ-bCR"/>
+                <constraint firstAttribute="trailing" secondItem="S2D-r6-gpm" secondAttribute="trailing" constant="8" id="MrJ-lH-RIs"/>
+                <constraint firstItem="jjT-RZ-YV9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="TQX-Ym-SFA"/>
+                <constraint firstItem="yfv-ec-u4S" firstAttribute="height" secondItem="OuL-2J-rYZ" secondAttribute="height" id="fiD-7J-yVq"/>
+                <constraint firstItem="S2D-r6-gpm" firstAttribute="top" secondItem="yfv-ec-u4S" secondAttribute="bottom" constant="8" id="fm9-Bh-lWc"/>
+                <constraint firstItem="sNj-Kw-6HO" firstAttribute="top" secondItem="jjT-RZ-YV9" secondAttribute="bottom" constant="43" id="gMv-VK-tzc"/>
+                <constraint firstItem="OuL-2J-rYZ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="gOg-V5-Tqh"/>
+                <constraint firstAttribute="trailing" secondItem="yfv-ec-u4S" secondAttribute="trailing" id="h2G-De-Odo"/>
+                <constraint firstItem="OuL-2J-rYZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hdI-zw-Fdo"/>
+                <constraint firstAttribute="trailing" secondItem="jjT-RZ-YV9" secondAttribute="trailing" id="oYP-3E-H1x"/>
+                <constraint firstAttribute="trailing" secondItem="sNj-Kw-6HO" secondAttribute="trailing" constant="60" id="r7S-gG-KOB"/>
+                <constraint firstItem="yfv-ec-u4S" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="vgQ-CA-HvK"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="378" y="380"/>
         </view>

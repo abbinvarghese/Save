@@ -134,7 +134,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     EntriesDetailViewController *view = [[EntriesDetailViewController alloc]initWithNibName:@"EntriesDetailViewController" bundle:[NSBundle mainBundle]];
     view.obj = [self.entriesArray objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:view animated:YES];
+    [self presentViewController:view animated:YES completion:nil];
 }
 
 

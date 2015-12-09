@@ -248,8 +248,7 @@
     }completion:^(BOOL finished){
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         SEntriesTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SEntriesTableViewController"];
-        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
-        [self presentViewController:nav animated:NO completion:^(void){
+        [self presentViewController:vc animated:NO completion:^(void){
             
         }];
 
