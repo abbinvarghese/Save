@@ -33,6 +33,8 @@
 		5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */; };
 		5874725A1BE791D700F3470D /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 587472591BE791D700F3470D /* Photos.framework */; };
 		5878467F1BE35F6300181EC4 /* SLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5878467E1BE35F6300181EC4 /* SLabel.m */; };
+		58DDC2611C182A4B0069AADA /* EntriesDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DDC25F1C182A4B0069AADA /* EntriesDetailViewController.m */; };
+		58DDC2621C182A4B0069AADA /* EntriesDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58DDC2601C182A4B0069AADA /* EntriesDetailViewController.xib */; };
 		58E41AE11BFDA05C007AD3B9 /* IntroCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E41AE01BFDA05C007AD3B9 /* IntroCollectionViewController.m */; };
 		58E41AE81BFDA179007AD3B9 /* IntroCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E41AE61BFDA179007AD3B9 /* IntroCollectionViewCell.m */; };
 		58E41AE91BFDA179007AD3B9 /* IntroCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58E41AE71BFDA179007AD3B9 /* IntroCollectionViewCell.xib */; };
@@ -111,6 +113,9 @@
 		587472591BE791D700F3470D /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		5878467D1BE35F6300181EC4 /* SLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLabel.h; sourceTree = "<group>"; };
 		5878467E1BE35F6300181EC4 /* SLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLabel.m; sourceTree = "<group>"; };
+		58DDC25E1C182A4B0069AADA /* EntriesDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntriesDetailViewController.h; sourceTree = "<group>"; };
+		58DDC25F1C182A4B0069AADA /* EntriesDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntriesDetailViewController.m; sourceTree = "<group>"; };
+		58DDC2601C182A4B0069AADA /* EntriesDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EntriesDetailViewController.xib; sourceTree = "<group>"; };
 		58E41ADF1BFDA05C007AD3B9 /* IntroCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroCollectionViewController.h; sourceTree = "<group>"; };
 		58E41AE01BFDA05C007AD3B9 /* IntroCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntroCollectionViewController.m; sourceTree = "<group>"; };
 		58E41AE51BFDA179007AD3B9 /* IntroCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroCollectionViewCell.h; sourceTree = "<group>"; };
@@ -240,6 +245,9 @@
 				58E41AE01BFDA05C007AD3B9 /* IntroCollectionViewController.m */,
 				580482A01C070EC200541450 /* SEntriesTableViewController.h */,
 				580482A11C070EC200541450 /* SEntriesTableViewController.m */,
+				58DDC25E1C182A4B0069AADA /* EntriesDetailViewController.h */,
+				58DDC25F1C182A4B0069AADA /* EntriesDetailViewController.m */,
+				58DDC2601C182A4B0069AADA /* EntriesDetailViewController.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -437,6 +445,7 @@
 				58036B851BFF24AA00F04877 /* IntroCollectionViewCellThree.xib in Resources */,
 				58036B801BFF0F8200F04877 /* IntroCollectionViewCellTwo.xib in Resources */,
 				585F9F471BD506EF006CC223 /* Adequate-ExtraLight.ttf in Resources */,
+				58DDC2621C182A4B0069AADA /* EntriesDetailViewController.xib in Resources */,
 				58FA04451BE7521900787B58 /* SCollectionViewCell.xib in Resources */,
 				581C2FA91BD4C2A90021ABA3 /* Main.storyboard in Resources */,
 				EDFD982D1C076D9B00B686CC /* SF-UI-Display-Ultralight.otf in Resources */,
@@ -529,6 +538,7 @@
 				58036B7B1BFEFA9E00F04877 /* IntroButton.m in Sources */,
 				58E41AE11BFDA05C007AD3B9 /* IntroCollectionViewController.m in Sources */,
 				5804829C1C06EAD100541450 /* NSDate+SDate.m in Sources */,
+				58DDC2611C182A4B0069AADA /* EntriesDetailViewController.m in Sources */,
 				580482A21C070EC200541450 /* SEntriesTableViewController.m in Sources */,
 				5873D3DB1BDE260B00D5BBEC /* AKPickerView.m in Sources */,
 				58036B7F1BFF0F8200F04877 /* IntroCollectionViewCellTwo.m in Sources */,

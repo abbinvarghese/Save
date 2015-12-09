@@ -840,6 +840,7 @@ static CGSize AssetGridThumbnailSize;
         if (string.length>1) {
             string = [string substringToIndex:[string length]-1];
         }
+        NSLog(@"%@",string);
         newDate1 = [self.selectedDate dateByAddingTimeInterval:60*60*24*[string intValue]];
         NSDateFormatter *form = [[NSDateFormatter alloc]init];
         [form setDateFormat:@"dd MMMM yyyy"];

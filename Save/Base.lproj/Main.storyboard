@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -10,20 +9,19 @@
             <string>EuropeUnderground-Light</string>
             <string>EuropeUnderground-Light</string>
             <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
+            <string>EuropeUnderground-Light</string>
         </mutableArray>
         <mutableArray key="SF-UI-Display-Ultralight.otf">
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
-            <string>SFUIDisplay-Ultralight</string>
             <string>SFUIDisplay-Ultralight</string>
             <string>SFUIDisplay-Ultralight</string>
         </mutableArray>
@@ -50,6 +48,8 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="Gh4-PS-tmj" appends="YES" id="WU7-uL-zPO"/>
                                     <outletCollection property="gestureRecognizers" destination="oS2-2f-gGF" appends="YES" id="6Rp-RI-Eja"/>
+                                    <outletCollection property="gestureRecognizers" destination="v1S-ES-WFQ" appends="YES" id="Olu-JK-3wc"/>
+                                    <outletCollection property="gestureRecognizers" destination="9Sp-vB-S2t" appends="YES" id="CXg-xJ-lpT"/>
                                 </connections>
                             </label>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="income" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wg2-J3-VN8" customClass="SLabel">
@@ -71,8 +71,12 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="downSwipe" destination="v1S-ES-WFQ" id="Ysn-dv-4De"/>
+                        <outlet property="expenceTap" destination="Gh4-PS-tmj" id="U2f-YT-mEi"/>
                         <outlet property="expenseButton" destination="fwn-ZR-HzN" id="AdC-M7-NpV"/>
                         <outlet property="incomeButton" destination="wg2-J3-VN8" id="Lln-0h-DFL"/>
+                        <outlet property="rightSwipe" destination="oS2-2f-gGF" id="Rvo-dr-AtL"/>
+                        <outlet property="upSwipe" destination="9Sp-vB-S2t" id="KPP-HO-sVE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -91,6 +95,16 @@
                         <action selector="expenseSwiped:" destination="BYZ-38-t0r" id="3wl-k0-4mE"/>
                     </connections>
                 </swipeGestureRecognizer>
+                <swipeGestureRecognizer cancelsTouchesInView="NO" delaysTouchesEnded="NO" direction="down" id="v1S-ES-WFQ">
+                    <connections>
+                        <action selector="expenceSwipedDown:" destination="BYZ-38-t0r" id="lt2-c1-h89"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer enabled="NO" cancelsTouchesInView="NO" delaysTouchesEnded="NO" direction="up" id="9Sp-vB-S2t">
+                    <connections>
+                        <action selector="expenceSwipedUp:" destination="BYZ-38-t0r" id="20P-pr-aaX"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="152" y="227"/>
         </scene>
@@ -103,10 +117,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <inset key="contentInset" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SEntriesTableViewControllerCell" textLabel="zCg-Mv-OCZ" detailTextLabel="aJN-gv-Miw" style="IBUITableViewCellStyleValue1" id="wHb-65-7xB">
-                                <rect key="frame" x="0.0" y="48" width="320" height="60"/>
+                                <rect key="frame" x="0.0" y="28" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wHb-65-7xB" id="JPQ-2g-ywj">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
@@ -199,7 +212,7 @@
                                         <rect key="frame" x="250" y="582" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="C">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -222,7 +235,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
                                         <gestureRecognizers/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="0">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -234,7 +247,7 @@
                                         <rect key="frame" x="0.0" y="582" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" type="system" weight="ultraLight" pointSize="30"/>
                                         <state key="normal" title=".">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -246,7 +259,7 @@
                                         <rect key="frame" x="125" y="497" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="8">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -258,7 +271,7 @@
                                         <rect key="frame" x="0.0" y="497" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="7">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -270,7 +283,7 @@
                                         <rect key="frame" x="250" y="497" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="9">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -282,7 +295,7 @@
                                         <rect key="frame" x="125" y="412" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="5">
                                             <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -295,7 +308,7 @@
                                         <rect key="frame" x="0.0" y="412" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="4">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -307,7 +320,7 @@
                                         <rect key="frame" x="250" y="412" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="6">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -319,7 +332,7 @@
                                         <rect key="frame" x="125" y="327" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="2">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -331,7 +344,7 @@
                                         <rect key="frame" x="0.0" y="327" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="1">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -343,7 +356,7 @@
                                         <rect key="frame" x="250" y="327" width="125" height="85"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="SFUIDisplay-Ultralight" family="SF UI Display" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="EuropeUnderground-Light" family="Europe Underground" pointSize="30"/>
                                         <state key="normal" title="3">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>

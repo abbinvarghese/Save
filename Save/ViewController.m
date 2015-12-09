@@ -26,8 +26,17 @@
 }
 
 @property (nonatomic, strong) BarChartView *chartView;
+@property (nonatomic,strong) UILabel *monthLimitLab;
+
 @property (weak, nonatomic) IBOutlet SLabel *incomeButton;
 @property (weak, nonatomic) IBOutlet SLabel *expenseButton;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *expenceTap;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *rightSwipe;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *downSwipe;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *upSwipe;
+
+@property (nonatomic,assign) NSInteger monthlyLimit;
+@property (nonatomic,assign) NSInteger monthlyLimit2;
 
 @end
 
@@ -60,7 +69,6 @@
         {
             case UIDeviceOrientationPortrait:
             {
-                [self setNeedsStatusBarAppearanceUpdate];
                 [UIView animateWithDuration:0.3 animations:^(void){
                     _chartView.alpha = 0;
                     self.incomeButton.alpha = 1;
@@ -72,7 +80,6 @@
                 break;
                 
             case UIDeviceOrientationLandscapeLeft:{
-                [self setNeedsStatusBarAppearanceUpdate];
                 [UIView animateWithDuration:0.3 animations:^(void){
                     self.incomeButton.alpha = 0;
                     self.expenseButton.alpha = 0;
@@ -81,7 +88,6 @@
                 }];
             }
             case UIDeviceOrientationLandscapeRight:{
-                [self setNeedsStatusBarAppearanceUpdate];
                 [UIView animateWithDuration:0.3 animations:^(void){
                     self.incomeButton.alpha = 0;
                     self.expenseButton.alpha = 0;
@@ -92,23 +98,11 @@
                 break;
                 
             default:
-            {
-                [self setNeedsStatusBarAppearanceUpdate];
-            }
                 break;
         };
 
     }
     }
-
-- (BOOL)prefersStatusBarHidden {
-    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft || [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
-        return YES;
-    }
-    else{
-        return NO;
-    }
-}
 
 -(void)drawCustomeView{
     [self.incomeButton drawRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:YES];
@@ -254,11 +248,85 @@
     }completion:^(BOOL finished){
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         SEntriesTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SEntriesTableViewController"];
-
-        [self presentViewController:vc animated:NO completion:^(void){
+        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+        [self presentViewController:nav animated:NO completion:^(void){
             
         }];
 
+    }];
+}
+- (IBAction)expenceSwipedDown:(UISwipeGestureRecognizer *)sender {
+    if (!self.monthLimitLab) {
+        self.monthLimitLab = [[UILabel alloc]initWithFrame:CGRectMake(0, self.incomeButton.frame.size.height, [UIScreen mainScreen].bounds.size.width, 50)];
+        self.monthLimitLab.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:20];
+        self.monthlyLimit = [[[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"] integerValue];
+        self.monthLimitLab.text = [self currencyFormString:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit]];
+        self.monthLimitLab.userInteractionEnabled = YES;
+        [self.monthLimitLab setTextAlignment:NSTextAlignmentCenter];
+        
+        UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc]
+                                       initWithTarget:self action:@selector(didpanMonthlyLimit:)];
+        
+        [self.monthLimitLab addGestureRecognizer:pgr];
+        
+    }
+    [self.view insertSubview:self.monthLimitLab atIndex:0];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.92 alpha:1];
+    self.expenceTap.enabled = NO;
+    self.incomeButton.userInteractionEnabled = NO;
+    self.rightSwipe.enabled = NO;
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+        self.expenseButton.center = CGPointMake(self.expenseButton.center.x, self.expenseButton.center.y+50);
+    }completion:^(BOOL finished){
+        self.upSwipe.enabled = YES;
+        self.downSwipe.enabled = NO;
+        self.expenseButton.shouldTouch = NO;
+    }];
+}
+
+-(void)didpanMonthlyLimit:(UIPanGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        self.monthlyLimit = self.monthlyLimit2;
+    }
+    else{
+        CGPoint tran = [recognizer translationInView:self.view];
+        NSString *string = [NSString stringWithFormat:@"%i",(int)tran.y];
+        if (string.length>1) {
+            string = [string substringToIndex:[string length]-1];
+        }
+        self.monthlyLimit2 = self.monthlyLimit + [string intValue]*100;
+        self.monthLimitLab.text = [self currencyFormString:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit2]];
+        
+    }
+
+}
+
+-(NSString*)currencyFormString:(NSString*)string{
+    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
+    [currencyFormatter setLocale:[NSLocale currentLocale]];
+    [currencyFormatter setMaximumFractionDigits:2];
+    [currencyFormatter setMinimumFractionDigits:2];
+    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
+    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
+    return [currencyFormatter stringFromNumber:someAmount];
+}
+
+- (IBAction)expenceSwipedUp:(UISwipeGestureRecognizer *)sender {
+
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
+        self.expenseButton.center = CGPointMake(self.expenseButton.center.x, self.expenseButton.center.y-50);
+    }completion:^(BOOL finished){
+        self.view.backgroundColor = [UIColor whiteColor];
+        self.expenceTap.enabled = YES;
+        self.incomeButton.userInteractionEnabled = YES;
+        self.rightSwipe.enabled = YES;
+        self.upSwipe.enabled = NO;
+        self.downSwipe.enabled = YES;
+        self.expenseButton.shouldTouch = YES;
+        [self.monthLimitLab removeFromSuperview];
+        [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit] forKey:@"monthlyLimit"];
     }];
 }
 
@@ -284,17 +352,6 @@
     }
 }
 
--(NSString*)currencyFormString:(NSString*)string{
-    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
-    [currencyFormatter setLocale:[NSLocale currentLocale]];
-    [currencyFormatter setMaximumFractionDigits:2];
-    [currencyFormatter setMinimumFractionDigits:2];
-    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
-    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    
-    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
-    return [currencyFormatter stringFromNumber:someAmount];
-}
 
 
 

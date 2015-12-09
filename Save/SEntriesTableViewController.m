@@ -12,6 +12,7 @@
 #import "Entries+CoreDataProperties.h"
 #import "NSDate+SDate.h"
 #import "SIntroLabel.h"
+#import "EntriesDetailViewController.h"
 
 @interface SEntriesTableViewController ()
 
@@ -37,7 +38,7 @@
         [msg setFont:[UIFont fontWithName:@"SFUIDisplay-Ultralight" size:20]];
         [self.tableView addSubview:msg];
     }
-    self.refreshLabel = [[UILabel alloc]initWithFrame:self.refreshControl.bounds];
+    self.refreshLabel = [[UILabel alloc]initWithFrame:self.refreshControl.frame];
     [self.refreshLabel setTextAlignment:NSTextAlignmentCenter];
     self.refreshLabel.text = @"pull down to dismiss";
     self.refreshLabel.font = [UIFont fontWithName:@"SFUIDisplay-Ultralight" size:20];
@@ -104,9 +105,9 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    self.refreshLabel.center = CGPointMake(self.refreshLabel.center.x,-scrollView.contentOffset.y/2);
+    self.refreshLabel.center = CGPointMake(self.refreshLabel.center.x,-scrollView.contentOffset.y/2.5);
     float offSetY = scrollView.contentOffset.y;
-    CGFloat adjustment = 130.0;
+    CGFloat adjustment = 150.0;
     if (-offSetY>(28+adjustment)) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
@@ -130,7 +131,11 @@
     }
 }
 
-
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    EntriesDetailViewController *view = [[EntriesDetailViewController alloc]initWithNibName:@"EntriesDetailViewController" bundle:[NSBundle mainBundle]];
+    view.obj = [self.entriesArray objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:view animated:YES];
+}
 
 
 /*
