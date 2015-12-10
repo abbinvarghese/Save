@@ -12,7 +12,7 @@
 #import "Entries+CoreDataProperties.h"
 #import "NSDate+SDate.h"
 #import "SIntroLabel.h"
-#import "EntriesDetailViewController.h"
+#import "EntriesDetailTableViewController.h"
 
 @interface SEntriesTableViewController ()
 
@@ -132,9 +132,13 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    EntriesDetailViewController *view = [[EntriesDetailViewController alloc]initWithNibName:@"EntriesDetailViewController" bundle:[NSBundle mainBundle]];
-    view.obj = [self.entriesArray objectAtIndex:indexPath.row];
-    [self presentViewController:view animated:YES completion:nil];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    EntriesDetailTableViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"EntriesDetailTableViewController"];
+    vc.obj = [self.entriesArray objectAtIndex:indexPath.row];
+    [self presentViewController:vc animated:YES completion:^(void){
+        self.hideView.alpha = 1;
+    }];
 }
 
 

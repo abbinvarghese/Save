@@ -146,7 +146,7 @@ static CoreDataHelper *coreDataHelper = nil;
     for (int i = 0; i < fetchedObjects.count; i++) {
         Entries *entry = [fetchedObjects objectAtIndex:i];
         if ([entry.monthDate isEqualToNumber:[NSNumber numberWithDouble:[monthDate doubleValue]]]) {
-            [dateVals addObject:[NSString stringWithFormat:@"%ld",entry.date.day ]];
+            [dateVals addObject:[NSString stringWithFormat:@"%ld",entry.date.day]];
         }
     }
     return dateVals;
