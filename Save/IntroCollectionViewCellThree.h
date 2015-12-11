@@ -20,8 +20,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
-@property (nonatomic, strong) FLAnimatedImageView *loader;
-
 @property (nonatomic, strong) id<IntroCellThreeDelegate> delegate;
 
 @end

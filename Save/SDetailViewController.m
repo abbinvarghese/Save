@@ -127,15 +127,15 @@ static CGSize AssetGridThumbnailSize;
     self.pickerViewCustom.maskDisabled = false;
     if (self.isIncome) {
         self.typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"income"];
-//        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
-        self.amountLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
-        self.currenzyLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+//        self.amountLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+//        self.currenzyLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
     }
     else{
         self.typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"expense"];
-//        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
-        self.amountLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
-        self.currenzyLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
+        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
+//        self.amountLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
+//        self.currenzyLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
     }
     
     self.selectedType = [self.typeArray objectAtIndex:0];
@@ -241,32 +241,38 @@ static CGSize AssetGridThumbnailSize;
     CGRect rect2 = [str2 boundingRectWithSize:(CGSize){50, CGFLOAT_MAX}
                                       options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
 
-//    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/4-20);
-//    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width, 20, rect2.size.width, [UIScreen mainScreen].bounds.size.height/4-20);
+    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/3-20);
+    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width, 20, rect2.size.width, [UIScreen mainScreen].bounds.size.height/3-20);
     
-    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/4-20);
-    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width-1, 20, rect2.size.width+5, [UIScreen mainScreen].bounds.size.height/4-20);
+//    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/4-20);
+//    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width-1, 20, rect2.size.width+5, [UIScreen mainScreen].bounds.size.height/4-20);
     
     self.currenzyLabel.text = [self LocalcurrencySymbol];
-    self.pickerViewCustom.frame = CGRectMake(0, self.amountLabel.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4);
-    self.pickerViewCustom.layer.borderWidth = 0.5;
+    self.pickerViewCustom.frame = CGRectMake(0, self.amountLabel.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/6);
 }
 
 -(void)initSecondryUIElements{
     if (!self.notesView) {
-        self.notesView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.pickerViewCustom.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4-50)];
+        self.notesView = [[UITextView alloc]initWithFrame:CGRectMake(0,
+                                                                     self.pickerViewCustom.frame.size.height+20,
+                                                                     [UIScreen mainScreen].bounds.size.width,
+                                                                     [UIScreen mainScreen].bounds.size.height/3-50)];
         [self.innerView addSubview:self.notesView];
     }
     self.notesView.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:15];
     self.notesView.backgroundColor = [UIColor whiteColor];
     self.notesView.alpha = 0;
+    self.notesView.delegate = self;
     
     if (!self.placeHolderText) {
-        self.placeHolderText = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20)];
+        self.placeHolderText = [[UILabel alloc]initWithFrame:CGRectMake(0,
+                                                                        0,
+                                                                        [UIScreen mainScreen].bounds.size.width,
+                                                                        20)];
     }
     self.placeHolderText.center = self.notesView.center;
     self.placeHolderText.text = @"notes";
-    self.notesView.delegate = self;
+    
     [self.placeHolderText setTextAlignment:NSTextAlignmentCenter];
     self.placeHolderText.alpha = 0;
     [self.placeHolderText setBackgroundColor:[UIColor clearColor]];
@@ -274,7 +280,10 @@ static CGSize AssetGridThumbnailSize;
     [self.innerView addSubview:self.placeHolderText];
     
     if (!self.dateView) {
-        self.dateView = [[UILabel alloc]initWithFrame:CGRectMake(0, self.notesView.frame.size.height+self.pickerViewCustom.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, 30)];
+        self.dateView = [[UILabel alloc]initWithFrame:CGRectMake(0,
+                                                                 self.notesView.frame.size.height+self.pickerViewCustom.frame.size.height+20,
+                                                                 [UIScreen mainScreen].bounds.size.width,
+                                                                 30)];
         UIPanGestureRecognizer *datePan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(didPanDateButton:)];
         self.dateView.userInteractionEnabled = YES;
         [self.dateView addGestureRecognizer:datePan];
@@ -649,6 +658,12 @@ static CGSize AssetGridThumbnailSize;
 }
 
 -(void)animateIntoOptions{
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        self.amountLabel.alpha = 0;
+        self.currenzyLabel.alpha = 0;
+    }completion:^(BOOL finished){
+        
+    }];
     [UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
         self.pointPoint = self.point.center;
         self.point.center = CGPointMake(self.point.center.x, [UIScreen mainScreen].bounds.size.height+self.point.bounds.size.height);
@@ -831,10 +846,15 @@ static CGSize AssetGridThumbnailSize;
         }completion:^(BOOL finished){
             self.pickerViewGesture.enabled=NO;
         }];
-        [UIView animateWithDuration:0.2 delay:0.2 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+        [UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
             self.pickerViewCustom.center = self.pickerPoint;
         }completion:^(BOOL finished){
-            
+            [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                self.amountLabel.alpha = 1;
+                self.currenzyLabel.alpha = 1;
+            }completion:^(BOOL finished){
+                
+            }];
         }];
     }];
 }
