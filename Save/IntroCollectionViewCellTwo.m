@@ -326,8 +326,40 @@ int buttonWidth;
 
 -(void)saveInBackThread{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",@"Food & Drinks",@"Bills",@"Entertainment",@"Shopping",@"Healthcare",@"Clothing",@"Education",@"Rent",@"Gifts", nil];
-    NSArray *income = [[NSArray alloc]initWithObjects:@"Salary", @"Business",@"Loans",@"Gifts", @"Shares", nil];
+    NSArray *expense = [[NSArray alloc]initWithObjects:@"Travel",
+                                                       @"Food",
+                                                       @"Family",
+                                                       @"Bills",
+                                                       @"Car",
+                                                       @"Entertainment",
+                                                       @"Home",
+                                                       @"Utilities",
+                                                       @"Shopping",
+                                                       @"Accommodation",
+                                                       @"Healthcare",
+                                                       @"Clothing",
+                                                       @"Transport",
+                                                       @"Groceries",
+                                                       @"Drinks",
+                                                       @"Hobbies",
+                                                       @"Pets",
+                                                       @"Education",
+                                                       @"Cinema",
+                                                       @"Love",
+                                                       @"Kids",
+                                                       @"Rent",
+                                                       @"iTunes",
+                                                       @"Gifts",
+                                                       @"Gadgets",
+                                                       @"Others", nil];
+    
+    NSArray *income = [[NSArray alloc]initWithObjects:@"Business",
+                                                      @"Salary",
+                                                      @"Gifts",
+                                                      @"Extra Income",
+                                                      @"Loans",
+                                                      @"Other", nil];
+    
     [defaults setObject:expense forKey:@"expense"];
     [defaults setObject:income forKey:@"income"];
     [defaults setObject:[NSDate date] forKey:@"monthlyLimitDay"];

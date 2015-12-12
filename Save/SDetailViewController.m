@@ -259,7 +259,7 @@ static CGSize AssetGridThumbnailSize;
                                                                      [UIScreen mainScreen].bounds.size.height/3-50)];
         [self.innerView addSubview:self.notesView];
     }
-    self.notesView.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:15];
+    self.notesView.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:15];
     self.notesView.backgroundColor = [UIColor whiteColor];
     self.notesView.alpha = 0;
     self.notesView.delegate = self;

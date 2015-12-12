@@ -21,6 +21,10 @@
     if (self.obj) {
         if (self.obj.attachment) {
             self.attachmentView.image = [UIImage imageWithData:self.obj.attachment];
+            self.placeHolderLabel.hidden = YES;
+        }
+        else{
+            self.placeHolderLabel.hidden = NO;
         }
         if (self.obj.note.length>0) {
             self.notesLabel.text = self.obj.note;

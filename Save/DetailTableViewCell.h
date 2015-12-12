@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *notesLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *attachmentView;
+@property (weak, nonatomic) IBOutlet UILabel *placeHolderLabel;
 
 @property(nonatomic,strong)Entries *obj;
 
