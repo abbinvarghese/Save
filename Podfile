@@ -6,7 +6,6 @@ platform :ios, ‘8.0’
 target 'Save' do
 
 pod 'Charts'
-pod 'FLAnimatedImage', '~> 1.0'
 pod 'Fabric'
 pod 'Crashlytics'
 

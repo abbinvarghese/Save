@@ -14,7 +14,6 @@
 		58036B851BFF24AA00F04877 /* IntroCollectionViewCellThree.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58036B831BFF24AA00F04877 /* IntroCollectionViewCellThree.xib */; };
 		5804829C1C06EAD100541450 /* NSDate+SDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5804829B1C06EAD100541450 /* NSDate+SDate.m */; };
 		580482A21C070EC200541450 /* SEntriesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 580482A11C070EC200541450 /* SEntriesTableViewController.m */; };
-		580482A51C07171D00541450 /* EntryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 580482A41C07171D00541450 /* EntryObject.m */; };
 		580697D81C15B4BC00569A73 /* Entries+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 580697D51C15B4BC00569A73 /* Entries+CoreDataProperties.m */; };
 		580697D91C15B4BC00569A73 /* Entries.m in Sources */ = {isa = PBXBuildFile; fileRef = 580697D71C15B4BC00569A73 /* Entries.m */; };
 		581C2FA01BD4C2A90021ABA3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 581C2F9F1BD4C2A90021ABA3 /* main.m */; };
@@ -80,8 +79,6 @@
 		5804829B1C06EAD100541450 /* NSDate+SDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+SDate.m"; sourceTree = "<group>"; };
 		580482A01C070EC200541450 /* SEntriesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEntriesTableViewController.h; sourceTree = "<group>"; };
 		580482A11C070EC200541450 /* SEntriesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEntriesTableViewController.m; sourceTree = "<group>"; };
-		580482A31C07171D00541450 /* EntryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntryObject.h; sourceTree = "<group>"; };
-		580482A41C07171D00541450 /* EntryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntryObject.m; sourceTree = "<group>"; };
 		580697D41C15B4BC00569A73 /* Entries+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Entries+CoreDataProperties.h"; sourceTree = "<group>"; };
 		580697D51C15B4BC00569A73 /* Entries+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Entries+CoreDataProperties.m"; sourceTree = "<group>"; };
 		580697D61C15B4BC00569A73 /* Entries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entries.h; sourceTree = "<group>"; };
@@ -192,6 +189,8 @@
 		581C2F9D1BD4C2A90021ABA3 /* Save */ = {
 			isa = PBXGroup;
 			children = (
+				ED6E55D01C1C20AC0085B1F4 /* Custom Cells */,
+				ED6E55CF1C1C20850085B1F4 /* Buttons and Label */,
 				5823E4F81C0826AD00AE5565 /* Core Data */,
 				585F9F4B1BD513B6006CC223 /* Custom */,
 				581C2FEB1BD4F8CF0021ABA3 /* Fonts */,
@@ -279,37 +278,12 @@
 			children = (
 				5873D3D91BDE260B00D5BBEC /* AKPickerView.h */,
 				5873D3DA1BDE260B00D5BBEC /* AKPickerView.m */,
-				5878467D1BE35F6300181EC4 /* SLabel.h */,
-				5878467E1BE35F6300181EC4 /* SLabel.m */,
-				58FA043E1BE73EE800787B58 /* SButton.h */,
-				58FA043F1BE73EE800787B58 /* SButton.m */,
-				58FA04411BE7521900787B58 /* SCollectionViewCell.h */,
-				58FA04421BE7521900787B58 /* SCollectionViewCell.m */,
-				58FA04431BE7521900787B58 /* SCollectionViewCell.xib */,
 				58FC99FC1BE87EBC001F5F49 /* UICollectionView+UICollectionView_Convenience.h */,
 				58FC99FD1BE87EBC001F5F49 /* UICollectionView+UICollectionView_Convenience.m */,
 				58FC99FF1BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.h */,
 				58FC9A001BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.m */,
-				58E41AE51BFDA179007AD3B9 /* IntroCollectionViewCell.h */,
-				58E41AE61BFDA179007AD3B9 /* IntroCollectionViewCell.m */,
-				58E41AE71BFDA179007AD3B9 /* IntroCollectionViewCell.xib */,
-				58036B7C1BFF0F8200F04877 /* IntroCollectionViewCellTwo.h */,
-				58036B7D1BFF0F8200F04877 /* IntroCollectionViewCellTwo.m */,
-				58036B7E1BFF0F8200F04877 /* IntroCollectionViewCellTwo.xib */,
-				58036B811BFF24AA00F04877 /* IntroCollectionViewCellThree.h */,
-				58036B821BFF24AA00F04877 /* IntroCollectionViewCellThree.m */,
-				58036B831BFF24AA00F04877 /* IntroCollectionViewCellThree.xib */,
-				58E41AEA1BFDC430007AD3B9 /* SIntroLabel.h */,
-				58E41AEB1BFDC430007AD3B9 /* SIntroLabel.m */,
-				58036B791BFEFA9E00F04877 /* IntroButton.h */,
-				58036B7A1BFEFA9E00F04877 /* IntroButton.m */,
 				5804829A1C06EAD100541450 /* NSDate+SDate.h */,
 				5804829B1C06EAD100541450 /* NSDate+SDate.m */,
-				580482A31C07171D00541450 /* EntryObject.h */,
-				580482A41C07171D00541450 /* EntryObject.m */,
-				585331B31C19772B00CA29DF /* DetailTableViewCell.h */,
-				585331B41C19772B00CA29DF /* DetailTableViewCell.m */,
-				585331B51C19772B00CA29DF /* DetailTableViewCell.xib */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -330,6 +304,43 @@
 				A91B8680B10D67FB5F073EAC /* Pods-Save.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		ED6E55CF1C1C20850085B1F4 /* Buttons and Label */ = {
+			isa = PBXGroup;
+			children = (
+				5878467D1BE35F6300181EC4 /* SLabel.h */,
+				5878467E1BE35F6300181EC4 /* SLabel.m */,
+				58FA043E1BE73EE800787B58 /* SButton.h */,
+				58FA043F1BE73EE800787B58 /* SButton.m */,
+				58E41AEA1BFDC430007AD3B9 /* SIntroLabel.h */,
+				58E41AEB1BFDC430007AD3B9 /* SIntroLabel.m */,
+				58036B791BFEFA9E00F04877 /* IntroButton.h */,
+				58036B7A1BFEFA9E00F04877 /* IntroButton.m */,
+			);
+			name = "Buttons and Label";
+			sourceTree = "<group>";
+		};
+		ED6E55D01C1C20AC0085B1F4 /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				58FA04411BE7521900787B58 /* SCollectionViewCell.h */,
+				58FA04421BE7521900787B58 /* SCollectionViewCell.m */,
+				58FA04431BE7521900787B58 /* SCollectionViewCell.xib */,
+				58E41AE51BFDA179007AD3B9 /* IntroCollectionViewCell.h */,
+				58E41AE61BFDA179007AD3B9 /* IntroCollectionViewCell.m */,
+				58E41AE71BFDA179007AD3B9 /* IntroCollectionViewCell.xib */,
+				58036B7C1BFF0F8200F04877 /* IntroCollectionViewCellTwo.h */,
+				58036B7D1BFF0F8200F04877 /* IntroCollectionViewCellTwo.m */,
+				58036B7E1BFF0F8200F04877 /* IntroCollectionViewCellTwo.xib */,
+				58036B811BFF24AA00F04877 /* IntroCollectionViewCellThree.h */,
+				58036B821BFF24AA00F04877 /* IntroCollectionViewCellThree.m */,
+				58036B831BFF24AA00F04877 /* IntroCollectionViewCellThree.xib */,
+				585331B31C19772B00CA29DF /* DetailTableViewCell.h */,
+				585331B41C19772B00CA29DF /* DetailTableViewCell.m */,
+				585331B51C19772B00CA29DF /* DetailTableViewCell.xib */,
+			);
+			name = "Custom Cells";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -554,7 +565,6 @@
 				58FC9A011BE87F9D001F5F49 /* NSIndexSet+NSIndexSet_Convenience.m in Sources */,
 				5878467F1BE35F6300181EC4 /* SLabel.m in Sources */,
 				58E41AEC1BFDC430007AD3B9 /* SIntroLabel.m in Sources */,
-				580482A51C07171D00541450 /* EntryObject.m in Sources */,
 				585331B61C19772B00CA29DF /* DetailTableViewCell.m in Sources */,
 				58FBC86B1C19976A00575BB4 /* EntriesDetailTableViewController.m in Sources */,
 				580697D91C15B4BC00569A73 /* Entries.m in Sources */,

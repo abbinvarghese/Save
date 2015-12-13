@@ -6,8 +6,8 @@
 //  Copyright © 2015 Abbin. All rights reserved.
 //
 @class IntroCollectionViewCellThree;
+
 #import <UIKit/UIKit.h>
-#import "FLAnimatedImage.h"
 
 @protocol IntroCellThreeDelegate <NSObject>
 

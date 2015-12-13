@@ -7,11 +7,19 @@
 //
 
 #import "DetailTableViewCell.h"
+#import "CoreDataHelper.h"
+
+#define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
 
 @implementation DetailTableViewCell
 
 - (void)awakeFromNib {
-    self.attachmentView.layer.cornerRadius = self.attachmentView.layer.frame.size.width/2;
+    if (IS_IPHONE_4s) {
+        self.attachmentView.layer.cornerRadius = self.attachmentView.layer.frame.size.width/3.5;
+    }
+    else{
+        self.attachmentView.layer.cornerRadius = self.attachmentView.layer.frame.size.width/2;
+    }
     self.attachmentView.layer.masksToBounds = YES;
     self.dateLabel.layer.borderWidth = 0.5f;
 }
@@ -29,7 +37,7 @@
         if (self.obj.note.length>0) {
             self.notesLabel.text = self.obj.note;
         }
-        if (self.obj.isIncome) {
+        if ([self.obj.isIncome boolValue]) {
             self.typeLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
             self.amountLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
         }
@@ -37,25 +45,12 @@
             self.typeLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
             self.amountLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
         }
-        self.amountLabel.text = [self currencyFormString:[NSString stringWithFormat:@"%@",self.obj.amount]];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:[NSString stringWithFormat:@"%@",self.obj.amount]];
         self.typeLabel.text = self.obj.type;
         NSDateFormatter *form = [[NSDateFormatter alloc]init];
         [form setDateFormat:@"dd MMMM yyyy"];
         self.dateLabel.text = [form stringFromDate:self.obj.date];
     }
-    // Configure the view for the selected state
-}
-
--(NSString*)currencyFormString:(NSString*)string{
-    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
-    [currencyFormatter setLocale:[NSLocale currentLocale]];
-    [currencyFormatter setMaximumFractionDigits:2];
-    [currencyFormatter setMinimumFractionDigits:2];
-    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
-    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    
-    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
-    return [currencyFormatter stringFromNumber:someAmount];
 }
 
 @end

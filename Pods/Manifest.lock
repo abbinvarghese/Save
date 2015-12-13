@@ -3,18 +3,15 @@ PODS:
   - Crashlytics (3.4.1):
     - Fabric (~> 1.6.0)
   - Fabric (1.6.1)
-  - FLAnimatedImage (1.0.8)
 
 DEPENDENCIES:
   - Charts
   - Crashlytics
   - Fabric
-  - FLAnimatedImage (~> 1.0)
 
 SPEC CHECKSUMS:
   Charts: 870589b6b4bf8468baacea8869c28983d71f602c
   Crashlytics: 41574a245bc6ae10c55d57f385ebd2004e5bee05
   Fabric: bf0ceb04e7c924090efc5f8c55e4fbcca189e0a0
-  FLAnimatedImage: f9422f796135aff80d8c00b2afc48015bb746e24
 
 COCOAPODS: 0.39.0

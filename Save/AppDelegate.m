@@ -23,7 +23,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [Fabric with:@[[Crashlytics class]]];
-
+    NSLog(@"%@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory  inDomains:NSUserDomainMask] lastObject]);
     return YES;
 }
 
@@ -44,13 +44,16 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    // EVERYTIME THE APP COME TO FORGROUND, IT CHECKS IF ITS THE START OF A NEW MONTH. IF YES, THE MONTHY LIMIT IS ADDED TO THE DATABASE
+    
     if ([[CoreDataHelper sharedCLCoreDataHelper] didSaveMonthlyEntryInBackGround]) {
         UILabel *alert = [[UILabel alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width, 30)];
         alert.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
         alert.textColor = [UIColor blackColor];
         NSString *str = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"]];
         
-        alert.text = [NSString stringWithFormat:@"%@ added to monthly balance",[self currencyFormString:str]];
+        alert.text = [NSString stringWithFormat:@"%@ added to monthly balance",[[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:str]];
         [alert setTextAlignment:NSTextAlignmentCenter];
         [alert setFont:[UIFont fontWithName:@"Adequate-ExtraLight" size:10]];
         [self.window addSubview:alert];
@@ -64,7 +67,6 @@
             }];
         }];
     }
-//    [[CoreDataHelper sharedCLCoreDataHelper] saveMonthlyEntryInBackGround];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -73,17 +75,6 @@
     [self saveContext];
 }
 
--(NSString*)currencyFormString:(NSString*)string{
-    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
-    [currencyFormatter setLocale:[NSLocale currentLocale]];
-    [currencyFormatter setMaximumFractionDigits:2];
-    [currencyFormatter setMinimumFractionDigits:2];
-    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
-    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    
-    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
-    return [currencyFormatter stringFromNumber:someAmount];
-}
 
 #pragma mark - Core Data stack
 

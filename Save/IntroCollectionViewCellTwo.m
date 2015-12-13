@@ -145,7 +145,7 @@ int buttonWidth;
 - (void)oneTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"1"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -157,7 +157,7 @@ int buttonWidth;
 - (void)twoTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"2"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -169,7 +169,7 @@ int buttonWidth;
 - (void)threeTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"3"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -181,7 +181,7 @@ int buttonWidth;
 - (void)fourTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"4"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -193,7 +193,7 @@ int buttonWidth;
 - (void)fiveTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"5"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -205,7 +205,7 @@ int buttonWidth;
 - (void)sixTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"6"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -217,7 +217,7 @@ int buttonWidth;
 - (void)sevenTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"7"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -229,7 +229,7 @@ int buttonWidth;
 - (void)eightTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"8"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -241,7 +241,7 @@ int buttonWidth;
 - (void)nineTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"9"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -253,7 +253,7 @@ int buttonWidth;
 - (void)pointTapped:(UIButton *)sender {
     if (self.amount.length<9) {
         [self.amount appendString:@"."];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -265,7 +265,7 @@ int buttonWidth;
 - (void)zeroTapped:(UIButton *)sender {
     if (self.amount.length<8) {
         [self.amount appendString:@"0"];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -277,7 +277,7 @@ int buttonWidth;
 - (void)backspaceTapped:(UIButton *)sender {
     if (self.amount.length>0) {
         [self.amount setString:[self.amount substringToIndex:[self.amount length]-1]];
-        self.amountLabel.text = [self currencyFormString:self.amount];
+        self.amountLabel.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:self.amount];
     }
     if (self.amount.length>0) {
         self.cellNextButton.enabled = YES;
@@ -285,18 +285,6 @@ int buttonWidth;
     else{
         self.cellNextButton.enabled = NO;
     }
-}
-
--(NSString*)currencyFormString:(NSString*)string{
-    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
-    [currencyFormatter setLocale:[NSLocale currentLocale]];
-    [currencyFormatter setMaximumFractionDigits:2];
-    [currencyFormatter setMinimumFractionDigits:2];
-    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
-    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    
-    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
-    return [currencyFormatter stringFromNumber:someAmount];
 }
 
 

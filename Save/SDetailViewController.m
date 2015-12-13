@@ -125,17 +125,20 @@ static CGSize AssetGridThumbnailSize;
     self.pickerViewCustom.fisheyeFactor = 0.001;
     self.pickerViewCustom.pickerViewStyle = AKPickerViewStyle3D;
     self.pickerViewCustom.maskDisabled = false;
+    
     if (self.isIncome) {
         self.typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"income"];
-        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
-//        self.amountLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
-//        self.currenzyLabel.backgroundColor = [UIColor colorWithRed:0.9 green:1 blue:0.9 alpha:1];
+        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:0.9
+                                                                green:1
+                                                                 blue:0.9
+                                                                alpha:1];
     }
     else{
         self.typeArray = [[NSUserDefaults standardUserDefaults]objectForKey:@"expense"];
-        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
-//        self.amountLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
-//        self.currenzyLabel.backgroundColor = [UIColor colorWithRed:1 green:0.9 blue:0.9 alpha:1];
+        self.pickerViewCustom.backgroundColor = [UIColor colorWithRed:1
+                                                                green:0.9
+                                                                 blue:0.9
+                                                                alpha:1];
     }
     
     self.selectedType = [self.typeArray objectAtIndex:0];
@@ -150,10 +153,9 @@ static CGSize AssetGridThumbnailSize;
     // Do any additional setup after loading the view.
 }
 
--(void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    // Begin caching assets in and around collection view's visible rect.
     [self updateCachedAssets];
     
     [UIView animateWithDuration:0.5 animations:^(void){
@@ -169,7 +171,7 @@ static CGSize AssetGridThumbnailSize;
     // Dispose of any resources that can be recreated.
 }
 
--(void)dismissView{
+- (void)dismissView{
     [UIView animateWithDuration:0.3 animations:^(void){
         self.view.backgroundColor = [UIColor whiteColor];
         self.saveLabel.alpha = 0;
@@ -205,53 +207,103 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark-
 #pragma mark Initilize and Draw Methods
 
--(NSString*)LocalcurrencySymbol{
+- (void)drawPrimaryView{
     
-    NSLocale* japanese_japan = [NSLocale currentLocale];
-    NSNumberFormatter* fmtr = [[NSNumberFormatter alloc] init];
-    [fmtr setNumberStyle:NSNumberFormatterCurrencyStyle];
-    [fmtr setLocale:japanese_japan];
-    
-    // Local currency symbol (what you're asking for)
-    NSString* currencySymbol = [fmtr currencySymbol];
-
-    return currencySymbol;
-}
-
--(void)drawPrimaryView{
     self.innerView.frame = [UIScreen mainScreen].bounds;
-    self.point.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
-    self.zero.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
-    self.cancel.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight, buttonWidth, buttonHeight);
-    self.seven.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight*2, buttonWidth, buttonHeight);
-    self.eight.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight*2, buttonWidth, buttonHeight);
-    self.nine.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight*2, buttonWidth, buttonHeight);
-    self.four.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight*3, buttonWidth, buttonHeight);
-    self.five.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight*3, buttonWidth, buttonHeight);
-    self.six.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight*3, buttonWidth, buttonHeight);
-    self.one.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-buttonHeight*4, buttonWidth, buttonHeight);
-    self.two.frame = CGRectMake(buttonWidth, [UIScreen mainScreen].bounds.size.height-buttonHeight*4, buttonWidth, buttonHeight);
-    self.three.frame = CGRectMake(buttonWidth*2, [UIScreen mainScreen].bounds.size.height-buttonHeight*4, buttonWidth, buttonHeight);
+    self.point.frame = CGRectMake(0,
+                                  [UIScreen mainScreen].bounds.size.height-buttonHeight,
+                                  buttonWidth,
+                                  buttonHeight);
     
-    self.cancelLabel.frame = CGRectMake(-32.5, [UIScreen mainScreen].bounds.size.height/2, 65, 25);
-    self.saveLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-23, [UIScreen mainScreen].bounds.size.height/2, 46, 25);
+    self.zero.frame = CGRectMake(buttonWidth,
+                                 [UIScreen mainScreen].bounds.size.height-buttonHeight,
+                                 buttonWidth,
+                                 buttonHeight);
+    
+    self.cancel.frame = CGRectMake(buttonWidth*2,
+                                   [UIScreen mainScreen].bounds.size.height-buttonHeight,
+                                   buttonWidth,
+                                   buttonHeight);
+    
+    self.seven.frame = CGRectMake(0,
+                                  [UIScreen mainScreen].bounds.size.height-buttonHeight*2,
+                                  buttonWidth,
+                                  buttonHeight);
+    
+    self.eight.frame = CGRectMake(buttonWidth,
+                                  [UIScreen mainScreen].bounds.size.height-buttonHeight*2,
+                                  buttonWidth,
+                                  buttonHeight);
+    
+    self.nine.frame = CGRectMake(buttonWidth*2,
+                                 [UIScreen mainScreen].bounds.size.height-buttonHeight*2,
+                                 buttonWidth,
+                                 buttonHeight);
+    
+    self.four.frame = CGRectMake(0,
+                                 [UIScreen mainScreen].bounds.size.height-buttonHeight*3,
+                                 buttonWidth,
+                                 buttonHeight);
+    
+    self.five.frame = CGRectMake(buttonWidth,
+                                 [UIScreen mainScreen].bounds.size.height-buttonHeight*3,
+                                 buttonWidth,
+                                 buttonHeight);
+    
+    self.six.frame = CGRectMake(buttonWidth*2,
+                                [UIScreen mainScreen].bounds.size.height-buttonHeight*3,
+                                buttonWidth,
+                                buttonHeight);
+    
+    self.one.frame = CGRectMake(0,
+                                [UIScreen mainScreen].bounds.size.height-buttonHeight*4,
+                                buttonWidth,
+                                buttonHeight);
+    
+    self.two.frame = CGRectMake(buttonWidth,
+                                [UIScreen mainScreen].bounds.size.height-buttonHeight*4,
+                                buttonWidth,
+                                buttonHeight);
+    
+    self.three.frame = CGRectMake(buttonWidth*2,
+                                  [UIScreen mainScreen].bounds.size.height-buttonHeight*4,
+                                  buttonWidth,
+                                  buttonHeight);
+    
+    self.cancelLabel.frame = CGRectMake(-32.5,
+                                        [UIScreen mainScreen].bounds.size.height/2,
+                                        65,
+                                        25);
+    
+    self.saveLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-23,
+                                      [UIScreen mainScreen].bounds.size.height/2,
+                                      46,
+                                      25);
     
     
     NSAttributedString *str2 = [[NSAttributedString alloc]initWithString:[self LocalcurrencySymbol] attributes:@{NSFontAttributeName:self.currenzyLabel.font}];
     CGRect rect2 = [str2 boundingRectWithSize:(CGSize){50, CGFLOAT_MAX}
                                       options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
 
-    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/3-20);
-    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width, 20, rect2.size.width, [UIScreen mainScreen].bounds.size.height/3-20);
+    self.amountLabel.frame = CGRectMake(0,
+                                        20,
+                                        [UIScreen mainScreen].bounds.size.width-rect2.size.width-5,
+                                        [UIScreen mainScreen].bounds.size.height/3-20);
     
-//    self.amountLabel.frame = CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width-rect2.size.width-5, [UIScreen mainScreen].bounds.size.height/4-20);
-//    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width-1, 20, rect2.size.width+5, [UIScreen mainScreen].bounds.size.height/4-20);
+    self.currenzyLabel.frame = CGRectMake(self.amountLabel.frame.size.width,
+                                          20,
+                                          rect2.size.width,
+                                          [UIScreen mainScreen].bounds.size.height/3-20);
     
     self.currenzyLabel.text = [self LocalcurrencySymbol];
-    self.pickerViewCustom.frame = CGRectMake(0, self.amountLabel.frame.size.height+20, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/6);
+    
+    self.pickerViewCustom.frame = CGRectMake(0,
+                                             self.amountLabel.frame.size.height+20,
+                                             [UIScreen mainScreen].bounds.size.width,
+                                             [UIScreen mainScreen].bounds.size.height/6);
 }
 
--(void)initSecondryUIElements{
+- (void)initSecondryUIElements{
     if (!self.notesView) {
         self.notesView = [[UITextView alloc]initWithFrame:CGRectMake(0,
                                                                      self.pickerViewCustom.frame.size.height+20,
@@ -321,13 +373,13 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark-
 #pragma mark UITextView Delegate
 
--(void)textViewDidBeginEditing:(UITextView *)textView{
+- (void)textViewDidBeginEditing:(UITextView *)textView{
     [UIView animateWithDuration:0.3 animations:^(void){
        self.placeHolderText.alpha=0;
     }];
 }
 
--(void)textViewDidEndEditing:(UITextView *)textView{
+- (void)textViewDidEndEditing:(UITextView *)textView{
     if (self.notesView.text.length==0) {
         [UIView animateWithDuration:0.3 animations:^(void){
             self.placeHolderText.alpha=0.5;
@@ -355,7 +407,6 @@ static CGSize AssetGridThumbnailSize;
                                 contentMode:PHImageContentModeAspectFill
                                     options:nil
                               resultHandler:^(UIImage *result, NSDictionary *info) {
-                                  // Set the cell's thumbnail image if it's still showing the same asset.
                                   
                                   cell.imageViewC.image = result;
                                   
@@ -369,7 +420,7 @@ static CGSize AssetGridThumbnailSize;
     return CGSizeMake(ss, ss);
 }
 
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     if ([self.notesView isFirstResponder]) {
         [self.view endEditing:YES];
     }
@@ -391,7 +442,6 @@ static CGSize AssetGridThumbnailSize;
                                     contentMode:PHImageContentModeAspectFill
                                         options:nil
                                   resultHandler:^(UIImage *result, NSDictionary *info) {
-                                      // Set the cell's thumbnail image if it's still showing the same asset.
                                       
                                       self.ivExpand.image = result;
                                       self.selectedimage = result;
@@ -437,8 +487,7 @@ static CGSize AssetGridThumbnailSize;
     }
 }
 
-- (void) onTap: (UITapGestureRecognizer*) tgr
-{
+- (void) onTap: (UITapGestureRecognizer*) tgr{
     [UIView animateWithDuration: 0.2
                      animations:^{
                          self.photoGallary.alpha=1;
@@ -458,7 +507,7 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark-
 #pragma mark Action Methods
 
--(void)didTapSButton:(SButton *)button{
+- (void)didTapSButton:(SButton *)button{
     if ([self.notesView isFirstResponder]) {
         [self.view endEditing:YES];
     }
@@ -869,27 +918,12 @@ static CGSize AssetGridThumbnailSize;
         if (string.length>1) {
             string = [string substringToIndex:[string length]-1];
         }
-        NSLog(@"%@",string);
         newDate1 = [self.selectedDate dateByAddingTimeInterval:60*60*24*[string intValue]];
         NSDateFormatter *form = [[NSDateFormatter alloc]init];
         [form setDateFormat:@"dd MMMM yyyy"];
         [self.dateView setText:[form stringFromDate:newDate1]];
         
     }
-}
-
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self.view endEditing:YES];
-}
-
--(void)allPhotosCollected{
-    [self.photoGallary reloadData];
-    self.imageButtonView.alpha = 0;
-    [UIView animateWithDuration:0.5 animations:^(void){
-        self.photoGallary.alpha = 1;
-    }completion:^(BOOL finished){
-        [self.imageButtonView removeFromSuperview];
-    }];
 }
 
 
@@ -899,7 +933,7 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark-
 #pragma mark Photo Manage Methods
 
--(void)getAllPictures{
+- (void)getAllPictures{
     if ([PHPhotoLibrary authorizationStatus]==PHAuthorizationStatusAuthorized) {
         UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
         layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
@@ -928,7 +962,7 @@ static CGSize AssetGridThumbnailSize;
     
 }
 
--(void)photoAccessDeniedProtocol{
+- (void)photoAccessDeniedProtocol{
     self.imageButtonView.enabled = NO;
     [self performSelector:@selector(setImageButtonTitleAccessDenied) withObject:nil afterDelay:0];
     [self performSelector:@selector(setImageButtonTitletwo) withObject:nil afterDelay:3];
@@ -937,19 +971,29 @@ static CGSize AssetGridThumbnailSize;
     [self performSelector:@selector(photoAccessDeniedProtocol) withObject:nil afterDelay:12];
 }
 
--(void)setImageButtonTitleAccessDenied{
+- (void)allPhotosCollected{
+    [self.photoGallary reloadData];
+    self.imageButtonView.alpha = 0;
+    [UIView animateWithDuration:0.5 animations:^(void){
+        self.photoGallary.alpha = 1;
+    }completion:^(BOOL finished){
+        [self.imageButtonView removeFromSuperview];
+    }];
+}
+
+- (void)setImageButtonTitleAccessDenied{
     [self.imageButtonView setTitle:@"access to photo library denied" forState:UIControlStateNormal];
 }
 
--(void)setImageButtonTitletwo{
+- (void)setImageButtonTitletwo{
     [self.imageButtonView setTitle:@"go to settings" forState:UIControlStateNormal];
 }
 
--(void)setImageButtonTitlethree{
+- (void)setImageButtonTitlethree{
     [self.imageButtonView setTitle:@"save app" forState:UIControlStateNormal];
 }
 
--(void)setImageButtonTitlefour{
+- (void)setImageButtonTitlefour{
     [self.imageButtonView setTitle:@"turn on Photo" forState:UIControlStateNormal];
 }
 
@@ -1109,10 +1153,34 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark Core Data and Save Methods
 
 
--(void)save{
+- (void)save{
     
     [[CoreDataHelper sharedCLCoreDataHelper] saveEntriesWithAmount:[self.amount doubleValue] type:self.selectedType notes:self.notesView.text date:self.selectedDate image:self.selectedimage isIncome:self.isIncome];
     
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark Utility Methods
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];
+}
+
+- (NSString*)LocalcurrencySymbol{
+    
+    NSLocale* japanese_japan = [NSLocale currentLocale];
+    NSNumberFormatter* fmtr = [[NSNumberFormatter alloc] init];
+    [fmtr setNumberStyle:NSNumberFormatterCurrencyStyle];
+    [fmtr setLocale:japanese_japan];
+    
+    // Local currency symbol (what you're asking for)
+    NSString* currencySymbol = [fmtr currencySymbol];
+    
+    return currencySymbol;
 }
 
 @end

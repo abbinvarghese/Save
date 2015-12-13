@@ -11,8 +11,6 @@
 
 @implementation IntroCollectionViewCell
 
-
-
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -21,7 +19,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
         NSArray *arrayOfViews = [[NSBundle mainBundle] loadNibNamed:@"IntroCollectionViewCell" owner:self options:nil];
         
         if ([arrayOfViews count] < 1) {

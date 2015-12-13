@@ -124,7 +124,7 @@ static CoreDataHelper *coreDataHelper = nil;
     NSEntityDescription *entity = [NSEntityDescription
                                    entityForName:@"Entries" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO];
     [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"monthlyAdd == 0"]];
     NSError *error = nil;
@@ -183,7 +183,17 @@ static CoreDataHelper *coreDataHelper = nil;
     return dateVals;
 }
 
-
+-(NSString*)currencyFormString:(NSString*)string{
+    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
+    [currencyFormatter setLocale:[NSLocale currentLocale]];
+    [currencyFormatter setMaximumFractionDigits:2];
+    [currencyFormatter setMinimumFractionDigits:2];
+    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
+    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
+    return [currencyFormatter stringFromNumber:someAmount];
+}
 
 
 @end

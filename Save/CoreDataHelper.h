@@ -24,5 +24,6 @@
 -(NSArray*)getAllEntries;
 -(void)deleteObject:(Entries*)object;
 -(BOOL)didSaveMonthlyEntryInBackGround;
+-(NSString*)currencyFormString:(NSString*)string;
 
 @end

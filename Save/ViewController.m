@@ -38,6 +38,9 @@
 @property (nonatomic,assign) NSInteger monthlyLimit;
 @property (nonatomic,assign) NSInteger monthlyLimit2;
 
+@property (nonatomic,assign) CGPoint incomeCenter;
+@property (nonatomic,assign) CGPoint expenceCenter;
+
 @end
 
 @implementation ViewController
@@ -45,12 +48,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self drawCustomeView];
+    
+    self.incomeCenter = self.incomeButton.center;
+    self.expenceCenter = self.expenseButton.center;
+    
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenWidth = screenRect.size.width;
     screenHeight = screenRect.size.height;
-    if (screenHeight % 2) {
-        screenHeight++;
-    }
+    
+    if (screenHeight % 2) {             //
+        screenHeight++;                 //  Height adjustMents based on device screen size
+    }                                   //
+    
     middle = screenHeight/2;
     middleOfMiddle = middle/2;
     
@@ -61,79 +70,33 @@
      object:[UIDevice currentDevice]];
 }
 
-- (void) orientationChanged:(NSNotification *)note
-{
-    if (self.view.superview != nil && [[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"]) {
-        UIDevice * device = note.object;
-        switch(device.orientation)
-        {
-            case UIDeviceOrientationPortrait:
-            {
-                [UIView animateWithDuration:0.3 animations:^(void){
-                    _chartView.alpha = 0;
-                    self.incomeButton.alpha = 1;
-                    self.expenseButton.alpha = 1;
-                }completion:^(BOOL finished){
-                    [_chartView removeFromSuperview];
-                }];
-            }
-                break;
-                
-            case UIDeviceOrientationLandscapeLeft:{
-                [UIView animateWithDuration:0.3 animations:^(void){
-                    self.incomeButton.alpha = 0;
-                    self.expenseButton.alpha = 0;
-                }completion:^(BOOL finished){
-                    [self drawChartWithOrintation:device.orientation];
-                }];
-            }
-            case UIDeviceOrientationLandscapeRight:{
-                [UIView animateWithDuration:0.3 animations:^(void){
-                    self.incomeButton.alpha = 0;
-                    self.expenseButton.alpha = 0;
-                }completion:^(BOOL finished){
-                    [self drawChartWithOrintation:device.orientation];
-                }];
-            }
-                break;
-                
-            default:
-                break;
-        };
-
-    }
-    }
-
--(void)drawCustomeView{
-    [self.incomeButton drawRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:YES];
-    [self.expenseButton drawRect:CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:NO];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
--(void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
     [UIView animateWithDuration:0.3 animations:^(void){
         self.incomeButton.alpha = 1;
         self.expenseButton.alpha = 1;
     }];
     
+    
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
-        self.incomeButton.center = CGPointMake(self.view.center.x,self.incomeButton.center.y);
+        self.incomeButton.center = self.incomeCenter; //CGPointMake(self.view.center.x,self.incomeButton.center.y);
     }completion:^(BOOL finished){
         
     }];
     
     [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
-        self.expenseButton.center = CGPointMake(self.view.center.x,self.expenseButton.center.y);
+        self.expenseButton.center = self.expenceCenter; //CGPointMake(self.view.center.x,self.expenseButton.center.y);
     }completion:^(BOOL finished){
         
     }];
     
-    // CREATES THE TYPE ARRAYS IN USER DEFAULTS AND LAUNCHS THE INTRO SCREEN IF ITS THE FIRST TIME LAUNCH
+    
+    // Launch the Introduction at first Launch(Checks for the "expence" key in UserDefaults which will be intiated in the finish of the introduction)
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"expense"]) {        
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         IntroCollectionViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"IntroCollectionViewController"];
@@ -145,7 +108,63 @@
 
 }
 
--(void)drawChartWithOrintation:(UIDeviceOrientation)orintation{
+- (void) orientationChanged:(NSNotification *)note{
+    if (self.view.superview != nil && [[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"]) {
+        UIDevice * device = note.object;
+        switch(device.orientation)
+        {
+            case UIDeviceOrientationPortrait:
+            {
+                [UIView animateWithDuration:0.3 animations:^(void){
+                    _chartView.alpha = 0;
+                    self.incomeButton.alpha = 1;
+                    self.expenseButton.alpha = 1;
+                    self.monthLimitLab.alpha = 1;
+                }completion:^(BOOL finished){
+                    [_chartView removeFromSuperview];
+                }];
+            }
+                break;
+                
+            case UIDeviceOrientationLandscapeLeft:{
+                [UIView animateWithDuration:0.3 animations:^(void){
+                    self.incomeButton.alpha = 0;
+                    self.expenseButton.alpha = 0;
+                    self.monthLimitLab.alpha = 0;
+                }completion:^(BOOL finished){
+                    [self drawChartWithOrintation:device.orientation];
+                }];
+            }
+            case UIDeviceOrientationLandscapeRight:{
+                [UIView animateWithDuration:0.3 animations:^(void){
+                    self.incomeButton.alpha = 0;
+                    self.expenseButton.alpha = 0;
+                    self.monthLimitLab.alpha = 0;
+                }completion:^(BOOL finished){
+                    [self drawChartWithOrintation:device.orientation];
+                }];
+            }
+                break;
+                
+            default:
+                break;
+        };
+        
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark-
+#pragma mark Custom View Initialization
+
+- (void)drawCustomeView{
+    [self.incomeButton drawRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:YES];
+    [self.expenseButton drawRect:CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, self.view.frame.size.height/2) withShadow:NO];
+}
+
+- (void)drawChartWithOrintation:(UIDeviceOrientation)orintation{
     if (!_chartView) {
         _chartView = [[BarChartView alloc]init];
         [_chartView animateWithXAxisDuration:2.0 yAxisDuration:2.0];
@@ -203,7 +222,7 @@
         
         _chartView.alpha = 0;
         
-        [self setDataCount:12 range:50];
+        [self setDataCount];
     }
     [self.view addSubview:_chartView];
     
@@ -212,6 +231,13 @@
     }];
 
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma mark-
+#pragma mark OutLets
 
 - (IBAction)incomeTapped:(UITapGestureRecognizer *)sender {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -236,9 +262,32 @@
     }];
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark-
+#pragma mark Gesture Recognizers
+
+- (void)didpanMonthlyLimit:(UIPanGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        self.monthlyLimit = self.monthlyLimit2;
+    }
+    else{
+        CGPoint tran = [recognizer translationInView:self.view];
+        NSString *string = [NSString stringWithFormat:@"%i",(int)tran.y];
+        if (string.length>1) {
+            string = [string substringToIndex:[string length]-1];
+        }
+        self.monthlyLimit2 = self.monthlyLimit + [string intValue]*100;
+        self.monthLimitLab.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit2]];
+        
+    }
+
+}
+
 - (IBAction)expenseSwiped:(UISwipeGestureRecognizer *)sender {
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
-       self.expenseButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width+self.expenseButton.frame.size.width,self.expenseButton.center.y);
+        self.expenseButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width+self.expenseButton.frame.size.width,self.expenseButton.center.y);
     }completion:^(BOOL finished){
         
     }];
@@ -251,15 +300,16 @@
         [self presentViewController:vc animated:NO completion:^(void){
             
         }];
-
+        
     }];
 }
+
 - (IBAction)expenceSwipedDown:(UISwipeGestureRecognizer *)sender {
     if (!self.monthLimitLab) {
         self.monthLimitLab = [[UILabel alloc]initWithFrame:CGRectMake(0, self.incomeButton.frame.size.height, [UIScreen mainScreen].bounds.size.width, 50)];
         self.monthLimitLab.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:20];
         self.monthlyLimit = [[[NSUserDefaults standardUserDefaults] valueForKey:@"monthlyLimit"] integerValue];
-        self.monthLimitLab.text = [self currencyFormString:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit]];
+        self.monthLimitLab.text = [[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit]];
         self.monthLimitLab.userInteractionEnabled = YES;
         [self.monthLimitLab setTextAlignment:NSTextAlignmentCenter];
         
@@ -270,7 +320,7 @@
         
     }
     [self.view insertSubview:self.monthLimitLab atIndex:0];
-    self.view.backgroundColor = [UIColor colorWithWhite:0.92 alpha:1];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.96 alpha:1];
     self.expenceTap.enabled = NO;
     self.incomeButton.userInteractionEnabled = NO;
     self.rightSwipe.enabled = NO;
@@ -283,39 +333,9 @@
     }];
 }
 
--(void)didpanMonthlyLimit:(UIPanGestureRecognizer *)recognizer {
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        self.monthlyLimit = self.monthlyLimit2;
-    }
-    else{
-        CGPoint tran = [recognizer translationInView:self.view];
-        NSString *string = [NSString stringWithFormat:@"%i",(int)tran.y];
-        if (string.length>1) {
-            string = [string substringToIndex:[string length]-1];
-        }
-        self.monthlyLimit2 = self.monthlyLimit + [string intValue]*100;
-        self.monthLimitLab.text = [self currencyFormString:[NSString stringWithFormat:@"%ld",(long)self.monthlyLimit2]];
-        
-    }
-
-}
-
--(NSString*)currencyFormString:(NSString*)string{
-    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
-    [currencyFormatter setLocale:[NSLocale currentLocale]];
-    [currencyFormatter setMaximumFractionDigits:2];
-    [currencyFormatter setMinimumFractionDigits:2];
-    [currencyFormatter setAlwaysShowsDecimalSeparator:YES];
-    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    
-    NSNumber *someAmount = [NSNumber numberWithFloat:[string floatValue]];
-    return [currencyFormatter stringFromNumber:someAmount];
-}
-
 - (IBAction)expenceSwipedUp:(UISwipeGestureRecognizer *)sender {
-
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
-        self.expenseButton.center = CGPointMake(self.expenseButton.center.x, self.expenseButton.center.y-50);
+        self.expenseButton.center = self.expenceCenter;
     }completion:^(BOOL finished){
         self.view.backgroundColor = [UIColor whiteColor];
         self.expenceTap.enabled = YES;
@@ -329,8 +349,13 @@
     }];
 }
 
-- (void)setDataCount:(int)count range:(double)range
-{
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma mark - 
+#pragma mark Utility Methods
+
+- (void)setDataCount{
     NSMutableArray *xVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceWithMonthDate:[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month]];
     
     NSMutableArray *yVals = [[CoreDataHelper sharedCLCoreDataHelper]collectFinalBalanceAmountWithMonthDate:[[NSString stringWithFormat:@"%ld%ld",(long)[NSDate date].year,(long)[NSDate date].month] doubleValue]];
@@ -338,7 +363,7 @@
     if (yVals.count>0 && xVals.count>0) {
         BarChartDataEntry *last = [yVals objectAtIndex:yVals.count-1];
         NSString *lastStr = [NSString stringWithFormat:@"%f",last.value];
-        BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:[self currencyFormString:lastStr]];
+        BarChartDataSet *set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:[[CoreDataHelper sharedCLCoreDataHelper] currencyFormString:lastStr]];
         set1.barSpace = 0.35;
         
         NSMutableArray *dataSets = [[NSMutableArray alloc] init];
@@ -350,8 +375,6 @@
         _chartView.data = data;
     }
 }
-
-
 
 
 @end
