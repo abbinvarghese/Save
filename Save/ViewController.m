@@ -15,6 +15,7 @@
 #import "CoreDataHelper.h"
 #import "NSDate+SDate.h"
 #import "SEntriesTableViewController.h"
+#import "AMPopTip.h"
 
 @interface ViewController ()
 
@@ -41,12 +42,27 @@
 @property (nonatomic,assign) CGPoint incomeCenter;
 @property (nonatomic,assign) CGPoint expenceCenter;
 
+@property (nonatomic, strong) AMPopTip *popTip;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.popTip = [AMPopTip popTip];
+    self.popTip.shouldDismissOnTap = YES;
+    self.popTip.entranceAnimation = AMPopTipEntranceAnimationScale;
+    self.popTip.actionAnimation = AMPopTipActionAnimationFloat;
+    self.popTip.popoverColor = [UIColor blackColor];
+    self.popTip.textColor = [UIColor whiteColor];
+    self.popTip.dismissHandler = ^{
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstCameraLaunchKey"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    };
+
+    
     [self drawCustomeView];
     
     self.incomeCenter = self.incomeButton.center;
@@ -70,12 +86,29 @@
      object:[UIDevice currentDevice]];
 }
 
+-(BOOL)isFirstCameraLaunch{
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstCameraLaunchKey"]) {
+        return NO;
+    }
+    else{
+        return YES;
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    if ([self isFirstCameraLaunch]) {
+            [self.popTip showText:@"Tap or swipe right or down" direction:AMPopTipDirectionUp
+                         maxWidth:self.expenseButton.frame.size.width/1.5
+                           inView:self.expenseButton
+                        fromFrame:CGRectMake(self.expenseButton.frame.origin.x, self.expenseButton.frame.origin.y/3, self.expenseButton.frame.size.width, self.expenseButton.frame.size.height)];
+    }
     
     [UIView animateWithDuration:0.3 animations:^(void){
         self.incomeButton.alpha = 1;
@@ -251,6 +284,7 @@
     }];
 }
 - (IBAction)expenseTapped:(UITapGestureRecognizer *)sender {
+    [self.popTip hide];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     SDetailViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"SDetailViewController"];
     vc.isIncome = NO;
@@ -286,6 +320,7 @@
 }
 
 - (IBAction)expenseSwiped:(UISwipeGestureRecognizer *)sender {
+    [self.popTip hide];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^(void){
         self.expenseButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width+self.expenseButton.frame.size.width,self.expenseButton.center.y);
     }completion:^(BOOL finished){
@@ -305,6 +340,7 @@
 }
 
 - (IBAction)expenceSwipedDown:(UISwipeGestureRecognizer *)sender {
+    [self.popTip hide];
     if (!self.monthLimitLab) {
         self.monthLimitLab = [[UILabel alloc]initWithFrame:CGRectMake(0, self.incomeButton.frame.size.height, [UIScreen mainScreen].bounds.size.width, 50)];
         self.monthLimitLab.font = [UIFont fontWithName:@"Adequate-ExtraLight" size:20];

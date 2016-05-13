@@ -14,7 +14,7 @@
 #import "NSIndexSet+NSIndexSet_Convenience.h"
 #import <objc/runtime.h>
 #import "CoreDataHelper.h"
-
+#import "AMPopTip.h"
 
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define IS_IPHONE_4s ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )480 ) < DBL_EPSILON )
@@ -32,6 +32,7 @@
 @property (nonatomic, strong) PHCachingImageManager *imageManager;
 @property CGRect previousPreheatRect;
 
+@property (nonatomic, strong) AMPopTip *popTip;
 
 @property (strong, nonatomic) UICollectionView *photoGallary;
 
@@ -109,8 +110,29 @@ static CGSize AssetGridThumbnailSize;
     
 }
 
+-(BOOL)isFirstCameraLaunch{
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstCameraLaunchKeyTWO"]) {
+        return NO;
+    }
+    else{
+        return YES;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.popTip = [AMPopTip popTip];
+    self.popTip.shouldDismissOnTap = YES;
+    self.popTip.entranceAnimation = AMPopTipEntranceAnimationScale;
+    self.popTip.actionAnimation = AMPopTipActionAnimationFloat;
+    self.popTip.popoverColor = [UIColor blackColor];
+    self.popTip.textColor = [UIColor whiteColor];
+    self.popTip.dismissHandler = ^{
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstCameraLaunchKeyTWO"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    };
     
     buttonWidth = [UIScreen mainScreen].bounds.size.width/3;
     buttonHeight = [UIScreen mainScreen].bounds.size.height/2/4;
@@ -155,6 +177,13 @@ static CGSize AssetGridThumbnailSize;
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    if ([self isFirstCameraLaunch]) {
+        [self.popTip showText:@"Swipe from edge to save or dismiss. Pull down on 5 for more options" direction:AMPopTipDirectionNone
+                     maxWidth:self.pickerViewCustom.frame.size.width/1.5
+                       inView:self.pickerViewCustom
+                    fromFrame:self.pickerViewCustom.frame];
+    }
     
     [self updateCachedAssets];
     
@@ -517,6 +546,7 @@ static CGSize AssetGridThumbnailSize;
     }
 }
 - (IBAction)oneTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"1"];
         self.amountLabel.text = self.amount;
@@ -524,66 +554,77 @@ static CGSize AssetGridThumbnailSize;
     }
 }
 - (IBAction)twoTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"2"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)threeTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"3"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)fourTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"4"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)fiveTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"5"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)sixTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"6"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)sevenTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"7"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)eightTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"8"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)nineTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"9"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)pointTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"."];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)zeroTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length<9) {
         [self.amount appendString:@"0"];
         self.amountLabel.text = self.amount;
     }
 }
 - (IBAction)backspaceTapped:(UIButton *)sender {
+    [self.popTip hide];
     if (self.amount.length>0) {
         [self.amount setString:[self.amount substringToIndex:[self.amount length]-1]];
         self.amountLabel.text = self.amount;
@@ -598,6 +639,7 @@ static CGSize AssetGridThumbnailSize;
 #pragma mark GestureRecognizers & Animate Methods
 
 - (IBAction)didPanOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
+    [self.popTip hide];
     [self.view endEditing:YES];
     CGPoint translation = [sender translationInView:self.innerView];
     
@@ -641,6 +683,7 @@ static CGSize AssetGridThumbnailSize;
 }
 
 - (IBAction)didPanRightOnInnerView:(UIScreenEdgePanGestureRecognizer *)sender {
+    [self.popTip hide];
     [self.view endEditing:YES];
     CGPoint translation = [sender translationInView:self.innerView];
     if ((int)translation.x < -[UIScreen mainScreen].bounds.size.width/2) {
@@ -702,6 +745,7 @@ static CGSize AssetGridThumbnailSize;
 }
 
 - (IBAction)didSwipeDownNumPads:(UISwipeGestureRecognizer *)sender {
+    [self.popTip hide];
     [self animateIntoOptions];
     [self initSecondryUIElements];
 }

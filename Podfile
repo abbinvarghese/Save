@@ -8,6 +8,7 @@ target 'Save' do
 pod 'Charts'
 pod 'Fabric'
 pod 'Crashlytics'
+pod 'AMPopTip'
 
 end
 

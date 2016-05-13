@@ -641,8 +641,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Abbin Varghese (7NSQ6MWKUS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abbin Varghese (7NSQ6MWKUS)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Abbin Varghese (CSG35NJ58U)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Abbin Varghese (CSG35NJ58U)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -664,7 +664,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "f2e8fb16-ad54-4412-859f-81342fcb6a44";
+				PROVISIONING_PROFILE = "341f718c-3ee3-4d3b-87de-a39317465fa3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -687,8 +687,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Abbin Varghese (76JA3GT3D5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Abbin Varghese (76JA3GT3D5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Abbin Varghese (BZKHJ5BM3B)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Abbin Varghese (BZKHJ5BM3B)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -703,7 +703,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "ff440553-ad51-4db4-b912-ab35e0ee5635";
+				PROVISIONING_PROFILE = "042e5410-e399-41ea-b7dd-cc0fae18cf9d";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -716,13 +716,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Abbin Varghese (7NSQ6MWKUS)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Abbin Varghese (CSG35NJ58U)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = Save/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Paadam.Save;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Paadam.SaveTwo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f2e8fb16-ad54-4412-859f-81342fcb6a44";
+				PROVISIONING_PROFILE = "341f718c-3ee3-4d3b-87de-a39317465fa3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -733,13 +733,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Abbin Varghese (76JA3GT3D5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Abbin Varghese (BZKHJ5BM3B)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = Save/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.Paadam.Save;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Paadam.SaveTwo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ff440553-ad51-4db4-b912-ab35e0ee5635";
+				PROVISIONING_PROFILE = "042e5410-e399-41ea-b7dd-cc0fae18cf9d";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
